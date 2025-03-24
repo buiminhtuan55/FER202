@@ -1,8 +1,9 @@
 import { CheckCircle } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Success() {
   // Lấy dữ liệu từ Checkout qua useLocation
+  const navigate = useNavigate();
   const location = useLocation();
   const { cartItems = [], addressDetails = {}, orderTotal = 0 } = location.state || {};
 
@@ -87,6 +88,12 @@ export default function Success() {
             >
               Back to Shop
             </a>
+            <button
+              onClick={() => navigate("/order-history")}
+              className="bg-green-600 text-sm font-semibold text-white p-3 rounded-full hover:bg-green-700 px-6"
+            >
+              View Order History
+            </button>
             <button
               onClick={() => window.print()}
               className="bg-gray-200 text-sm font-semibold text-gray-800 p-3 rounded-full hover:bg-gray-300 px-6"

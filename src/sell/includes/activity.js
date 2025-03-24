@@ -1,6 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const Activity = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="p-4">
       <h2 className="text-lg font-bold mb-4">Hoạt động</h2>
@@ -59,19 +63,10 @@ const Activity = () => {
       <div className="border rounded p-4 mb-4">
         <h3 className="text-md font-semibold mb-2">Lịch sử mua hàng</h3>
         <p className="text-gray-500 mb-2">Xem lại các đơn hàng đã mua.</p>
-        <ul className="space-y-2">
-          <li className="flex justify-between items-center">
-            <span>Điện thoại iPhone 14 - Đen</span>
-            <span className="text-blue-500">$999.00</span>
-            <span className="text-gray-400 text-sm">Đã giao: 15/03/2025</span>
-          </li>
-          <li className="flex justify-between items-center">
-            <span>Tai nghe Bluetooth Sony</span>
-            <span className="text-blue-500">$89.00</span>
-            <span className="text-gray-400 text-sm">Đã giao: 10/03/2025</span>
-          </li>
-        </ul>
-        <a href="#" className="text-blue-500 text-sm mt-2 inline-block">
+
+        <a onClick={() => navigate("/order-history")}
+          className="text-blue-500 text-sm mt-2 inline-block hover:underline"
+        >
           Xem tất cả lịch sử mua hàng
         </a>
       </div>

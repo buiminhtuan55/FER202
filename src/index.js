@@ -15,6 +15,7 @@ import ListCategory from './listCategory/page';
 import Wishlist from './wishlist/page';
 import Sell from './sell/page';
 import SellerProducts from './sellerProduct/page';
+import OrderHistory from './OrderHistory/page';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -32,6 +33,7 @@ root.render(
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/sellerProduct" element={<SellerProducts />} />
+        <Route path="/order-history" element={<OrderHistory />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

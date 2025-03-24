@@ -159,7 +159,7 @@ export default function Checkout() {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     };
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         if (!currentUser) {
             alert("Please login to checkout");
             navigate("/auth");
@@ -171,8 +171,47 @@ export default function Checkout() {
             return;
         }
 
-        // Simulate payment processing và truyền dữ liệu sang Success
-        setTimeout(() => {
+        const orderId = "ORD" + Math.floor(100 + Math.random() * 900);
+        const orderData = {
+            order_id: orderId,
+            user_id: currentUser.id,
+            order_date: new Date().toISOString(),
+            total_amount: parseFloat((getCartTotal() / 100).toFixed(2)),
+            status: "pending",
+            items: cartItems.map(item => ({
+                product_name: item.title,
+                quantity: item.quantity,
+                price: parseFloat((item.price / 100).toFixed(2)),
+            }))
+        };
+
+        try {
+            // 1. Lưu đơn hàng mới vào orders
+            await fetch("http://localhost:9999/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(orderData),
+            });
+
+            // 2. Cập nhật user.order_id
+            const updatedOrderIds = [...(currentUser.order_id || []), orderId];
+            await fetch(`http://localhost:9999/user/${currentUser.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ order_id: updatedOrderIds }),
+            });
+
+            // 3. Xoá toàn bộ giỏ hàng sau khi thanh toán
+            const cartRes = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`);
+            const cartData = await cartRes.json();
+            for (let cart of cartData) {
+                await fetch(`http://localhost:9999/shoppingCart/${cart.id}`, { method: "DELETE" });
+            }
+
+            // Cập nhật localStorage
+            localStorage.setItem("currentUser", JSON.stringify({ ...currentUser, order_id: updatedOrderIds }));
+
+            // Điều hướng đến trang success
             navigate("/success", {
                 state: {
                     cartItems: cartItems,
@@ -180,8 +219,12 @@ export default function Checkout() {
                     orderTotal: getCartTotal(),
                 },
             });
-        }, 1000);
+        } catch (error) {
+            console.error("Payment error:", error);
+            alert("Đã xảy ra lỗi khi thanh toán.");
+        }
     };
+
 
     if (!currentUser) {
         return (
