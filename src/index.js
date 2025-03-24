@@ -16,6 +16,8 @@ import Wishlist from './wishlist/page';
 import Sell from './sell/page';
 import SellerProducts from './sellerProduct/page';
 import OrderHistory from './OrderHistory/page';
+import { Search } from 'lucide-react';
+import SearchResults from './SearchResults/SearchResults';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +36,7 @@ root.render(
         <Route path="/sell" element={<Sell />} />
         <Route path="/sellerProduct" element={<SellerProducts />} />
         <Route path="/order-history" element={<OrderHistory />} />
+        <Route path="/search" element={<SearchResults />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
