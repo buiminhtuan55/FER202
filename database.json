@@ -1,0 +1,458 @@
+{
+  "user": [
+    {
+      "id": "1",
+      "email": "user1@gmail.com",
+      "password": "123123",
+      "fullname": "John Smith",
+      "order_id": [
+        "ORD001",
+        "ORD006"
+      ],
+      "address": {
+        "street": "123 Main St",
+        "zipcode": "12345",
+        "city": "New York",
+        "country": "United States"
+      }
+    },
+    {
+      "id": "2",
+      "email": "user2@gmail.com",
+      "password": "123123",
+      "fullname": "Mary Johnson",
+      "order_id": [
+        "ORD002"
+      ],
+      "address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
+    },
+    {
+      "id": "3",
+      "email": "user3@gmail.com",
+      "password": "123123",
+      "fullname": "David Wilson",
+      "order_id": [
+        "ORD003"
+      ],
+      "address": {
+        "street": "789 Oak St",
+        "zipcode": "54321",
+        "city": "Chicago",
+        "country": "United States"
+      }
+    },
+    {
+      "id": "4",
+      "email": "user4@gmail.com",
+      "password": "123123",
+      "fullname": "Sarah Brown",
+      "order_id": [
+        "ORD005"
+      ],
+      "address": {
+        "street": "321 Pine St",
+        "zipcode": "98765",
+        "city": "Houston",
+        "country": "United States"
+      }
+    },
+    {
+      "id": "5",
+      "email": "user5@gmail.com",
+      "password": "123123",
+      "fullname": "Michael Davis",
+      "order_id": [
+        "ORD007"
+      ],
+      "address": {
+        "street": "654 Maple St",
+        "zipcode": "11223",
+        "city": "San Francisco",
+        "country": "United States"
+      }
+    },
+    {
+      "id": "27b4",
+      "email": "user6@gmail.com",
+      "password": "123123",
+      "fullname": "Cao Linh",
+      "order_id": [
+        "ORD004",
+        "ORD008"
+      ],
+      "address": {
+        "street": "Vietnam",
+        "zipcode": "123123",
+        "city": "Hanoi",
+        "country": "Vietnam"
+      }
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "ORD001",
+      "user_id": "1",
+      "order_date": "2024-03-24T10:30:00Z",
+      "total_amount": 150.5,
+      "status": "delivered",
+      "items": [
+        {
+          "product_name": "Laptop Dell XPS 13",
+          "quantity": 1,
+          "price": 1200
+        },
+        {
+          "product_name": "Wireless Mouse",
+          "quantity": 2,
+          "price": 25
+        }
+      ],
+      "id": "7eeb"
+    },
+    {
+      "order_id": "ORD002",
+      "user_id": "2",
+      "order_date": "2024-03-22T15:45:00Z",
+      "total_amount": 89.99,
+      "status": "shipped",
+      "items": [
+        {
+          "product_name": "Bluetooth Headphones",
+          "quantity": 1,
+          "price": 89.99
+        }
+      ],
+      "id": "b185"
+    },
+    {
+      "order_id": "ORD003",
+      "user_id": "3",
+      "order_date": "2024-03-20T08:20:00Z",
+      "total_amount": 45,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "USB-C Charger",
+          "quantity": 1,
+          "price": 45
+        }
+      ],
+      "id": "02a8"
+    },
+    {
+      "order_id": "ORD004",
+      "user_id": "27b4",
+      "order_date": "2024-03-18T12:00:00Z",
+      "total_amount": 230,
+      "status": "delivered",
+      "items": [
+        {
+          "product_name": "Mechanical Keyboard",
+          "quantity": 1,
+          "price": 150
+        },
+        {
+          "product_name": "Gaming Mouse",
+          "quantity": 1,
+          "price": 80
+        }
+      ],
+      "id": "44fe"
+    },
+    {
+      "order_id": "ORD005",
+      "user_id": "4",
+      "order_date": "2024-03-25T14:10:00Z",
+      "total_amount": 399.99,
+      "status": "shipped",
+      "items": [
+        {
+          "product_name": "Smartphone Samsung Galaxy S22",
+          "quantity": 1,
+          "price": 399.99
+        }
+      ],
+      "id": "cde8"
+    },
+    {
+      "order_id": "ORD006",
+      "user_id": "1",
+      "order_date": "2024-03-26T09:00:00Z",
+      "total_amount": 299.99,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Smartwatch Apple Watch Series 8",
+          "quantity": 1,
+          "price": 299.99
+        }
+      ],
+      "id": "50ec"
+    },
+    {
+      "order_id": "ORD007",
+      "user_id": "5",
+      "order_date": "2024-03-27T17:30:00Z",
+      "total_amount": 79.99,
+      "status": "delivered",
+      "items": [
+        {
+          "product_name": "Wireless Earbuds",
+          "quantity": 1,
+          "price": 79.99
+        }
+      ],
+      "id": "be83"
+    },
+    {
+      "order_id": "ORD008",
+      "user_id": "27b4",
+      "order_date": "2024-03-28T11:20:00Z",
+      "total_amount": 120,
+      "status": "shipped",
+      "items": [
+        {
+          "product_name": "Portable SSD 1TB",
+          "quantity": 1,
+          "price": 120
+        }
+      ],
+      "id": "83e7"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Fashion",
+      "description": "Fashion products and accessories"
+    },
+    {
+      "id": "2",
+      "name": "Electronics",
+      "description": "Electronic devices and technology"
+    },
+    {
+      "id": "3",
+      "name": "Home & Kitchen",
+      "description": "Home and kitchen appliances"
+    },
+    {
+      "id": "4",
+      "name": "Health & Fitness",
+      "description": "Health care equipment and products"
+    },
+    {
+      "id": "5",
+      "name": "Entertainment",
+      "description": "Entertainment and sports products"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "title": "Brown Leather Bag",
+      "description": "Handcrafted genuine leather bag with premium stitching and multiple compartments",
+      "price": 2500,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/7",
+      "status": "available"
+    },
+    {
+      "id": "10",
+      "title": "Leather Wallet",
+      "description": "Slim leather wallet with RFID protection and multiple card slots",
+      "price": 450,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/103",
+      "status": "available"
+    },
+    {
+      "id": "11",
+      "title": "Denim Jacket",
+      "description": "Stylish street fashion denim jacket",
+      "price": 1200,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/365",
+      "status": "available"
+    },
+    {
+      "id": "2",
+      "title": "Vintage Camera",
+      "description": "Classic film camera with manual focus and exposure controls",
+      "price": 1800,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/250",
+      "status": "available"
+    },
+    {
+      "id": "3",
+      "title": "Modern Laptop",
+      "description": "High-performance laptop with sleek design and long battery life",
+      "price": 4500,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/0",
+      "status": "available"
+    },
+    {
+      "id": "4",
+      "title": "Wireless Headphones",
+      "description": "Noise-cancelling headphones with premium sound quality",
+      "price": 1200,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/367",
+      "status": "available"
+    },
+    {
+      "id": "5",
+      "title": "Ceramic Coffee Mug",
+      "description": "Handmade ceramic mug with artistic design and comfortable handle",
+      "price": 350,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/30",
+      "status": "available"
+    },
+    {
+      "id": "7",
+      "title": "Desk Lamp",
+      "description": "Adjustable LED desk lamp with multiple brightness levels",
+      "price": 750,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/859",
+      "status": "available"
+    },
+    {
+      "id": "13",
+      "title": "Rice Cooker",
+      "description": "Automatic rice cooker with multiple cooking functions",
+      "price": 1800,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/292",
+      "status": "available"
+    },
+    {
+      "id": "8",
+      "title": "Fitness Watch",
+      "description": "Smart fitness tracker with heart rate monitor and sleep tracking",
+      "price": 950,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/719",
+      "status": "available"
+    },
+    {
+      "id": "12",
+      "title": "Athletic Shoes",
+      "description": "Versatile athletic shoes suitable for running and gym workouts",
+      "price": 1500,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/21",
+      "status": "available"
+    },
+    {
+      "id": "15",
+      "title": "Yoga Kit",
+      "description": "Complete yoga kit with mat and accessories",
+      "price": 980,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/437",
+      "status": "available"
+    },
+    {
+      "id": "9",
+      "title": "Portable Speaker",
+      "description": "Waterproof Bluetooth speaker with 360-degree sound",
+      "price": 880,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/27",
+      "status": "available"
+    },
+    {
+      "id": "19",
+      "title": "Tennis Racket",
+      "description": "Professional tennis racket with balanced design",
+      "price": 2200,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/224",
+      "status": "unavailable"
+    },
+    {
+      "id": "30",
+      "title": "Board Game Set",
+      "description": "Classic board game set for family and friends",
+      "price": 1100,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/482",
+      "status": "available"
+    }
+  ],
+  "shoppingCart": [
+    {
+      "id": "1438",
+      "userId": "2",
+      "productId": [
+        {
+          "idProduct": "1",
+          "quantity": "1"
+        },
+        {
+          "idProduct": "3",
+          "quantity": "1"
+        }
+      ],
+      "dateAdded": "2025-03-01T05:36:10.233Z"
+    },
+    {
+      "id": "3e19",
+      "userId": "27b4",
+      "productId": [
+        {
+          "idProduct": "1",
+          "quantity": "1"
+        },
+        {
+          "idProduct": "2",
+          "quantity": "2"
+        }
+      ],
+      "dateAdded": "2025-03-19T15:30:11.598Z"
+    },
+    {
+      "id": "1685",
+      "userId": "5",
+      "productId": [
+        {
+          "idProduct": "1",
+          "quantity": "2"
+        },
+        {
+          "idProduct": "2",
+          "quantity": "1"
+        },
+        {
+          "idProduct": "3",
+          "quantity": "5"
+        }
+      ],
+      "dateAdded": "2025-03-24T11:41:11.428Z"
+    },
+    {
+      "id": "e97a",
+      "userId": "1",
+      "productId": [
+        {
+          "idProduct": "1",
+          "quantity": "11"
+        },
+        {
+          "idProduct": "2",
+          "quantity": "1"
+        }
+      ],
+      "dateAdded": "2025-03-24T14:19:39.248Z"
+    }
+  ]
+}
