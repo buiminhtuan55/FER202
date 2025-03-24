@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Search, Loader2 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 export default function MainHeader() {
+    const navigate = useNavigate();
     // State to store the fetched products
     const [products, setProducts] = useState([]);
     // State to store the search query
@@ -19,6 +21,12 @@ export default function MainHeader() {
     const filteredProducts = products.filter(product =>
         product.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+        }
+    };
 
     return (
         <div id="MainHeader" className="border-b">
@@ -31,20 +39,12 @@ export default function MainHeader() {
 
                         <div className="w-full">
                             <div className="relative">
-                                <div className="flex items-center">
+                                <form onSubmit={handleSubmit} className="flex items-center w-full">
                                     <div className="relative flex items-center border-2 border-gray-900 w-full p-2">
-                                        <button className="flex items-center">
-                                            <Search size={22} />
-                                        </button>
+                                        <Search size={22} />
 
                                         <input
-                                            className="
-                                                w-full
-                                                placeholder-gray-400
-                                                text-sm
-                                                pl-3
-                                                focus:outline-none
-                                            "
+                                            className="w-full placeholder-gray-400 text-sm pl-3 focus:outline-none"
                                             placeholder="Search for anything"
                                             type="text"
                                             value={searchQuery}
@@ -52,14 +52,18 @@ export default function MainHeader() {
                                         />
                                     </div>
 
-                                    <button className="flex items-center bg-blue-600 text-sm font-semibold text-white p-[11px] ml-2 px-14">
+                                    <button
+                                        type="submit"
+                                        className="flex items-center bg-blue-600 text-sm font-semibold text-white p-[11px] ml-2 px-14"
+                                    >
                                         Search
                                     </button>
 
                                     <a href="#" className="text-xs px-2 hover:text-blue-500 cursor-pointer">
                                         Advanced
                                     </a>
-                                </div>
+                                </form>
+
 
                                 {/* Dropdown with search results */}
                                 {searchQuery.length > 0 && (

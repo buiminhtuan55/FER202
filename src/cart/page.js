@@ -15,8 +15,8 @@ function EmptyCart() {
       <ShoppingCart className="h-16 w-16 text-gray-400 mb-4" />
       <h3 className="text-2xl font-semibold mb-2">Your cart is empty</h3>
       <p className="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet</p>
-      <button 
-        onClick={() => navigate("/")} 
+      <button
+        onClick={() => navigate("/")}
         className="bg-blue-600 text-white px-8 py-2 rounded-full hover:bg-blue-700"
       >
         Start Shopping
@@ -29,10 +29,10 @@ function CartItem({ product, cartItemId, onRemove, onUpdateQuantity }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b p-4">
       <div className="flex items-center gap-4">
-        <img 
-          src={`${product.url}/100`} 
-          alt={product.title} 
-          className="w-[100px] h-[100px] object-cover rounded-lg" 
+        <img
+          src={`${product.url}/100`}
+          alt={product.title}
+          className="w-[100px] h-[100px] object-cover rounded-lg"
         />
         <div>
           <div className="font-semibold">{product.title}</div>
@@ -57,8 +57,8 @@ function CartItem({ product, cartItemId, onRemove, onUpdateQuantity }) {
           </div>
         </div>
       </div>
-      <button 
-        onClick={() => onRemove(cartItemId, product.idProduct)} 
+      <button
+        onClick={() => onRemove(cartItemId, product.idProduct)}
         className="text-blue-500 hover:text-blue-700"
       >
         Remove
@@ -80,7 +80,7 @@ export default function Cart() {
       setIsLoading(false)
       return
     }
-    
+
     try {
       console.log("Current user:", currentUser)
       console.log("Fetching cart for user:", currentUser.id)
@@ -99,7 +99,7 @@ export default function Cart() {
       }
 
       const itemsWithDetails = await Promise.all(
-        cartData.flatMap(cartItem => 
+        cartData.flatMap(cartItem =>
           cartItem.productId.map(async (product) => {
             console.log(`Fetching product with id: ${product.idProduct}`)
             const productResponse = await fetch(`http://localhost:9999/products?id=${product.idProduct}`)
@@ -151,18 +151,18 @@ export default function Cart() {
       const cartResponse = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`)
       const cartData = await cartResponse.json()
       console.log("Cart data before adding:", cartData)
-      
+
       if (cartData.length > 0) {
         const cartItem = cartData[0]
         const existingProduct = cartItem.productId.find(p => p.idProduct === productId)
-        
+
         if (existingProduct) {
           const updatedProducts = cartItem.productId.map(p =>
-            p.idProduct === productId 
+            p.idProduct === productId
               ? { ...p, quantity: (parseInt(p.quantity) + 1).toString() }
               : p
           )
-          
+
           await fetch(`http://localhost:9999/shoppingCart/${cartItem.id}`, {
             method: 'PATCH',
             headers: {
@@ -196,7 +196,7 @@ export default function Cart() {
           })
         })
       }
-      
+
       await fetchCartItems()
     } catch (error) {
       console.error('Error adding to cart:', error)
@@ -208,9 +208,9 @@ export default function Cart() {
     try {
       const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`)
       const cartItem = await cartResponse.json()
-      
+
       const updatedProducts = cartItem.productId.filter(p => p.idProduct !== productId)
-      
+
       if (updatedProducts.length === 0) {
         await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
           method: 'DELETE'
@@ -226,7 +226,7 @@ export default function Cart() {
           })
         })
       }
-      
+
       await fetchCartItems()
     } catch (error) {
       console.error('Error removing item:', error)
@@ -240,8 +240,8 @@ export default function Cart() {
     try {
       const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`)
       const cartItem = await cartResponse.json()
-      
-      const updatedProducts = cartItem.productId.map(p => 
+
+      const updatedProducts = cartItem.productId.map(p =>
         p.idProduct === productId ? { ...p, quantity: newQuantity.toString() } : p
       )
 
@@ -254,7 +254,7 @@ export default function Cart() {
           productId: updatedProducts
         })
       })
-      
+
       if (response.ok) {
         await fetchCartItems()
       } else {
@@ -318,14 +318,6 @@ export default function Cart() {
 
       <div className="max-w-[1200px] mx-auto mb-8 min-h-[300px]">
         <div className="text-2xl font-bold my-4">Shopping cart</div>
-
-        <button 
-          onClick={handleAddTestProduct}
-          className="bg-green-500 text-white px-4 py-2 rounded mb-4"
-        >
-          Add Test Product (ID: 1)
-        </button>
-
         {isLoading ? (
           <div className="text-center py-12">Loading...</div>
         ) : (
