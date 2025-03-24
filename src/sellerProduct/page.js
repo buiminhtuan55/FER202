@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 const SellerProducts = () => {
-  const [products, setProducts] = useState([]);
+  const [sellerData, setSellerData] = useState(null);
+  const [productsDetails, setProductsDetails] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [newProduct, setNewProduct] = useState({
+    idProduct: "",
     title: "",
     description: "",
     price: 0,
@@ -15,87 +17,201 @@ const SellerProducts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch sản phẩm từ API
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
+      if (!currentUser || !currentUser.id) {
+        setError("Vui lòng đăng nhập để xem sản phẩm của bạn.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch("http://localhost:9999/products");
-        if (!response.ok) throw new Error("Không thể lấy danh sách sản phẩm.");
-        const data = await response.json();
-        setProducts(data);
+        console.log("Current User:", currentUser);
+
+        // Fetch sellerProduct
+        console.log("Fetching sellerProduct...");
+        const sellerResponse = await fetch(
+          `http://localhost:9999/sellerProduct?userId=${currentUser.id}`
+        );
+        if (!sellerResponse.ok) {
+          throw new Error(
+            `Không thể lấy danh sách sản phẩm của người bán: ${sellerResponse.statusText}`
+          );
+        }
+        const sellerData = await sellerResponse.json();
+        console.log("Seller Data:", sellerData);
+        const seller = Array.isArray(sellerData)
+          ? sellerData.find((item) => item.userId === currentUser.id)
+          : sellerData;
+        if (!seller) {
+          throw new Error("Không tìm thấy dữ liệu sản phẩm cho người dùng này.");
+        }
+        setSellerData(seller);
+
+        // Fetch products
+        const productIds = seller.products.map((p) => p.idProduct);
+        if (productIds.length > 0) {
+          console.log("Fetching products for IDs:", productIds);
+          const productsResponse = await fetch("http://localhost:9999/products");
+          if (!productsResponse.ok) {
+            throw new Error(`Không thể lấy chi tiết sản phẩm: ${productsResponse.statusText}`);
+          }
+          const allProducts = await productsResponse.json();
+          console.log("All Products:", allProducts);
+          const filteredProducts = allProducts.filter((product) =>
+            productIds.includes(product.id)
+          );
+          setProductsDetails(filteredProducts);
+        }
       } catch (err) {
+        console.error("Fetch Error:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchProducts();
-  }, []);
+    fetchData();
+  }, [currentUser]);
 
-  // Thêm hoặc sửa sản phẩm
   const handleSaveProduct = async (e) => {
     e.preventDefault();
-    const productToSave = editingProduct
-      ? { ...editingProduct }
-      : { ...newProduct, id: `prod${Date.now()}` }; // Tạo ID tạm thời nếu thêm mới
+    if (!currentUser || !currentUser.id) {
+      alert("Vui lòng đăng nhập để thực hiện thao tác này.");
+      return;
+    }
+
+    const isEditing = !!editingProduct;
+    const productToSave = isEditing
+      ? { ...editingProduct, id: editingProduct.idProduct }
+      : {
+          id: newProduct.idProduct || `prod${Date.now()}`,
+          title: newProduct.title,
+          description: newProduct.description,
+          price: newProduct.price,
+          categoryId: newProduct.categoryId,
+          url: newProduct.url,
+          status: newProduct.status,
+        };
 
     try {
-      const method = editingProduct ? "PUT" : "POST";
-      const url = editingProduct
+      const productMethod = isEditing ? "PUT" : "POST";
+      const productUrl = isEditing
         ? `http://localhost:9999/products/${productToSave.id}`
         : "http://localhost:9999/products";
-      const response = await fetch(url, {
-        method,
+      const productResponse = await fetch(productUrl, {
+        method: productMethod,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productToSave),
       });
-      if (!response.ok) throw new Error("Không thể lưu sản phẩm.");
+      if (!productResponse.ok) throw new Error("Không thể lưu chi tiết sản phẩm.");
+      const savedProduct = await productResponse.json();
 
-      const savedProduct = await response.json();
-      if (editingProduct) {
-        setProducts(products.map((p) => (p.id === savedProduct.id ? savedProduct : p)));
-      } else {
-        setProducts([...products, savedProduct]);
-      }
+      const updatedSellerProducts = isEditing
+        ? sellerData.products.map((p) =>
+            p.idProduct === productToSave.id ? { ...p, status: productToSave.status } : p
+          )
+        : [...sellerData.products, { idProduct: productToSave.id, status: productToSave.status }];
+      const updatedSellerData = { ...sellerData, products: updatedSellerProducts };
+
+      const sellerResponse = await fetch(
+        `http://localhost:9999/sellerProduct/${sellerData.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedSellerData),
+        }
+      );
+      if (!sellerResponse.ok) throw new Error("Không thể cập nhật danh sách sản phẩm.");
+
+      setSellerData(updatedSellerData);
+      setProductsDetails(
+        isEditing
+          ? productsDetails.map((p) => (p.id === savedProduct.id ? savedProduct : p))
+          : [...productsDetails, savedProduct]
+      );
       setIsModalOpen(false);
       setEditingProduct(null);
-      setNewProduct({ title: "", description: "", price: 0, categoryId: 1, url: "", status: "available" });
+      setNewProduct({
+        idProduct: "",
+        title: "",
+        description: "",
+        price: 0,
+        categoryId: 1,
+        url: "",
+        status: "available",
+      });
     } catch (err) {
-      console.error("Lỗi khi lưu sản phẩm:", err);
-      alert("Không thể lưu sản phẩm. Vui lòng thử lại.");
+      console.error("Save Error:", err);
+      alert("Không thể lưu sản phẩm: " + err.message);
     }
   };
 
-  // Xóa sản phẩm
-  const handleDeleteProduct = async (id) => {
+  const handleDeleteProduct = async (idProduct) => {
     if (!window.confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
+
     try {
-      const response = await fetch(`http://localhost:9999/products/${id}`, {
+      const productResponse = await fetch(`http://localhost:9999/products/${idProduct}`, {
         method: "DELETE",
       });
-      if (!response.ok) throw new Error("Không thể xóa sản phẩm.");
-      setProducts(products.filter((p) => p.id !== id));
+      if (!productResponse.ok) throw new Error("Không thể xóa sản phẩm.");
+
+      const updatedProducts = sellerData.products.filter((p) => p.idProduct !== idProduct);
+      const updatedSellerData = { ...sellerData, products: updatedProducts };
+
+      const sellerResponse = await fetch(
+        `http://localhost:9999/sellerProduct/${sellerData.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedSellerData),
+        }
+      );
+      if (!sellerResponse.ok) throw new Error("Không thể cập nhật danh sách sản phẩm.");
+
+      setSellerData(updatedSellerData);
+      setProductsDetails(productsDetails.filter((p) => p.id !== idProduct));
     } catch (err) {
-      console.error("Lỗi khi xóa sản phẩm:", err);
-      alert("Không thể xóa sản phẩm. Vui lòng thử lại.");
+      console.error("Delete Error:", err);
+      alert("Không thể xóa sản phẩm: " + err.message);
     }
   };
 
-  // Mở modal để sửa sản phẩm
   const handleEditProduct = (product) => {
-    setEditingProduct(product);
+    const detailedProduct = productsDetails.find((p) => p.id === product.idProduct);
+    setEditingProduct({
+      idProduct: product.idProduct,
+      title: detailedProduct?.title || "",
+      description: detailedProduct?.description || "",
+      price: detailedProduct?.price || 0,
+      categoryId: detailedProduct?.categoryId || 1,
+      url: detailedProduct?.url || "",
+      status: product.status,
+    });
     setIsModalOpen(true);
   };
 
+  if (!currentUser || !currentUser.id) {
+    return (
+      <div className="p-4 text-center">
+        Vui lòng đăng nhập để quản lý sản phẩm của bạn.
+      </div>
+    );
+  }
+
   if (loading) return <div className="p-4">Đang tải...</div>;
   if (error) return <div className="p-4 text-red-500">Lỗi: {error}</div>;
+  if (!sellerData || !sellerData.products)
+    return <div className="p-4">Không có dữ liệu sản phẩm.</div>;
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Quản lý sản phẩm bán hàng</h2>
-      <p className="text-gray-600 mb-6">Tạo, chỉnh sửa và xóa sản phẩm của bạn.</p>
+      <p className="text-gray-600 mb-6">
+        Quản lý sản phẩm của bạn (Người dùng ID: {currentUser.id}).
+      </p>
 
-      {/* Nút thêm sản phẩm */}
       <button
         onClick={() => {
           setEditingProduct(null);
@@ -106,13 +222,13 @@ const SellerProducts = () => {
         Thêm sản phẩm
       </button>
 
-      {/* Danh sách sản phẩm */}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-2 text-left">Hình ảnh</th>
-              <th className="p-2 text-left">Tên sản phẩm</th>
+              <th className="p-2 text-left">ID Sản phẩm</th>
+              <th className="p-2 text-left">Tên</th>
               <th className="p-2 text-left">Mô tả</th>
               <th className="p-2 text-left">Giá (£)</th>
               <th className="p-2 text-left">Danh mục</th>
@@ -121,45 +237,56 @@ const SellerProducts = () => {
             </tr>
           </thead>
           <tbody>
-            {products.length === 0 ? (
+            {sellerData.products.length === 0 ? (
               <tr>
-                <td colSpan="7" className="p-4 text-center text-gray-500">
+                <td colSpan="8" className="p-4 text-center text-gray-500">
                   Chưa có sản phẩm nào.
                 </td>
               </tr>
             ) : (
-              products.map((product) => (
-                <tr key={product.id} className="border-b">
-                  <td className="p-2">
-                    <img src={`${product.url}/50`} alt={product.title} className="w-12 h-12 object-cover rounded" />
-                  </td>
-                  <td className="p-2">{product.title}</td>
-                  <td className="p-2">{product.description}</td>
-                  <td className="p-2">£{(product.price / 100).toFixed(2)}</td>
-                  <td className="p-2">{product.categoryId}</td>
-                  <td className="p-2">{product.status}</td>
-                  <td className="p-2">
-                    <button
-                      onClick={() => handleEditProduct(product)}
-                      className="text-blue-500 hover:underline mr-2"
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProduct(product.id)}
-                      className="text-red-500 hover:underline"
-                    >
-                      Xóa
-                    </button>
-                  </td>
-                </tr>
-              ))
+              sellerData.products.map((product) => {
+                const detail = productsDetails.find((p) => p.id === product.idProduct) || {};
+                return (
+                  <tr key={product.idProduct} className="border-b">
+                    <td className="p-2">
+                      {detail.url ? (
+                        <img
+                          src={`${detail.url}/50`}
+                          alt={detail.title}
+                          className="w-12 h-12 object-cover rounded"
+                        />
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
+                    <td className="p-2">{product.idProduct}</td>
+                    <td className="p-2">{detail.title || "N/A"}</td>
+                    <td className="p-2">{detail.description || "N/A"}</td>
+                    <td className="p-2">£{(detail.price / 100 || 0).toFixed(2)}</td>
+                    <td className="p-2">{detail.categoryId || "N/A"}</td>
+                    <td className="p-2">{product.status}</td>
+                    <td className="p-2">
+                      <button
+                        onClick={() => handleEditProduct(product)}
+                        className="text-blue-500 hover:underline mr-2"
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(product.idProduct)}
+                        className="text-red-500 hover:underline"
+                      >
+                        Xóa
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
 
-      {/* Modal thêm/sửa sản phẩm */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -167,6 +294,22 @@ const SellerProducts = () => {
               {editingProduct ? "Sửa sản phẩm" : "Thêm sản phẩm mới"}
             </h3>
             <form onSubmit={handleSaveProduct}>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-1">ID Sản phẩm</label>
+                <input
+                  type="text"
+                  value={editingProduct ? editingProduct.idProduct : newProduct.idProduct}
+                  onChange={(e) =>
+                    editingProduct
+                      ? setEditingProduct({ ...editingProduct, idProduct: e.target.value })
+                      : setNewProduct({ ...newProduct, idProduct: e.target.value })
+                  }
+                  className="w-full p-2 border rounded"
+                  placeholder="Ví dụ: 101"
+                  required
+                  disabled={editingProduct}
+                />
+              </div>
               <div className="mb-4">
                 <label className="block text-gray-700 mb-1">Tên sản phẩm</label>
                 <input
@@ -185,7 +328,9 @@ const SellerProducts = () => {
               <div className="mb-4">
                 <label className="block text-gray-700 mb-1">Mô tả</label>
                 <textarea
-                  value={editingProduct ? editingProduct.description : newProduct.description}
+                  value={
+                    editingProduct ? editingProduct.description : newProduct.description
+                  }
                   onChange={(e) =>
                     editingProduct
                       ? setEditingProduct({ ...editingProduct, description: e.target.value })
@@ -216,10 +361,15 @@ const SellerProducts = () => {
                 <label className="block text-gray-700 mb-1">ID Danh mục</label>
                 <input
                   type="number"
-                  value={editingProduct ? editingProduct.categoryId : newProduct.categoryId}
+                  value={
+                    editingProduct ? editingProduct.categoryId : newProduct.categoryId
+                  }
                   onChange={(e) =>
                     editingProduct
-                      ? setEditingProduct({ ...editingProduct, categoryId: parseInt(e.target.value) })
+                      ? setEditingProduct({
+                          ...editingProduct,
+                          categoryId: parseInt(e.target.value),
+                        })
                       : setNewProduct({ ...newProduct, categoryId: parseInt(e.target.value) })
                   }
                   className="w-full p-2 border rounded"

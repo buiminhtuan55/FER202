@@ -227,27 +227,27 @@
   ],
   "categories": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Fashion",
       "description": "Fashion products and accessories"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Electronics",
       "description": "Electronic devices and technology"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Home & Kitchen",
       "description": "Home and kitchen appliances"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Health & Fitness",
       "description": "Health care equipment and products"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Entertainment",
       "description": "Entertainment and sports products"
     }
@@ -389,13 +389,13 @@
       "status": "available"
     },
     {
-      "id": "prod1742832522699",
-      "title": "giay dep",
-      "description": "qua vip",
-      "price": 100,
-      "categoryId": 3,
-      "url": "https://picsum.photos/id/102",
-      "status": "sold"
+      "id": "1111",
+      "title": "1111",
+      "description": "1111",
+      "price": 1111,
+      "categoryId": 1111,
+      "url": "https://picsum.photos/id/88",
+      "status": "available"
     }
   ],
   "shoppingCart": [
@@ -566,6 +566,92 @@
         "USD"
       ],
       "status": "Active"
+    }
+  ],
+  "sellerProduct": [
+    {
+      "id": "sp001",
+      "userId": "1",
+      "products": [
+        {
+          "idProduct": "1",
+          "status": "Active"
+        },
+        {
+          "idProduct": "2",
+          "status": "Inactive"
+        },
+        {
+          "idProduct": "1111",
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "id": "sp002",
+      "userId": "2",
+      "products": [
+        {
+          "idProduct": "103",
+          "status": "Active"
+        },
+        {
+          "idProduct": "104",
+          "status": "Active"
+        },
+        {
+          "idProduct": "105",
+          "status": "Inactive"
+        }
+      ]
+    },
+    {
+      "id": "sp003",
+      "userId": "3",
+      "products": [
+        {
+          "idProduct": "106",
+          "status": "Active"
+        }
+      ]
+    },
+    {
+      "id": "sp004",
+      "userId": "4",
+      "products": [
+        {
+          "idProduct": "107",
+          "status": "Active"
+        },
+        {
+          "idProduct": "108",
+          "status": "Active"
+        }
+      ]
+    },
+    {
+      "id": "sp005",
+      "userId": "5",
+      "products": [
+        {
+          "idProduct": "109",
+          "status": "Inactive"
+        }
+      ]
+    },
+    {
+      "id": "sp006",
+      "userId": "27b4",
+      "products": [
+        {
+          "idProduct": "110",
+          "status": "Active"
+        },
+        {
+          "idProduct": "111",
+          "status": "Inactive"
+        }
+      ]
     }
   ]
 }
