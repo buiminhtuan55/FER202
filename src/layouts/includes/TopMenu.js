@@ -144,7 +144,7 @@ export default function TopMenu() {
                     </li>
                     <li className="flex items-center gap-2 px-3 hover:underline cursor-pointer">
                         <Link to="/address" className="flex items-center gap-2">
-                            <img width={32} src="/images/uk.png" alt="UK flag" />
+                            <img width={32} src="/images/vn.png" alt="UK flag" />
                             Ship to
                         </Link>
                     </li>
