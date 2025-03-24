@@ -95,6 +95,21 @@
         "city": "Hanoi",
         "country": "Vietnam"
       }
+    },
+    {
+      "id": "user1742836430004",
+      "email": "test@gmail.com",
+      "password": "123123",
+      "fullname": "11111111",
+      "order_id": [
+        "ORD522"
+      ],
+      "address": {
+        "street": "123123",
+        "zipcode": "123123",
+        "city": "123123",
+        "country": "123123"
+      }
     }
   ],
   "orders": [
@@ -317,6 +332,21 @@
           "price": 3.5
         }
       ]
+    },
+    {
+      "id": "a9e6",
+      "order_id": "ORD522",
+      "user_id": "user1742836430004",
+      "order_date": "2025-03-24T17:14:29.395Z",
+      "total_amount": 12,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Denim Jacket",
+          "quantity": 1,
+          "price": 12
+        }
+      ]
     }
   ],
   "categories": [
@@ -481,15 +511,6 @@
       "categoryId": 5,
       "url": "https://picsum.photos/id/482",
       "status": "available"
-    },
-    {
-      "id": "1111",
-      "title": "1111",
-      "description": "1111",
-      "price": 1111,
-      "categoryId": 1111,
-      "url": "https://picsum.photos/id/88",
-      "status": "available"
     }
   ],
   "shoppingCart": [
@@ -651,10 +672,6 @@
         {
           "idProduct": "2",
           "status": "Inactive"
-        },
-        {
-          "idProduct": "1111",
-          "status": "available"
         }
       ]
     },
@@ -663,15 +680,15 @@
       "userId": "2",
       "products": [
         {
-          "idProduct": "103",
+          "idProduct": "3",
           "status": "Active"
         },
         {
-          "idProduct": "104",
+          "idProduct": "4",
           "status": "Active"
         },
         {
-          "idProduct": "105",
+          "idProduct": "5",
           "status": "Inactive"
         }
       ]
@@ -681,7 +698,7 @@
       "userId": "3",
       "products": [
         {
-          "idProduct": "106",
+          "idProduct": "6",
           "status": "Active"
         }
       ]
@@ -691,11 +708,11 @@
       "userId": "4",
       "products": [
         {
-          "idProduct": "107",
+          "idProduct": "7",
           "status": "Active"
         },
         {
-          "idProduct": "108",
+          "idProduct": "8",
           "status": "Active"
         }
       ]
@@ -705,7 +722,7 @@
       "userId": "5",
       "products": [
         {
-          "idProduct": "109",
+          "idProduct": "9",
           "status": "Inactive"
         }
       ]
@@ -715,14 +732,19 @@
       "userId": "27b4",
       "products": [
         {
-          "idProduct": "110",
+          "idProduct": "10",
           "status": "Active"
         },
         {
-          "idProduct": "111",
+          "idProduct": "11",
           "status": "Inactive"
         }
       ]
+    },
+    {
+      "id": "sp1742836430014",
+      "userId": "user1742836430004",
+      "products": []
     }
   ]
 }

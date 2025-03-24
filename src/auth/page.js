@@ -41,19 +41,21 @@ export default function AuthPage() {
         } else {
             try {
                 // Kiểm tra xem email đã tồn tại chưa
-                const response = await fetch('http://localhost:9999/user')
-                const users = await response.json()
+                const usersResponse = await fetch('http://localhost:9999/user')
+                const users = await usersResponse.json()
                 const existingUser = users.find(u => u.email === formData.email)
                 if (existingUser) {
                     setError("Email đã tồn tại")
                     return
                 }
 
-                // Tạo đối tượng user mới
+                // Tạo đối tượng user mới theo định dạng yêu cầu
                 const newUser = {
+                    id: `user${Date.now()}`, // Tạo ID tạm thời dựa trên timestamp
                     email: formData.email,
                     password: formData.password,
                     fullname: formData.fullname,
+                    order_id: [], // Khởi tạo mảng rỗng cho order_id
                     address: {
                         street: formData.street,
                         zipcode: formData.zipcode,
@@ -62,8 +64,8 @@ export default function AuthPage() {
                     }
                 }
 
-                // Gửi POST request để đăng ký
-                const postResponse = await fetch('http://localhost:9999/user', {
+                // Gửi POST request để đăng ký user
+                const userResponse = await fetch('http://localhost:9999/user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -71,13 +73,38 @@ export default function AuthPage() {
                     body: JSON.stringify(newUser)
                 })
 
-                if (postResponse.ok) {
-                    const createdUser = await postResponse.json()
-                    localStorage.setItem('currentUser', JSON.stringify(createdUser))
-                    navigate('/')
-                } else {
+                if (!userResponse.ok) {
                     setError("Đăng ký thất bại")
+                    return
                 }
+
+                const createdUser = await userResponse.json()
+
+                // Tạo sellerProduct cho user mới
+                const newSellerProduct = {
+                    id: `sp${Date.now()}`, // Tạo ID tạm thời dựa trên timestamp
+                    userId: createdUser.id,
+                    products: [] // Khởi tạo mảng products rỗng
+                }
+
+                // Gửi POST request để tạo sellerProduct
+                const sellerResponse = await fetch('http://localhost:9999/sellerProduct', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newSellerProduct)
+                })
+
+                if (!sellerResponse.ok) {
+                    setError("Tạo dữ liệu người bán thất bại")
+                    return
+                }
+
+                // Lưu thông tin user vào localStorage và chuyển hướng
+                localStorage.setItem('currentUser', JSON.stringify(createdUser))
+                navigate('/')
+
             } catch (err) {
                 setError("Không thể kết nối tới server")
                 console.error("Lỗi đăng ký:", err)

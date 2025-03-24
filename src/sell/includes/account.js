@@ -139,174 +139,37 @@ const PersonalInfo = ({ userInfo, onSave }) => {
   );
 };
 
-const PaymentPayouts = ({ paymentMethods, onSave }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [methods, setMethods] = useState(paymentMethods);
-  const [newMethod, setNewMethod] = useState({
-    name: "",
-    description: "",
-    processingFee: 0,
-    currency: [],
-    status: "Active",
-  });
-
-  const handleAddMethod = async (e) => {
-    e.preventDefault();
-    const methodToAdd = {
-      id: `pm${Date.now()}`,
-      ...newMethod,
-    };
-    const updatedMethods = [...methods, methodToAdd];
-    setMethods(updatedMethods);
-    onSave(updatedMethods);
-    setNewMethod({ name: "", description: "", processingFee: 0, currency: [], status: "Active" });
-
-    try {
-      await fetch("http://localhost:9999/paymentMethods", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(methodToAdd),
-      });
-    } catch (err) {
-      console.error("Lỗi khi thêm phương thức:", err);
-    }
-  };
-
-  const handleRemoveMethod = async (id) => {
-    const updatedMethods = methods.filter((method) => method.id !== id);
-    setMethods(updatedMethods);
-    onSave(updatedMethods);
-
-    try {
-      await fetch(`http://localhost:9999/paymentMethods/${id}`, {
-        method: "DELETE",
-      });
-    } catch (err) {
-      console.error("Lỗi khi xóa phương thức:", err);
-    }
-  };
-
+const PaymentPayouts = ({ paymentMethods }) => {
   return (
     <div className="border rounded p-4 mb-4">
       <h3 className="text-md font-semibold mb-2">Thanh toán & Nhận tiền</h3>
       <p className="text-gray-500 mb-1">
-        Phương thức thanh toán: {methods.find((m) => m.name === "Credit Card") ? "Thẻ tín dụng" : "Chưa có"}
+        Phương thức thanh toán: {paymentMethods.find((m) => m.name === "Credit Card") ? "Thẻ tín dụng" : "Chưa có"}
       </p>
       <p className="text-gray-500 mb-1">
-        Phương thức nhận tiền: {methods.find((m) => m.name === "PayPal") ? "PayPal" : "Chưa có"}
+        Phương thức nhận tiền: {paymentMethods.find((m) => m.name === "PayPal") ? "PayPal" : "Chưa có"}
       </p>
-      <p className="text-gray-500 mb-2">Trạng thái: {methods.length > 0 ? "Đã xác minh" : "Chưa xác minh"}</p>
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="text-blue-500 hover:underline"
-      >
-        Quản lý phương thức thanh toán
-      </button>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
-            <h3 className="text-lg font-semibold mb-4">Quản lý phương thức thanh toán</h3>
-
-            {/* Danh sách phương thức thanh toán - hiển thị ngang */}
-            <div className="mb-6">
-              {methods.length === 0 ? (
-                <p className="text-gray-500">Chưa có phương thức thanh toán nào.</p>
-              ) : (
-                <div className="overflow-x-auto">
-                  <div className="flex space-x-4">
-                    {methods.map((method) => (
-                      <div
-                        key={method.id}
-                        className="flex-shrink-0 w-64 p-4 border rounded-lg bg-gray-50"
-                      >
-                        <div className="font-semibold">{method.name}</div>
-                        <p className="text-sm text-gray-500">{method.description}</p>
-                        <p className="text-sm text-gray-500">Phí: {method.processingFee}%</p>
-                        <p className="text-sm text-gray-500">Tiền tệ: {method.currency.join(", ")}</p>
-                        <p className="text-sm text-gray-500">Trạng thái: {method.status}</p>
-                        <button
-                          onClick={() => handleRemoveMethod(method.id)}
-                          className="mt-2 text-red-500 hover:text-red-700 text-sm"
-                        >
-                          Xóa
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+      <p className="text-gray-500 mb-2">Trạng thái: {paymentMethods.length > 0 ? "Đã xác minh" : "Chưa xác minh"}</p>
+      
+      {/* Hiển thị danh sách phương thức thanh toán */}
+      {paymentMethods.length > 0 && (
+        <div className="mt-4">
+          <h4 className="text-sm font-semibold mb-2">Danh sách phương thức:</h4>
+          <div className="overflow-x-auto">
+            <div className="flex space-x-4">
+              {paymentMethods.map((method) => (
+                <div
+                  key={method.id}
+                  className="flex-shrink-0 w-64 p-4 border rounded-lg bg-gray-50"
+                >
+                  <div className="font-semibold">{method.name}</div>
+                  <p className="text-sm text-gray-500">{method.description}</p>
+                  <p className="text-sm text-gray-500">Phí: {method.processingFee}%</p>
+                  <p className="text-sm text-gray-500">Tiền tệ: {method.currency.join(", ")}</p>
+                  <p className="text-sm text-gray-500">Trạng thái: {method.status}</p>
                 </div>
-              )}
+              ))}
             </div>
-
-            {/* Form thêm phương thức mới */}
-            <form onSubmit={handleAddMethod}>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Tên phương thức</label>
-                <input
-                  type="text"
-                  value={newMethod.name}
-                  onChange={(e) => setNewMethod({ ...newMethod, name: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  placeholder="Ví dụ: Credit Card"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Mô tả</label>
-                <input
-                  type="text"
-                  value={newMethod.description}
-                  onChange={(e) => setNewMethod({ ...newMethod, description: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  placeholder="Ví dụ: Visa, MasterCard,..."
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Phí xử lý (%)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={newMethod.processingFee}
-                  onChange={(e) =>
-                    setNewMethod({ ...newMethod, processingFee: parseFloat(e.target.value) })
-                  }
-                  className="w-full p-2 border rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Tiền tệ (cách nhau bởi dấu phẩy)</label>
-                <input
-                  type="text"
-                  value={newMethod.currency.join(", ")}
-                  onChange={(e) =>
-                    setNewMethod({
-                      ...newMethod,
-                      currency: e.target.value.split(", ").map((c) => c.trim()),
-                    })
-                  }
-                  className="w-full p-2 border rounded"
-                  placeholder="Ví dụ: USD, EUR, GBP"
-                  required
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                >
-                  Đóng
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                  Thêm
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}
@@ -389,7 +252,7 @@ const Account = () => {
       <p className="text-gray-600 mb-6">Nơi bạn quản lý thông tin tài khoản cá nhân.</p>
 
       <PersonalInfo userInfo={userInfo} onSave={handleSaveUserInfo} />
-      <PaymentPayouts paymentMethods={paymentMethods} onSave={handleSavePaymentMethods} />
+      <PaymentPayouts paymentMethods={paymentMethods} />
 
       <div className="border rounded p-4 mb-4">
         <h3 className="text-md font-semibold mb-2">Tùy chỉnh</h3>

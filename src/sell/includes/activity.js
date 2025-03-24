@@ -107,7 +107,7 @@ const Activity = () => {
             </li>
           </ul>
         </div>
-        <a href="#" className="text-blue-500 text-sm mt-2 inline-block">
+        <a onClick={() => navigate("/sellerProduct")} className="text-blue-500 text-sm mt-2 inline-block">
           Xem tất cả hoạt động bán hàng
         </a>
       </div>
