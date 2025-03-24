@@ -4,10 +4,14 @@
       "id": "1",
       "email": "user1@gmail.com",
       "password": "123123",
-      "fullname": "John Smith",
+      "fullname": "John Smiths",
       "order_id": [
-        "ORD001",
-        "ORD006"
+        "ORD381",
+        "ORD118",
+        "ORD137",
+        "ORD960",
+        "ORD130",
+        "ORD201"
       ],
       "address": {
         "street": "123 Main St",
@@ -95,26 +99,6 @@
   ],
   "orders": [
     {
-      "order_id": "ORD001",
-      "user_id": "1",
-      "order_date": "2024-03-24T10:30:00Z",
-      "total_amount": 150.5,
-      "status": "delivered",
-      "items": [
-        {
-          "product_name": "Laptop Dell XPS 13",
-          "quantity": 1,
-          "price": 1200
-        },
-        {
-          "product_name": "Wireless Mouse",
-          "quantity": 2,
-          "price": 25
-        }
-      ],
-      "id": "7eeb"
-    },
-    {
       "order_id": "ORD002",
       "user_id": "2",
       "order_date": "2024-03-22T15:45:00Z",
@@ -180,21 +164,6 @@
       "id": "cde8"
     },
     {
-      "order_id": "ORD006",
-      "user_id": "1",
-      "order_date": "2024-03-26T09:00:00Z",
-      "total_amount": 299.99,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Smartwatch Apple Watch Series 8",
-          "quantity": 1,
-          "price": 299.99
-        }
-      ],
-      "id": "50ec"
-    },
-    {
       "order_id": "ORD007",
       "user_id": "5",
       "order_date": "2024-03-27T17:30:00Z",
@@ -223,31 +192,156 @@
         }
       ],
       "id": "83e7"
+    },
+    {
+      "id": "0328",
+      "order_id": "ORD381",
+      "user_id": "1",
+      "order_date": "2025-03-24T15:45:46.120Z",
+      "total_amount": 343,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Brown Leather Bag",
+          "quantity": 13,
+          "price": 25
+        },
+        {
+          "product_name": "Vintage Camera",
+          "quantity": 1,
+          "price": 18
+        }
+      ]
+    },
+    {
+      "id": "06e6",
+      "order_id": "ORD118",
+      "user_id": "1",
+      "order_date": "2025-03-24T15:46:05.866Z",
+      "total_amount": 75,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Brown Leather Bag",
+          "quantity": 3,
+          "price": 25
+        }
+      ]
+    },
+    {
+      "id": "5e09",
+      "order_id": "ORD137",
+      "user_id": "1",
+      "order_date": "2025-03-24T16:07:57.801Z",
+      "total_amount": 49.5,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Leather Wallet",
+          "quantity": 1,
+          "price": 4.5
+        },
+        {
+          "product_name": "Modern Laptop",
+          "quantity": 1,
+          "price": 45
+        }
+      ]
+    },
+    {
+      "id": "4f30",
+      "order_id": "ORD960",
+      "user_id": "1",
+      "order_date": "2025-03-24T16:09:11.474Z",
+      "total_amount": 15.5,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Ceramic Coffee Mug",
+          "quantity": 1,
+          "price": 3.5
+        },
+        {
+          "product_name": "Wireless Headphones",
+          "quantity": 1,
+          "price": 12
+        }
+      ]
+    },
+    {
+      "id": "9963",
+      "order_id": "ORD130",
+      "user_id": "1",
+      "order_date": "2025-03-24T16:33:10.455Z",
+      "total_amount": 21.8,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Denim Jacket",
+          "quantity": 1,
+          "price": 12
+        },
+        {
+          "product_name": "Yoga Kit",
+          "quantity": 1,
+          "price": 9.8
+        }
+      ]
+    },
+    {
+      "id": "99c4",
+      "order_id": "ORD201",
+      "user_id": "1",
+      "order_date": "2025-03-24T16:51:56.291Z",
+      "total_amount": 341.5,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Brown Leather Bag",
+          "quantity": 11,
+          "price": 25
+        },
+        {
+          "product_name": "Vintage Camera",
+          "quantity": 1,
+          "price": 18
+        },
+        {
+          "product_name": "Modern Laptop",
+          "quantity": 1,
+          "price": 45
+        },
+        {
+          "product_name": "Ceramic Coffee Mug",
+          "quantity": 1,
+          "price": 3.5
+        }
+      ]
     }
   ],
   "categories": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Fashion",
       "description": "Fashion products and accessories"
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Electronics",
       "description": "Electronic devices and technology"
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Home & Kitchen",
       "description": "Home and kitchen appliances"
     },
     {
-      "id": "4",
+      "id": 4,
       "name": "Health & Fitness",
       "description": "Health care equipment and products"
     },
     {
-      "id": "5",
+      "id": 5,
       "name": "Entertainment",
       "description": "Entertainment and sports products"
     }
@@ -447,29 +541,6 @@
         }
       ],
       "dateAdded": "2025-03-24T11:41:11.428Z"
-    },
-    {
-      "id": "e97a",
-      "userId": "1",
-      "productId": [
-        {
-          "idProduct": "1",
-          "quantity": "11"
-        },
-        {
-          "idProduct": "2",
-          "quantity": "1"
-        },
-        {
-          "idProduct": "3",
-          "quantity": "1"
-        },
-        {
-          "idProduct": "5",
-          "quantity": "1"
-        }
-      ],
-      "dateAdded": "2025-03-24T14:19:39.248Z"
     },
     {
       "id": "cd5d",
