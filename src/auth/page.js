@@ -1,287 +1,244 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { Minus, Plus, ShoppingCart } from "lucide-react"
-import TopMenu from "../layouts/includes/TopMenu"
-import MainHeader from "../layouts/includes/MainHeader"
-import SubMenu from "../layouts/includes/SubMenu"
-import SimilarProducts from "../components/SimilarProducts"
-import Footer from "../layouts/includes/Footer"
+"use client"
 
-function EmptyCart() {
-  const navigate = useNavigate()
+import { useState } from "react"
+import { Eye, EyeOff, Mail, Lock, User } from "lucide-react"
+import { useNavigate } from 'react-router-dom'
 
-  return (
-    <div className="flex flex-col items-center justify-center py-12 text-center">
-      <ShoppingCart className="h-16 w-16 text-gray-400 mb-4" />
-      <h3 className="text-2xl font-semibold mb-2">Your cart is empty</h3>
-      <p className="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet</p>
-      <button 
-        onClick={() => navigate("/")} 
-        className="bg-blue-600 text-white px-8 py-2 rounded-full hover:bg-blue-700"
-      >
-        Start Shopping
-      </button>
-    </div>
-  )
-}
+export default function AuthPage() {
+    const [isLogin, setIsLogin] = useState(true)
+    const [showPassword, setShowPassword] = useState(false)
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        fullname: '',
+        street: '',
+        zipcode: '',
+        city: '',
+        country: ''
+    })
+    const [error, setError] = useState("")
+    const navigate = useNavigate()
 
-function CartItem({ product, cartItemId, onRemove, onUpdateQuantity }) {
-  return (
-    <div className="flex items-center justify-between gap-4 border-b p-4">
-      <div className="flex items-center gap-4">
-        <img 
-          src={`${product.url}/100`} 
-          alt={product.title} 
-          className="w-[100px] h-[100px] object-cover rounded-lg" 
-        />
-        <div>
-          <div className="font-semibold">{product.title}</div>
-          <div className="text-sm text-gray-500">{product.description}</div>
-          <div className="font-bold mt-2">£{(product.price / 100).toFixed(2)}</div>
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setError("")
 
-          <div className="flex items-center gap-2 mt-2">
-            <button
-              onClick={() => onUpdateQuantity(cartItemId, product.idProduct, product.quantity - 1)}
-              className="p-1 rounded-full hover:bg-gray-100"
-              disabled={product.quantity <= 1}
-            >
-              <Minus size={16} />
-            </button>
-            <span>{product.quantity}</span>
-            <button
-              onClick={() => onUpdateQuantity(cartItemId, product.idProduct, product.quantity + 1)}
-              className="p-1 rounded-full hover:bg-gray-100"
-            >
-              <Plus size={16} />
-            </button>
-          </div>
-        </div>
-      </div>
-      <button 
-        onClick={() => onRemove(cartItemId, product.idProduct)} 
-        className="text-blue-500 hover:text-blue-700"
-      >
-        Remove
-      </button>
-    </div>
-  )
-}
-
-export default function Cart() {
-  const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-
-  const fetchCartItems = async () => {
-    if (!currentUser) {
-      setIsLoading(false)
-      return
-    }
-    
-    try {
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`)
-      const cartData = await cartResponse.json()
-
-      // Flatten the cart items and fetch product details
-      const itemsWithDetails = await Promise.all(
-        cartData.flatMap(cartItem => 
-          cartItem.productId.map(async (product) => {
-            const productResponse = await fetch(`http://localhost:9999/products?id=${product.idProduct}`)
-            const productData = await productResponse.json()
-            return {
-              ...productData[0],
-              quantity: parseInt(product.quantity),
-              idProduct: product.idProduct,
-              cartItemId: cartItem.id
+        if (isLogin) {
+            try {
+                const response = await fetch('http://localhost:9999/user')
+                const users = await response.json()
+                const user = users.find(u => u.email === formData.email && u.password === formData.password)
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user))
+                    navigate('/')
+                } else {
+                    setError("Email hoặc mật khẩu không đúng")
+                }
+            } catch (err) {
+                setError("Không thể kết nối tới server")
+                console.error("Lỗi đăng nhập:", err)
             }
-          })
-        )
-      )
+        } else {
+            try {
+                // Kiểm tra xem email đã tồn tại chưa
+                const response = await fetch('http://localhost:9999/user')
+                const users = await response.json()
+                const existingUser = users.find(u => u.email === formData.email)
+                if (existingUser) {
+                    setError("Email đã tồn tại")
+                    return
+                }
 
-      setCartItems(itemsWithDetails)
-      setIsLoading(false)
-    } catch (error) {
-      console.error('Error fetching cart:', error)
-      setIsLoading(false)
-    }
-  }
+                // Tạo đối tượng user mới
+                const newUser = {
+                    email: formData.email,
+                    password: formData.password,
+                    fullname: formData.fullname,
+                    address: {
+                        street: formData.street,
+                        zipcode: formData.zipcode,
+                        city: formData.city,
+                        country: formData.country
+                    }
+                }
 
-  useEffect(() => {
-    fetchCartItems()
-  }, [currentUser])
+                // Gửi POST request để đăng ký
+                const postResponse = await fetch('http://localhost:9999/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newUser)
+                })
 
-  const removeFromCart = async (cartItemId, productId) => {
-    try {
-      // Get current cart item
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`)
-      const cartItem = await cartResponse.json()
-      
-      // Filter out the product to remove
-      const updatedProducts = cartItem.productId.filter(p => p.idProduct !== productId)
-      
-      if (updatedProducts.length === 0) {
-        // If no products left, delete the cart item
-        await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
-          method: 'DELETE'
-        })
-      } else {
-        // Update the cart item with remaining products
-        await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            productId: updatedProducts
-          })
-        })
-      }
-      
-      await fetchCartItems()
-    } catch (error) {
-      console.error('Error removing item:', error)
-      alert('Failed to remove item from cart')
-    }
-  }
-
-  const updateQuantity = async (cartItemId, productId, newQuantity) => {
-    if (newQuantity < 1) return
-
-    try {
-      // Get current cart item
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`)
-      const cartItem = await cartResponse.json()
-      
-      // Update quantity for specific product
-      const updatedProducts = cartItem.productId.map(p => 
-        p.idProduct === productId ? { ...p, quantity: newQuantity.toString() } : p
-      )
-
-      const response = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          productId: updatedProducts
-        })
-      })
-      
-      if (response.ok) {
-        await fetchCartItems()
-      } else {
-        throw new Error('Failed to update quantity')
-      }
-    } catch (error) {
-      console.error('Error updating quantity:', error)
-      alert('Failed to update quantity')
-    }
-  }
-
-  const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
-  }
-
-  const handleCheckout = () => {
-    if (!currentUser) {
-      alert("Please login to checkout")
-      navigate("/auth")
-      return
+                if (postResponse.ok) {
+                    const createdUser = await postResponse.json()
+                    localStorage.setItem('currentUser', JSON.stringify(createdUser))
+                    navigate('/')
+                } else {
+                    setError("Đăng ký thất bại")
+                }
+            } catch (err) {
+                setError("Không thể kết nối tới server")
+                console.error("Lỗi đăng ký:", err)
+            }
+        }
     }
 
-    if (cartItems.length === 0) {
-      alert("Your cart is empty!")
-      return
-    }
-    navigate("/checkout")
-  }
-
-  if (!currentUser) {
     return (
-      <div id="MainLayout" className="min-w-[1050px] max-w-[1300px] mx-auto">
-        <div>
-          <TopMenu />
-          <MainHeader />
-          <SubMenu />
-        </div>
-        <div className="text-center py-20">
-          Please <button onClick={() => navigate('/auth')} className="text-blue-500 hover:underline">login</button> to view your cart
-        </div>
-        <Footer />
-      </div>
-    )
-  }
-
-  return (
-    <div id="MainLayout" className="min-w-[1050px] max-w-[1300px] mx-auto">
-      <div>
-        <TopMenu />
-        <MainHeader />
-        <SubMenu />
-      </div>
-
-      <div className="max-w-[1200px] mx-auto mb-8 min-h-[300px]">
-        <div className="text-2xl font-bold my-4">Shopping cart</div>
-
-        {isLoading ? (
-          <div className="text-center py-12">Loading...</div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="md:col-span-2">
-              {cartItems.length === 0 ? (
-                <EmptyCart />
-              ) : (
-                <div className="space-y-4">
-                  {cartItems.map((product) => (
-                    <CartItem
-                      key={`${product.cartItemId}-${product.idProduct}`}
-                      product={product}
-                      cartItemId={product.cartItemId}
-                      onRemove={removeFromCart}
-                      onUpdateQuantity={updateQuantity}
-                    />
-                  ))}
-                </div>
-              )}
+        <div id="AuthPage" className="w-full min-h-screen bg-white">
+            <div className="w-full flex items-center justify-center p-5 border-b-gray-300">
+                <a href="/" className="min-w-[170px]">
+                    <img width="170" src="/images/logo.svg" alt="Logo" />
+                </a>
             </div>
 
-            {cartItems.length > 0 && (
-              <div className="md:col-span-1">
-                <div className="bg-white p-4 border sticky top-4">
-                  <button
-                    onClick={handleCheckout}
-                    className="flex items-center justify-center bg-blue-600 w-full text-white font-semibold p-3 rounded-full hover:bg-blue-700"
-                  >
-                    Go to checkout
-                  </button>
-
-                  <div className="flex items-center justify-between mt-4 text-sm mb-1">
-                    <div>Items ({cartItems.reduce((sum, item) => sum + item.quantity, 0)})</div>
-                    <div>£{(getCartTotal() / 100).toFixed(2)}</div>
-                  </div>
-                  <div className="flex items-center justify-between mb-4 text-sm">
-                    <div>Shipping:</div>
-                    <div>Free</div>
-                  </div>
-
-                  <div className="border-b border-gray-300" />
-
-                  <div className="flex items-center justify-between mt-4 mb-1 text-lg font-semibold">
-                    <div>Subtotal</div>
-                    <div>£{(getCartTotal() / 100).toFixed(2)}</div>
-                  </div>
+            <div className="w-full flex items-center justify-center p-5 border-b-gray-300">
+                <div className="flex gap-4">
+                    <button
+                        className={`font-semibold ${isLogin ? "text-blue-600" : "text-gray-600"}`}
+                        onClick={() => setIsLogin(true)}
+                    >
+                        Đăng nhập
+                    </button>
+                    <span className="text-gray-300">|</span>
+                    <button
+                        className={`font-semibold ${!isLogin ? "text-blue-600" : "text-gray-600"}`}
+                        onClick={() => setIsLogin(false)}
+                    >
+                        Đăng ký
+                    </button>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
+            </div>
 
-        <div className="mt-12">
-          <SimilarProducts />
+            <div className="max-w-[400px] mx-auto px-2">
+                {error && (
+                    <div className="text-red-500 text-center my-2">{error}</div>
+                )}
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-4">
+                    {!isLogin && (
+                        <div className="relative">
+                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                            <input
+                                type="text"
+                                placeholder="Họ và tên"
+                                className="w-full p-3 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                                value={formData.fullname}
+                                onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
+                            />
+                        </div>
+                    )}
+
+                    <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                        <input
+                            type="email"
+                            placeholder="Địa chỉ Email"
+                            className="w-full p-3 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Mật khẩu"
+                            className="w-full p-3 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
+
+                    {!isLogin && (
+                        <>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Đường"
+                                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                    value={formData.street}
+                                    onChange={(e) => setFormData({ ...formData, street: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Mã bưu điện"
+                                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                    value={formData.zipcode}
+                                    onChange={(e) => setFormData({ ...formData, zipcode: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Thành phố"
+                                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                    value={formData.city}
+                                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Quốc gia"
+                                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                    value={formData.country}
+                                    onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                                />
+                            </div>
+                        </>
+                    )}
+
+                    <button
+                        type="submit"
+                        className="w-full p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
+                    >
+                        {isLogin ? "Đăng nhập" : "Đăng ký"}
+                    </button>
+
+                    {isLogin && (
+                        <a href="/forgot-password" className="text-center text-blue-600 hover:underline text-sm">
+                            Quên mật khẩu?
+                        </a>
+                    )}
+
+                    <div className="relative my-4">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-white text-gray-500">hoặc tiếp tục với</span>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="flex items-center justify-center gap-2 p-3 border rounded-md hover:bg-gray-50"
+                        onClick={() => alert("Đăng nhập bằng Google")}
+                    >
+                        <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
+                        Tiếp tục với Google
+                    </button>
+                </form>
+            </div>
         </div>
-      </div>
-      <Footer />
-    </div>
-  )
+    )
 }

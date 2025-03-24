@@ -35,7 +35,7 @@
       "id": "3",
       "email": "user3@gmail.com",
       "password": "123123",
-      "fullname": "David Wilson",
+      "fullname": "David Wilson 222",
       "order_id": [
         "ORD003"
       ],
@@ -227,27 +227,27 @@
   ],
   "categories": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Fashion",
       "description": "Fashion products and accessories"
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Electronics",
       "description": "Electronic devices and technology"
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Home & Kitchen",
       "description": "Home and kitchen appliances"
     },
     {
-      "id": "4",
+      "id": 4,
       "name": "Health & Fitness",
       "description": "Health care equipment and products"
     },
     {
-      "id": "5",
+      "id": 5,
       "name": "Entertainment",
       "description": "Entertainment and sports products"
     }
@@ -387,6 +387,15 @@
       "categoryId": 5,
       "url": "https://picsum.photos/id/482",
       "status": "available"
+    },
+    {
+      "id": "prod1742832522699",
+      "title": "giay dep",
+      "description": "qua vip",
+      "price": 100,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/102",
+      "status": "sold"
     }
   ],
   "shoppingCart": [
@@ -450,9 +459,113 @@
         {
           "idProduct": "2",
           "quantity": "1"
+        },
+        {
+          "idProduct": "3",
+          "quantity": "1"
+        },
+        {
+          "idProduct": "5",
+          "quantity": "1"
         }
       ],
       "dateAdded": "2025-03-24T14:19:39.248Z"
+    },
+    {
+      "id": "cd5d",
+      "userId": "3",
+      "productId": [
+        {
+          "idProduct": "2",
+          "quantity": "1"
+        }
+      ],
+      "dateAdded": "2025-03-24T15:59:03.745Z"
+    }
+  ],
+  "paymentMethods": [
+    {
+      "id": "pm001",
+      "name": "Credit Card",
+      "description": "Visa, MasterCard, American Express, and Discover",
+      "processingFee": 2.5,
+      "currency": [
+        "USD",
+        "EUR",
+        "GBP"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "pm002",
+      "name": "PayPal",
+      "description": "Secure online payments through PayPal account",
+      "processingFee": 3,
+      "currency": [
+        "USD",
+        "EUR",
+        "GBP",
+        "AUD"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "pm003",
+      "name": "Bank Transfer",
+      "description": "Direct bank transfer (ACH, SEPA, SWIFT)",
+      "processingFee": 1.5,
+      "currency": [
+        "USD",
+        "EUR"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "pm004",
+      "name": "Apple Pay",
+      "description": "Fast payments using Apple devices",
+      "processingFee": 2,
+      "currency": [
+        "USD",
+        "EUR",
+        "GBP",
+        "CAD"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "pm005",
+      "name": "Google Pay",
+      "description": "Fast payments using Google Wallet",
+      "processingFee": 2,
+      "currency": [
+        "USD",
+        "EUR",
+        "GBP"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "pm006",
+      "name": "Cryptocurrency",
+      "description": "Bitcoin, Ethereum, and other supported cryptocurrencies",
+      "processingFee": 0,
+      "currency": [
+        "BTC",
+        "ETH",
+        "USDT"
+      ],
+      "status": "Inactive"
+    },
+    {
+      "id": "pm007",
+      "name": "Cash on Delivery (COD)",
+      "description": "Pay with cash upon delivery",
+      "processingFee": 0,
+      "currency": [
+        "USD"
+      ],
+      "status": "Active"
     }
   ]
 }
