@@ -11,7 +11,8 @@
         "ORD137",
         "ORD960",
         "ORD130",
-        "ORD201"
+        "ORD201",
+        "ORD327"
       ],
       "address": {
         "street": "123 Main St",
@@ -347,6 +348,31 @@
           "price": 12
         }
       ]
+    },
+    {
+      "id": "a886",
+      "order_id": "ORD327",
+      "user_id": "1",
+      "order_date": "2025-03-24T17:45:27.823Z",
+      "total_amount": 127.6,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Yoga Kit",
+          "quantity": 2,
+          "price": 9.8
+        },
+        {
+          "product_name": "Modern Laptop",
+          "quantity": 2,
+          "price": 45
+        },
+        {
+          "product_name": "Vintage Camera",
+          "quantity": 1,
+          "price": 18
+        }
+      ]
     }
   ],
   "categories": [
@@ -377,6 +403,96 @@
     }
   ],
   "products": [
+    {
+      "id": "16",
+      "title": "Stainless Steel Water Bottle",
+      "description": "Durable water bottle with double-wall insulation for hot and cold drinks",
+      "price": 600,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/45",
+      "status": "available"
+    },
+    {
+      "id": "17",
+      "title": "Gaming Mouse",
+      "description": "Ergonomic mouse with customizable RGB lighting and high-precision sensor",
+      "price": 850,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/128",
+      "status": "available"
+    },
+    {
+      "id": "18",
+      "title": "Wool Scarf",
+      "description": "Soft and warm wool scarf with classic plaid pattern",
+      "price": 700,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/67",
+      "status": "available"
+    },
+    {
+      "id": "20",
+      "title": "Electric Kettle",
+      "description": "Fast-boiling kettle with auto shut-off and sleek stainless steel design",
+      "price": 1100,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/89",
+      "status": "available"
+    },
+    {
+      "id": "21",
+      "title": "Running Backpack",
+      "description": "Lightweight backpack with hydration compatibility for outdoor activities",
+      "price": 1300,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/543",
+      "status": "available"
+    },
+    {
+      "id": "22",
+      "title": "Vinyl Record Player",
+      "description": "Retro-style record player with built-in speakers and Bluetooth",
+      "price": 2500,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/156",
+      "status": "available"
+    },
+    {
+      "id": "23",
+      "title": "Sunglasses",
+      "description": "Polarized sunglasses with UV protection and stylish frame",
+      "price": 900,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/234",
+      "status": "available"
+    },
+    {
+      "id": "24",
+      "title": "Digital Sketch Pad",
+      "description": "Portable drawing tablet with pressure-sensitive stylus",
+      "price": 3200,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/678",
+      "status": "available"
+    },
+    {
+      "id": "25",
+      "title": "Camping Tent",
+      "description": "Weather-resistant tent for 2-3 people with easy setup",
+      "price": 2800,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/987",
+      "status": "available"
+    },
+    {
+      "id": "26",
+      "title": "Chess Set",
+      "description": "Handcrafted wooden chess set with elegant design",
+      "price": 1400,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/321",
+      "status": "available"
+    },
     {
       "id": "1",
       "title": "Brown Leather Bag",
@@ -500,7 +616,7 @@
       "description": "Professional tennis racket with balanced design",
       "price": 2200,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/224",
+      "url": "https://picsum.photos/id/29",
       "status": "unavailable"
     },
     {
@@ -510,6 +626,15 @@
       "price": 1100,
       "categoryId": 5,
       "url": "https://picsum.photos/id/482",
+      "status": "available"
+    },
+    {
+      "id": "333",
+      "title": "333",
+      "description": "3333",
+      "price": 3333,
+      "categoryId": 333,
+      "url": "https://picsum.photos/id/33",
       "status": "available"
     }
   ],
@@ -672,6 +797,10 @@
         {
           "idProduct": "2",
           "status": "Inactive"
+        },
+        {
+          "idProduct": "333",
+          "status": "available"
         }
       ]
     },
