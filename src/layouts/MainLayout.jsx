@@ -58,7 +58,9 @@ export default function MainLayout() {
 
   // Filter products by category
   const filteredProducts = selectedCategory
-    ? products.filter((product) => product.categoryId === selectedCategory)
+    ? products.filter(
+        (product) => String(product.categoryId) === String(selectedCategory)
+      )
     : products;
 
   // Calculate pagination

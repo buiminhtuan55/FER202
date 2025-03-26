@@ -6,7 +6,6 @@ import MainHeader from "../layouts/includes/MainHeader";
 import SubMenu from "../layouts/includes/SubMenu";
 import Footer from "../layouts/includes/Footer";
 
-
 // Filter configurations for different categories
 const categoryFilters = {
     1: [ // Fashion
@@ -42,7 +41,6 @@ const categoryFilters = {
         { name: "Price", options: ["Under $20", "$20-$60", "Over $60"] },
         { name: "Format", options: ["Digital", "Physical", "Collector's Edition"] },
     ],
-    // Default filters
     default: [
         { name: "Price", options: ["Low to High", "High to Low"] },
         { name: "Condition", options: ["New", "Used", "Refurbished"] },
@@ -112,7 +110,6 @@ const categorySubcategories = {
         "Outdoor Recreation",
         "Arts & Crafts"
     ],
-    // Default subcategories
     default: [
         "Popular Items",
         "New Arrivals",
@@ -130,17 +127,15 @@ const categorySubcategories = {
 export default function ListCategory() {
     // Extract categoryId from URL params
     const { categoryId } = useParams();
-
-    console.log(categoryId);
-    // Make sure categoryId is treated as a number for consistent comparison
-    const numericCategoryId = categoryId ? parseInt(categoryId, 10) : null;
+    // Giữ nguyên categoryId dưới dạng string
+    const numericCategoryId = categoryId;
 
     const [activeTab, setActiveTab] = useState("all");
     const [category, setCategory] = useState(null);
     const [products, setProducts] = useState([]);
     const [allCategories, setAllCategories] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [wishlist, setWishlist] = useState([])
+    const [wishlist, setWishlist] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -150,8 +145,8 @@ export default function ListCategory() {
                 const allCategories = await allCategoriesResponse.json();
                 setAllCategories(allCategories);
 
-                // Tìm category theo id từ danh sách đã fetch
-                const currentCategory = allCategories.find(cat => cat.id === Number(numericCategoryId));
+                // Tìm category theo id, đảm bảo so sánh dạng string
+                const currentCategory = allCategories.find(cat => String(cat.id) === String(numericCategoryId));
                 if (currentCategory) {
                     setCategory(currentCategory);
                 } else {
@@ -180,6 +175,7 @@ export default function ListCategory() {
         const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
         setWishlist(storedWishlist);
     }, []);
+
     // Kiểm tra sản phẩm có trong Wishlist không
     const isInWishlist = (id) => wishlist.some(item => item.id === id);
 
@@ -195,7 +191,6 @@ export default function ListCategory() {
         setWishlist(updatedWishlist);
         localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
     };
-
 
     // Get subcategories based on current category
     const getSubcategories = () => {
@@ -281,7 +276,7 @@ export default function ListCategory() {
                                     <li key={cat.id}>
                                         <Link
                                             to={`/list-category/${cat.id}`}
-                                            className={`text-gray-700 hover:text-blue-600 cursor-pointer ${numericCategoryId === cat.id ? "font-bold text-blue-600" : ""}`}
+                                            className={`text-gray-700 hover:text-blue-600 cursor-pointer ${numericCategoryId === String(cat.id) ? "font-bold text-blue-600" : ""}`}
                                         >
                                             {cat.name}
                                         </Link>
