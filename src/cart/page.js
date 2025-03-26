@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { Minus, Plus, ShoppingCart } from "lucide-react"
-import TopMenu from "../layouts/includes/TopMenu"
-import MainHeader from "../layouts/includes/MainHeader"
-import SubMenu from "../layouts/includes/SubMenu"
-import SimilarProducts from "../components/SimilarProducts"
-import Footer from "../layouts/includes/Footer"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Minus, Plus, ShoppingCart } from "lucide-react";
+import TopMenu from "../layouts/includes/TopMenu";
+import MainHeader from "../layouts/includes/MainHeader";
+import SubMenu from "../layouts/includes/SubMenu";
+import SimilarProducts from "../components/SimilarProducts";
+import Footer from "../layouts/includes/Footer";
 
 function EmptyCart() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -22,10 +22,10 @@ function EmptyCart() {
         Start Shopping
       </button>
     </div>
-  )
+  );
 }
 
-function CartItem({ product, cartItemId, onRemove, onUpdateQuantity }) {
+function CartItem({ product, cartItemId, onRemove, onUpdateQuantity, availableStock }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b p-4">
       <div className="flex items-center gap-4">
@@ -51,10 +51,14 @@ function CartItem({ product, cartItemId, onRemove, onUpdateQuantity }) {
             <button
               onClick={() => onUpdateQuantity(cartItemId, product.idProduct, product.quantity + 1)}
               className="p-1 rounded-full hover:bg-gray-100"
+              disabled={product.quantity >= availableStock}
             >
               <Plus size={16} />
             </button>
           </div>
+          {availableStock === 0 && (
+            <div className="text-red-500 text-sm mt-1">Out of stock</div>
+          )}
         </div>
       </div>
       <button
@@ -64,233 +68,290 @@ function CartItem({ product, cartItemId, onRemove, onUpdateQuantity }) {
         Remove
       </button>
     </div>
-  )
+  );
 }
 
 export default function Cart() {
-  const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const fetchCartItems = async () => {
     if (!currentUser) {
-      console.log("No current user, setting empty cart")
-      setCartItems([])
-      setIsLoading(false)
-      return
+      console.log("No current user, setting empty cart");
+      setCartItems([]);
+      setIsLoading(false);
+      return;
     }
 
     try {
-      console.log("Current user:", currentUser)
-      console.log("Fetching cart for user:", currentUser.id)
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`)
+      console.log("Current user:", currentUser);
+      console.log("Fetching cart for user:", currentUser.id);
+      const cartResponse = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`);
       if (!cartResponse.ok) {
-        throw new Error(`Failed to fetch cart: ${cartResponse.status}`)
+        throw new Error(`Failed to fetch cart: ${cartResponse.status}`);
       }
-      const cartData = await cartResponse.json()
-      console.log("Cart data:", cartData)
+      const cartData = await cartResponse.json();
+      console.log("Cart data:", cartData);
 
       if (!cartData || cartData.length === 0) {
-        console.log("No cart data found")
-        setCartItems([])
-        setIsLoading(false)
-        return
+        console.log("No cart data found");
+        setCartItems([]);
+        setIsLoading(false);
+        return;
       }
 
       const itemsWithDetails = await Promise.all(
-        cartData.flatMap(cartItem =>
+        cartData.flatMap((cartItem) =>
           cartItem.productId.map(async (product) => {
-            console.log(`Fetching product with id: ${product.idProduct}`)
-            const productResponse = await fetch(`http://localhost:9999/products?id=${product.idProduct}`)
+            console.log(`Fetching product with id: ${product.idProduct}`);
+            const productResponse = await fetch(`http://localhost:9999/products?id=${product.idProduct}`);
             if (!productResponse.ok) {
-              console.warn(`Failed to fetch product with id ${product.idProduct}: ${productResponse.status}`)
-              return null
+              console.warn(`Failed to fetch product with id ${product.idProduct}: ${productResponse.status}`);
+              return null;
             }
-            const productData = await productResponse.json()
-            console.log(`Product data for id ${product.idProduct}:`, productData)
+            const productData = await productResponse.json();
+            console.log(`Product data for id ${product.idProduct}:`, productData);
 
-            // Handle both array and object response
-            let productInfo = Array.isArray(productData) ? productData[0] : productData
+            let productInfo = Array.isArray(productData) ? productData[0] : productData;
             if (productInfo) {
               return {
                 ...productInfo,
                 quantity: parseInt(product.quantity),
                 idProduct: product.idProduct,
-                cartItemId: cartItem.id
-              }
+                cartItemId: cartItem.id,
+                availableStock: productInfo.quantity,
+              };
             }
-            console.warn(`No product data found for id ${product.idProduct}`)
-            return null
+            console.warn(`No product data found for id ${product.idProduct}`);
+            return null;
           })
         )
-      )
+      );
 
-      const filteredItems = itemsWithDetails.filter(item => item !== null)
-      console.log("Filtered cart items:", filteredItems)
+      const filteredItems = itemsWithDetails.filter((item) => item !== null);
+      console.log("Filtered cart items:", filteredItems);
       if (filteredItems.length === 0) {
-        console.warn("No valid products found in cart. Check if products exist in the database or if the API response format is correct.")
+        console.warn("No valid products found in cart.");
       }
-      setCartItems(filteredItems)
-      setIsLoading(false)
+      setCartItems(filteredItems);
+      setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching cart:', error)
-      setCartItems([])
-      setIsLoading(false)
+      console.error("Error fetching cart:", error);
+      setCartItems([]);
+      setIsLoading(false);
     }
-  }
+  };
 
   const addToCart = async (productId) => {
     if (!currentUser) {
-      alert("Please login to add items to cart")
-      navigate("/auth")
-      return
+      alert("Please login to add items to cart");
+      navigate("/auth");
+      return;
     }
 
     try {
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`)
-      const cartData = await cartResponse.json()
-      console.log("Cart data before adding:", cartData)
+      // Fetch product data to check stock
+      const productResponse = await fetch(`http://localhost:9999/products?id=${productId}`);
+      const productData = await productResponse.json();
+      const productInfo = Array.isArray(productData) ? productData[0] : productData;
+      if (!productInfo || productInfo.quantity <= 0) {
+        alert("This product is out of stock!");
+        return;
+      }
 
+      const cartResponse = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`);
+      const cartData = await cartResponse.json();
+      console.log("Cart data before adding:", cartData);
+
+      let newCartQuantity = 1;
       if (cartData.length > 0) {
-        const cartItem = cartData[0]
-        const existingProduct = cartItem.productId.find(p => p.idProduct === productId)
+        const cartItem = cartData[0];
+        const existingProduct = cartItem.productId.find((p) => p.idProduct === productId);
 
         if (existingProduct) {
-          const updatedProducts = cartItem.productId.map(p =>
+          const currentQty = parseInt(existingProduct.quantity);
+          if (currentQty + 1 > productInfo.quantity) {
+            alert("Cannot add more items; stock limit reached!");
+            return;
+          }
+          newCartQuantity = currentQty + 1;
+          const updatedProducts = cartItem.productId.map((p) =>
             p.idProduct === productId
-              ? { ...p, quantity: (parseInt(p.quantity) + 1).toString() }
+              ? { ...p, quantity: newCartQuantity.toString() }
               : p
-          )
+          );
 
           await fetch(`http://localhost:9999/shoppingCart/${cartItem.id}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              productId: updatedProducts
-            })
-          })
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId: updatedProducts }),
+          });
         } else {
           await fetch(`http://localhost:9999/shoppingCart/${cartItem.id}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json'
-            },
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              productId: [...cartItem.productId, { idProduct: productId, quantity: "1" }]
-            })
-          })
+              productId: [...cartItem.productId, { idProduct: productId, quantity: "1" }],
+            }),
+          });
         }
       } else {
         await fetch(`http://localhost:9999/shoppingCart`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId: currentUser.id,
             productId: [{ idProduct: productId, quantity: "1" }],
-            dateAdded: new Date().toISOString()
-          })
-        })
+            dateAdded: new Date().toISOString(),
+          }),
+        });
       }
 
-      await fetchCartItems()
+      // Update product stock
+      const newStock = productInfo.quantity - 1;
+      const stockResponse = await fetch(`http://localhost:9999/products/${productId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity: newStock }),
+      });
+      if (!stockResponse.ok) {
+        throw new Error("Failed to update product stock");
+      }
+
+      await fetchCartItems();
     } catch (error) {
-      console.error('Error adding to cart:', error)
-      alert('Failed to add item to cart')
+      console.error("Error adding to cart:", error);
+      alert("Failed to add item to cart");
     }
-  }
+  };
 
   const removeFromCart = async (cartItemId, productId) => {
     try {
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`)
-      const cartItem = await cartResponse.json()
+      const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`);
+      const cartItem = await cartResponse.json();
 
-      const updatedProducts = cartItem.productId.filter(p => p.idProduct !== productId)
+      const productToRemove = cartItem.productId.find((p) => p.idProduct === productId);
+      const quantityRemoved = parseInt(productToRemove.quantity);
+
+      const updatedProducts = cartItem.productId.filter((p) => p.idProduct !== productId);
 
       if (updatedProducts.length === 0) {
-        await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
-          method: 'DELETE'
-        })
+        await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, { method: "DELETE" });
       } else {
         await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            productId: updatedProducts
-          })
-        })
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productId: updatedProducts }),
+        });
       }
 
-      await fetchCartItems()
+      // Restore stock to products API
+      const productResponse = await fetch(`http://localhost:9999/products?id=${productId}`);
+      const productData = await productResponse.json();
+      const productInfo = Array.isArray(productData) ? productData[0] : productData;
+      const newStock = productInfo.quantity + quantityRemoved;
+
+      const stockResponse = await fetch(`http://localhost:9999/products/${productId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity: newStock }),
+      });
+      if (!stockResponse.ok) {
+        throw new Error("Failed to update product stock");
+      }
+
+      await fetchCartItems();
     } catch (error) {
-      console.error('Error removing item:', error)
-      alert('Failed to remove item from cart')
+      console.error("Error removing item:", error);
+      alert("Failed to remove item from cart");
     }
-  }
+  };
 
   const updateQuantity = async (cartItemId, productId, newQuantity) => {
-    if (newQuantity < 1) return
+    if (newQuantity < 1) return;
 
     try {
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`)
-      const cartItem = await cartResponse.json()
+      // Fetch current product stock
+      const productResponse = await fetch(`http://localhost:9999/products?id=${productId}`);
+      const productData = await productResponse.json();
+      const productInfo = Array.isArray(productData) ? productData[0] : productData;
+      const currentStock = productInfo.quantity;
 
-      const updatedProducts = cartItem.productId.map(p =>
-        p.idProduct === productId ? { ...p, quantity: newQuantity.toString() } : p
-      )
+      // Fetch current cart quantity
+      const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`);
+      const cartItem = await cartResponse.json();
+      const currentCartProduct = cartItem.productId.find((p) => p.idProduct === productId);
+      const currentCartQty = parseInt(currentCartProduct.quantity);
 
-      const response = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          productId: updatedProducts
-        })
-      })
+      // Calculate stock change
+      const quantityDifference = newQuantity - currentCartQty;
+      const newStock = currentStock - quantityDifference;
 
-      if (response.ok) {
-        await fetchCartItems()
-      } else {
-        throw new Error('Failed to update quantity')
+      if (newStock < 0) {
+        alert("Cannot update quantity; insufficient stock!");
+        return;
       }
+
+      // Update cart
+      const updatedProducts = cartItem.productId.map((p) =>
+        p.idProduct === productId ? { ...p, quantity: newQuantity.toString() } : p
+      );
+
+      const cartUpdateResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: updatedProducts }),
+      });
+
+      if (!cartUpdateResponse.ok) {
+        throw new Error("Failed to update cart quantity");
+      }
+
+      // Update product stock
+      const stockResponse = await fetch(`http://localhost:9999/products/${productId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity: newStock }),
+      });
+
+      if (!stockResponse.ok) {
+        throw new Error("Failed to update product stock");
+      }
+
+      await fetchCartItems();
     } catch (error) {
-      console.error('Error updating quantity:', error)
-      alert('Failed to update quantity')
+      console.error("Error updating quantity:", error);
+      alert("Failed to update quantity");
     }
-  }
+  };
 
   const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
-  }
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
 
   const handleCheckout = () => {
     if (!currentUser) {
-      alert("Please login to checkout")
-      navigate("/auth")
-      return
+      alert("Please login to checkout");
+      navigate("/auth");
+      return;
     }
 
     if (cartItems.length === 0) {
-      alert("Your cart is empty!")
-      return
+      alert("Your cart is empty!");
+      return;
     }
-    navigate("/checkout")
-  }
+    navigate("/checkout");
+  };
 
   useEffect(() => {
-    fetchCartItems()
-  }, [currentUser])
+    fetchCartItems();
+  }, [currentUser]);
 
   const handleAddTestProduct = () => {
-    addToCart("1")
-  }
+    addToCart("1");
+  };
 
   if (!currentUser) {
     return (
@@ -301,11 +362,15 @@ export default function Cart() {
           <SubMenu />
         </div>
         <div className="text-center py-20">
-          Please <button onClick={() => navigate('/auth')} className="text-blue-500 hover:underline">login</button> to view your cart
+          Please{" "}
+          <button onClick={() => navigate("/auth")} className="text-blue-500 hover:underline">
+            login
+          </button>{" "}
+          to view your cart
         </div>
         <Footer />
       </div>
-    )
+    );
   }
 
   return (
@@ -334,6 +399,7 @@ export default function Cart() {
                       cartItemId={product.cartItemId}
                       onRemove={removeFromCart}
                       onUpdateQuantity={updateQuantity}
+                      availableStock={product.availableStock}
                     />
                   ))}
                 </div>
@@ -345,7 +411,8 @@ export default function Cart() {
                 <div className="bg-white p-4 border sticky top-4">
                   <button
                     onClick={handleCheckout}
-                    className="flex items-center justify-center bg-blue-600 w-full text-white font-semibold p-3 rounded-full hover:bg-blue-700"
+                    className="flex items —
+center justify-center bg-blue-600 w-full text-white font-semibold p-3 rounded-full hover:bg-blue-700"
                   >
                     Go to checkout
                   </button>
@@ -377,5 +444,5 @@ export default function Cart() {
       </div>
       <Footer />
     </div>
-  )
+  );
 }

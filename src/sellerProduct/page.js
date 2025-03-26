@@ -13,6 +13,7 @@ const SellerProducts = () => {
     title: "",
     description: "",
     price: 0,
+    quantity: 0, // Added quantity field
     categoryId: 1,
     url: "",
     status: "available",
@@ -33,7 +34,6 @@ const SellerProducts = () => {
       try {
         console.log("Current User:", currentUser);
 
-        // Fetch sellerProduct
         console.log("Fetching sellerProduct...");
         const sellerResponse = await fetch(
           `http://localhost:9999/sellerProduct?userId=${currentUser.id}`
@@ -53,7 +53,6 @@ const SellerProducts = () => {
         }
         setSellerData(seller);
 
-        // Fetch products
         const productIds = seller.products.map((p) => p.idProduct);
         if (productIds.length > 0) {
           console.log("Fetching products for IDs:", productIds);
@@ -93,6 +92,7 @@ const SellerProducts = () => {
           title: newProduct.title,
           description: newProduct.description,
           price: newProduct.price,
+          quantity: newProduct.quantity, // Added quantity
           categoryId: newProduct.categoryId,
           url: newProduct.url,
           status: newProduct.status,
@@ -141,6 +141,7 @@ const SellerProducts = () => {
         title: "",
         description: "",
         price: 0,
+        quantity: 0, // Added quantity
         categoryId: 1,
         url: "",
         status: "available",
@@ -188,6 +189,7 @@ const SellerProducts = () => {
       title: detailedProduct?.title || "",
       description: detailedProduct?.description || "",
       price: detailedProduct?.price || 0,
+      quantity: detailedProduct?.quantity || 0, // Added quantity
       categoryId: detailedProduct?.categoryId || 1,
       url: detailedProduct?.url || "",
       status: product.status,
@@ -240,6 +242,7 @@ const SellerProducts = () => {
                 <th className="p-2 text-left">Tên</th>
                 <th className="p-2 text-left">Mô tả</th>
                 <th className="p-2 text-left">Giá (£)</th>
+                <th className="p-2 text-left">Số lượng</th> {/* Added quantity column */}
                 <th className="p-2 text-left">Danh mục</th>
                 <th className="p-2 text-left">Trạng thái</th>
                 <th className="p-2 text-left">Hành động</th>
@@ -248,7 +251,7 @@ const SellerProducts = () => {
             <tbody>
               {sellerData.products.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="p-4 text-center text-gray-500">
+                  <td colSpan="9" className="p-4 text-center text-gray-500">
                     Chưa có sản phẩm nào.
                   </td>
                 </tr>
@@ -272,6 +275,7 @@ const SellerProducts = () => {
                       <td className="p-2">{detail.title || "N/A"}</td>
                       <td className="p-2">{detail.description || "N/A"}</td>
                       <td className="p-2">£{(detail.price / 100 || 0).toFixed(2)}</td>
+                      <td className="p-2">{detail.quantity || 0}</td> {/* Display quantity */}
                       <td className="p-2">{detail.categoryId || "N/A"}</td>
                       <td className="p-2">{product.status}</td>
                       <td className="p-2">
@@ -364,6 +368,22 @@ const SellerProducts = () => {
                     className="w-full p-2 border rounded"
                     placeholder="Ví dụ: 2500 (25.00 GBP)"
                     required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-1">Số lượng</label>
+                  <input
+                    type="number"
+                    value={editingProduct ? editingProduct.quantity : newProduct.quantity}
+                    onChange={(e) =>
+                      editingProduct
+                        ? setEditingProduct({ ...editingProduct, quantity: parseInt(e.target.value) })
+                        : setNewProduct({ ...newProduct, quantity: parseInt(e.target.value) })
+                    }
+                    className="w-full p-2 border rounded"
+                    placeholder="Ví dụ: 10"
+                    required
+                    min="0"
                   />
                 </div>
                 <div className="mb-4">
