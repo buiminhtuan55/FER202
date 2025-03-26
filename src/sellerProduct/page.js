@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import TopMenu from "../layouts/includes/TopMenu";
 import MainHeader from "../layouts/includes/MainHeader";
 import SubMenu from "../layouts/includes/SubMenu";
+import { useNavigate } from "react-router-dom";
 
 const SellerProducts = () => {
+  const navigate = useNavigate();
   const [sellerData, setSellerData] = useState(null);
   const [productsDetails, setProductsDetails] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -218,7 +220,15 @@ const SellerProducts = () => {
         <SubMenu />
       </div>
       <div className="p-4 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold mb-4">Quản lý sản phẩm bán hàng</h2>
+      <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Quản lý sản phẩm bán hàng</h2>
+          <button
+            onClick={() => navigate('/totalSell')} // Add navigation button
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Xem doanh thu
+          </button>
+        </div>
         <p className="text-gray-600 mb-6">
           Quản lý sản phẩm của bạn (Người dùng ID: {currentUser.id}).
         </p>

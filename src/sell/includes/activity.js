@@ -112,6 +112,28 @@ const Activity = () => {
         </a>
       </div>
 
+      <div className="border rounded p-4 mb-4">
+        <h3 className="text-md font-semibold mb-2">Tổng số doanh thu</h3>
+        <p className="text-gray-500 mb-2">
+          Lưu trữ các sản phẩm bạn quan tâm.
+        </p>
+        <ul className="space-y-2">
+          <li className="flex justify-between items-center">
+            <span>Laptop Dell XPS 13</span>
+            <span className="text-blue-500">$1,200.00</span>
+            <span className="text-gray-400 text-sm">Còn 5 ngày</span>
+          </li>
+          <li className="flex justify-between items-center">
+            <span>Giày thể thao Nike</span>
+            <span className="text-blue-500">$80.00</span>
+            <span className="text-gray-400 text-sm">Còn 2 ngày</span>
+          </li>
+        </ul>
+        <a onClick={() => navigate("/totalSell")}  className="text-blue-500 text-sm mt-2 inline-block">
+          Xem toàn bộ danh sách theo dõi
+        </a>
+      </div>
+
       {/* Watchlist */}
       <div className="border rounded p-4 mb-4">
         <h3 className="text-md font-semibold mb-2">Danh sách theo dõi</h3>

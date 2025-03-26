@@ -18,6 +18,7 @@ import SellerProducts from './sellerProduct/page';
 import OrderHistory from './OrderHistory/page';
 import { Search } from 'lucide-react';
 import SearchResults from './SearchResults/SearchResults';
+import TotalSell from './totalSell/page';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -37,6 +38,7 @@ root.render(
         <Route path="/sellerProduct" element={<SellerProducts />} />
         <Route path="/order-history" element={<OrderHistory />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/totalSell" element={<TotalSell />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

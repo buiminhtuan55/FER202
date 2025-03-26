@@ -60,7 +60,8 @@
       "password": "123123",
       "fullname": "Sarah Brown",
       "order_id": [
-        "ORD005"
+        "ORD005",
+        "ORD607"
       ],
       "address": {
         "street": "321 Pine St",
@@ -429,6 +430,26 @@
           "product_name": "Vinyl Record Player",
           "quantity": 8,
           "price": 25
+        }
+      ]
+    },
+    {
+      "id": "6d80",
+      "order_id": "ORD607",
+      "user_id": "4",
+      "order_date": "2025-03-26T12:54:29.492Z",
+      "total_amount": 57,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Modern Laptop",
+          "quantity": 1,
+          "price": 45
+        },
+        {
+          "product_name": "Wireless Headphones",
+          "quantity": 1,
+          "price": 12
         }
       ]
     }
