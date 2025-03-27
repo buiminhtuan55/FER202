@@ -15,7 +15,8 @@
         "ORD327",
         "ORD701",
         "ORD855",
-        "ORD399"
+        "ORD399",
+        "ORD677"
       ],
       "address": {
         "street": "123 Main St",
@@ -24,7 +25,7 @@
         "country": "United States"
       },
       "role": "seller",
-      "action": "unlock"
+      "action": "lock"
     },
     {
       "id": "2",
@@ -43,7 +44,7 @@
         "country": "United States"
       },
       "role": "seller",
-      "action": "unlock"
+      "action": "lock"
     },
     {
       "id": "3",
@@ -60,7 +61,7 @@
         "country": "United States"
       },
       "role": "seller",
-      "action": "lock"
+      "action": "unlock"
     },
     {
       "id": "4",
@@ -70,7 +71,8 @@
       "order_id": [
         "ORD005",
         "ORD607",
-        "ORD681"
+        "ORD681",
+        "ORD990"
       ],
       "address": {
         "street": "321 Pine St",
@@ -79,7 +81,7 @@
         "country": "United States"
       },
       "role": "admin",
-      "action": "unlock"
+      "action": "lock"
     },
     {
       "id": "5",
@@ -87,7 +89,8 @@
       "password": "123123",
       "fullname": "Michael Davis",
       "order_id": [
-        "ORD007"
+        "ORD007",
+        "ORD552"
       ],
       "address": {
         "street": "654 Maple St",
@@ -96,7 +99,7 @@
         "country": "United States"
       },
       "role": "admin",
-      "action": "unlock"
+      "action": "lock"
     },
     {
       "id": "27b4",
@@ -167,21 +170,6 @@
         }
       ],
       "id": "44fe"
-    },
-    {
-      "order_id": "ORD005",
-      "user_id": "4",
-      "order_date": "2024-03-25T14:10:00Z",
-      "total_amount": 399.99,
-      "status": "shipped",
-      "items": [
-        {
-          "product_name": "Smartphone Samsung Galaxy S22",
-          "quantity": 1,
-          "price": 399.99
-        }
-      ],
-      "id": "cde8"
     },
     {
       "order_id": "ORD007",
@@ -507,6 +495,101 @@
           "price": 9.5
         }
       ]
+    },
+    {
+      "id": "3898",
+      "order_id": "ORD990",
+      "user_id": "4",
+      "order_date": "2025-03-27T17:05:12.572Z",
+      "total_amount": 294.66,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Digital Sketch Pad",
+          "quantity": 3,
+          "price": 32
+        },
+        {
+          "product_name": "Vintage Camera",
+          "quantity": 2,
+          "price": 18
+        },
+        {
+          "product_name": "Travel Pillow",
+          "quantity": 6,
+          "price": 6
+        },
+        {
+          "product_name": "Smart Thermostat",
+          "quantity": 3,
+          "price": 20
+        },
+        {
+          "product_name": "333",
+          "quantity": 2,
+          "price": 33.33
+        }
+      ]
+    },
+    {
+      "id": "8953",
+      "order_id": "ORD552",
+      "user_id": "5",
+      "order_date": "2025-03-27T17:05:53.008Z",
+      "total_amount": 172.33,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Brown Leather Bag",
+          "quantity": 2,
+          "price": 25
+        },
+        {
+          "product_name": "Vintage Camera",
+          "quantity": 1,
+          "price": 18
+        },
+        {
+          "product_name": "Modern Laptop",
+          "quantity": 1,
+          "price": 45
+        },
+        {
+          "product_name": "333",
+          "quantity": 1,
+          "price": 33.33
+        },
+        {
+          "product_name": "Smart Thermostat",
+          "quantity": 1,
+          "price": 20
+        },
+        {
+          "product_name": "Travel Pillow",
+          "quantity": 1,
+          "price": 6
+        }
+      ]
+    },
+    {
+      "id": "d47f",
+      "order_id": "ORD677",
+      "user_id": "1",
+      "order_date": "2025-03-27T17:07:03.958Z",
+      "total_amount": 143,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Vinyl Record Player",
+          "quantity": 5,
+          "price": 25
+        },
+        {
+          "product_name": "Vintage Camera",
+          "quantity": 1,
+          "price": 18
+        }
+      ]
     }
   ],
   "categories": [
@@ -538,6 +621,139 @@
   ],
   "products": [
     {
+      "id": "1",
+      "title": "Brown Leather Bag",
+      "description": "Handcrafted genuine leather bag with premium stitching and multiple compartments",
+      "price": 2500,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/7",
+      "status": "available",
+      "quantity": 30,
+      "isAuction": true
+    },
+    {
+      "id": "2",
+      "title": "Vintage Camera",
+      "description": "Classic film camera with manual focus and exposure controls",
+      "price": 1800,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/250",
+      "status": "available",
+      "quantity": 24
+    },
+    {
+      "id": "3",
+      "title": "Modern Laptop",
+      "description": "High-performance laptop with sleek design and long battery life",
+      "price": 4500,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/0",
+      "status": "available",
+      "quantity": 14
+    },
+    {
+      "id": "4",
+      "title": "Wireless Headphones",
+      "description": "Noise-cancelling headphones with premium sound quality",
+      "price": 1200,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/367",
+      "status": "available",
+      "quantity": 50
+    },
+    {
+      "id": "5",
+      "title": "Ceramic Coffee Mug",
+      "description": "Handmade ceramic mug with artistic design and comfortable handle",
+      "price": 350,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/30",
+      "status": "available",
+      "quantity": 100
+    },
+    {
+      "id": "7",
+      "title": "Desk Lamp",
+      "description": "Adjustable LED desk lamp with multiple brightness levels",
+      "price": 750,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/859",
+      "status": "available",
+      "quantity": 55,
+      "isAuction": true
+    },
+    {
+      "id": "8",
+      "title": "Fitness Watch",
+      "description": "Smart fitness tracker with heart rate monitor and sleep tracking",
+      "price": 950,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/719",
+      "status": "available",
+      "quantity": 43,
+      "isAuction": false
+    },
+    {
+      "id": "9",
+      "title": "Portable Speaker",
+      "description": "Waterproof Bluetooth speaker with 360-degree sound",
+      "price": 880,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/27",
+      "status": "available",
+      "quantity": 60
+    },
+    {
+      "id": "10",
+      "title": "Leather Wallet",
+      "description": "Slim leather wallet with RFID protection and multiple card slots",
+      "price": 450,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/103",
+      "status": "available",
+      "quantity": 80
+    },
+    {
+      "id": "11",
+      "title": "Denim Jacket",
+      "description": "Stylish street fashion denim jacket",
+      "price": 1200,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/365",
+      "status": "available",
+      "quantity": 40
+    },
+    {
+      "id": "12",
+      "title": "Athletic Shoes",
+      "description": "Versatile athletic shoes suitable for running and gym workouts",
+      "price": 1500,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/21",
+      "status": "available",
+      "quantity": 70
+    },
+    {
+      "id": "13",
+      "title": "Rice Cooker",
+      "description": "Automatic rice cooker with multiple cooking functions",
+      "price": 1800,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/292",
+      "status": "available",
+      "quantity": 35
+    },
+    {
+      "id": "15",
+      "title": "Yoga Kit",
+      "description": "Complete yoga kit with mat and accessories",
+      "price": 980,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/437",
+      "status": "available",
+      "quantity": 40
+    },
+    {
       "id": "17",
       "title": "Gaming Mouse",
       "description": "Ergonomic mouse with customizable RGB lighting and high-precision sensor",
@@ -556,6 +772,16 @@
       "url": "https://picsum.photos/id/67",
       "status": "available",
       "quantity": 75
+    },
+    {
+      "id": "19",
+      "title": "Tennis Racket",
+      "description": "Professional tennis racket with balanced design",
+      "price": 2200,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/29",
+      "status": "unavailable",
+      "quantity": 0
     },
     {
       "id": "20",
@@ -605,7 +831,7 @@
       "categoryId": 2,
       "url": "https://picsum.photos/id/678",
       "status": "available",
-      "quantity": 20
+      "quantity": 18
     },
     {
       "id": "25",
@@ -628,146 +854,34 @@
       "quantity": 45
     },
     {
-      "id": "1",
-      "title": "Brown Leather Bag",
-      "description": "Handcrafted genuine leather bag with premium stitching and multiple compartments",
-      "price": 2500,
+      "id": "27",
+      "title": "Travel Pillow",
+      "description": "Memory foam travel pillow with ergonomic design",
+      "price": 600,
       "categoryId": 1,
-      "url": "https://picsum.photos/id/7",
+      "url": "https://picsum.photos/id/444",
       "status": "available",
-      "quantity": 30
+      "quantity": 85
     },
     {
-      "id": "10",
-      "title": "Leather Wallet",
-      "description": "Slim leather wallet with RFID protection and multiple card slots",
-      "price": 450,
-      "categoryId": 1,
-      "url": "https://picsum.photos/id/103",
+      "id": "28",
+      "title": "Smart Thermostat",
+      "description": "Wi-Fi enabled thermostat with energy-saving features",
+      "price": 2000,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/555",
       "status": "available",
-      "quantity": 80
+      "quantity": 13
     },
     {
-      "id": "11",
-      "title": "Denim Jacket",
-      "description": "Stylish street fashion denim jacket",
-      "price": 1200,
-      "categoryId": 1,
-      "url": "https://picsum.photos/id/365",
-      "status": "available",
-      "quantity": 40
-    },
-    {
-      "id": "2",
-      "title": "Vintage Camera",
-      "description": "Classic film camera with manual focus and exposure controls",
-      "price": 1800,
+      "id": "29",
+      "title": "Gaming Keyboard",
+      "description": "Mechanical keyboard with RGB backlighting and programmable keys",
+      "price": 1500,
       "categoryId": 2,
-      "url": "https://picsum.photos/id/250",
+      "url": "https://picsum.photos/id/666",
       "status": "available",
       "quantity": 25
-    },
-    {
-      "id": "3",
-      "title": "Modern Laptop",
-      "description": "High-performance laptop with sleek design and long battery life",
-      "price": 4500,
-      "categoryId": 2,
-      "url": "https://picsum.photos/id/0",
-      "status": "available",
-      "quantity": 10
-    },
-    {
-      "id": "4",
-      "title": "Wireless Headphones",
-      "description": "Noise-cancelling headphones with premium sound quality",
-      "price": 1200,
-      "categoryId": 2,
-      "url": "https://picsum.photos/id/367",
-      "status": "available",
-      "quantity": 50
-    },
-    {
-      "id": "5",
-      "title": "Ceramic Coffee Mug",
-      "description": "Handmade ceramic mug with artistic design and comfortable handle",
-      "price": 350,
-      "categoryId": 3,
-      "url": "https://picsum.photos/id/30",
-      "status": "available",
-      "quantity": 100
-    },
-    {
-      "id": "7",
-      "title": "Desk Lamp",
-      "description": "Adjustable LED desk lamp with multiple brightness levels",
-      "price": 750,
-      "categoryId": 3,
-      "url": "https://picsum.photos/id/859",
-      "status": "available",
-      "quantity": 55,
-      "isAuction": true
-    },
-    {
-      "id": "13",
-      "title": "Rice Cooker",
-      "description": "Automatic rice cooker with multiple cooking functions",
-      "price": 1800,
-      "categoryId": 3,
-      "url": "https://picsum.photos/id/292",
-      "status": "available",
-      "quantity": 35
-    },
-    {
-      "id": "8",
-      "title": "Fitness Watch",
-      "description": "Smart fitness tracker with heart rate monitor and sleep tracking",
-      "price": 950,
-      "categoryId": 4,
-      "url": "https://picsum.photos/id/719",
-      "status": "available",
-      "quantity": 43,
-      "isAuction": false
-    },
-    {
-      "id": "12",
-      "title": "Athletic Shoes",
-      "description": "Versatile athletic shoes suitable for running and gym workouts",
-      "price": 1500,
-      "categoryId": 4,
-      "url": "https://picsum.photos/id/21",
-      "status": "available",
-      "quantity": 70
-    },
-    {
-      "id": "15",
-      "title": "Yoga Kit",
-      "description": "Complete yoga kit with mat and accessories",
-      "price": 980,
-      "categoryId": 4,
-      "url": "https://picsum.photos/id/437",
-      "status": "available",
-      "quantity": 40
-    },
-    {
-      "id": "9",
-      "title": "Portable Speaker",
-      "description": "Waterproof Bluetooth speaker with 360-degree sound",
-      "price": 880,
-      "categoryId": 5,
-      "url": "https://picsum.photos/id/27",
-      "status": "available",
-      "quantity": 60
-    },
-    {
-      "id": "19",
-      "title": "Tennis Racket",
-      "description": "Professional tennis racket with balanced design",
-      "price": 2200,
-      "categoryId": 5,
-      "url": "https://picsum.photos/id/29",
-      "status": "unavailable",
-      "quantity": 0
     },
     {
       "id": "30",
@@ -780,6 +894,156 @@
       "quantity": 30
     },
     {
+      "id": "31",
+      "title": "Electric Toothbrush",
+      "description": "Rechargeable toothbrush with multiple brushing modes",
+      "price": 950,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/777",
+      "status": "available",
+      "quantity": 50
+    },
+    {
+      "id": "32",
+      "title": "Hiking Boots",
+      "description": "Durable waterproof hiking boots with ankle support",
+      "price": 1700,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/888",
+      "status": "available",
+      "quantity": 20
+    },
+    {
+      "id": "33",
+      "title": "Wireless Mouse",
+      "description": "Silent-click wireless mouse with long battery life",
+      "price": 500,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/999",
+      "status": "available",
+      "quantity": 80
+    },
+    {
+      "id": "34",
+      "title": "Air Purifier",
+      "description": "Compact air purifier with HEPA filter for clean air",
+      "price": 2300,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/101",
+      "status": "available",
+      "quantity": 12
+    },
+    {
+      "id": "35",
+      "title": "Soccer Ball",
+      "description": "Professional-grade soccer ball with durable stitching",
+      "price": 650,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/202",
+      "status": "available",
+      "quantity": 100
+    },
+    {
+      "id": "36",
+      "title": "Winter Gloves",
+      "description": "Thermal gloves with touchscreen compatibility",
+      "price": 400,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/304",
+      "status": "available",
+      "quantity": 120
+    },
+    {
+      "id": "37",
+      "title": "Smart Light Bulb",
+      "description": "Color-changing LED bulb with app control",
+      "price": 300,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/404",
+      "status": "available",
+      "quantity": 200
+    },
+    {
+      "id": "38",
+      "title": "Backpack Cooler",
+      "description": "Insulated backpack cooler for picnics and outdoor trips",
+      "price": 1400,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/505",
+      "status": "available",
+      "quantity": 30
+    },
+    {
+      "id": "39",
+      "title": "Bluetooth Earbuds",
+      "description": "True wireless earbuds with sweat resistance",
+      "price": 1100,
+      "categoryId": 2,
+      "url": "https://picsum.photos/id/606",
+      "status": "available",
+      "quantity": 45
+    },
+    {
+      "id": "40",
+      "title": "Cookware Set",
+      "description": "Non-stick cookware set with 5 pieces",
+      "price": 3500,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/701",
+      "status": "available",
+      "quantity": 10
+    },
+    {
+      "id": "41",
+      "title": "Folding Bike",
+      "description": "Lightweight folding bicycle for urban commuting",
+      "price": 5000,
+      "categoryId": 4,
+      "url": "https://picsum.photos/id/808",
+      "status": "available",
+      "quantity": 8
+    },
+    {
+      "id": "42",
+      "title": "Puzzle Game",
+      "description": "1000-piece jigsaw puzzle with scenic artwork",
+      "price": 700,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/909",
+      "status": "available",
+      "quantity": 50
+    },
+    {
+      "id": "43",
+      "title": "Electric Guitar",
+      "description": "Beginner-friendly electric guitar with amplifier",
+      "price": 3800,
+      "categoryId": 5,
+      "url": "https://picsum.photos/id/111",
+      "status": "available",
+      "quantity": 15
+    },
+    {
+      "id": "44",
+      "title": "Smart Doorbell",
+      "description": "Wi-Fi doorbell with camera and motion detection",
+      "price": 2600,
+      "categoryId": 3,
+      "url": "https://picsum.photos/id/222",
+      "status": "available",
+      "quantity": 20
+    },
+    {
+      "id": "45",
+      "title": "Raincoat",
+      "description": "Waterproof raincoat with breathable fabric",
+      "price": 850,
+      "categoryId": 1,
+      "url": "https://picsum.photos/id/323",
+      "status": "available",
+      "quantity": 60
+    },
+    {
       "id": "333",
       "title": "333",
       "description": "3333",
@@ -787,7 +1051,7 @@
       "categoryId": 333,
       "url": "https://picsum.photos/id/33",
       "status": "available",
-      "quantity": 5
+      "quantity": 4
     }
   ],
   "shoppingCart": [
@@ -807,25 +1071,6 @@
       "dateAdded": "2025-03-19T15:30:11.598Z"
     },
     {
-      "id": "1685",
-      "userId": "5",
-      "productId": [
-        {
-          "idProduct": "1",
-          "quantity": "2"
-        },
-        {
-          "idProduct": "2",
-          "quantity": "1"
-        },
-        {
-          "idProduct": "3",
-          "quantity": "5"
-        }
-      ],
-      "dateAdded": "2025-03-24T11:41:11.428Z"
-    },
-    {
       "id": "cd5d",
       "userId": "3",
       "productId": [
@@ -835,28 +1080,6 @@
         }
       ],
       "dateAdded": "2025-03-24T15:59:03.745Z"
-    },
-    {
-      "id": "17de",
-      "userId": "1",
-      "productId": [
-        {
-          "idProduct": "22",
-          "quantity": "5"
-        }
-      ],
-      "dateAdded": "2025-03-25T12:55:50.272Z"
-    },
-    {
-      "id": "3e69",
-      "userId": "4",
-      "productId": [
-        {
-          "idProduct": "24",
-          "quantity": "1"
-        }
-      ],
-      "dateAdded": "2025-03-27T11:35:25.080Z"
     }
   ],
   "paymentMethods": [
@@ -955,11 +1178,19 @@
         },
         {
           "idProduct": "2",
-          "status": "Inactive"
+          "status": "Active"
         },
         {
           "idProduct": "333",
           "status": "available"
+        },
+        {
+          "idProduct": "27",
+          "status": "Active"
+        },
+        {
+          "idProduct": "28",
+          "status": "Active"
         }
       ]
     },
@@ -978,6 +1209,14 @@
         {
           "idProduct": "5",
           "status": "Inactive"
+        },
+        {
+          "idProduct": "29",
+          "status": "Active"
+        },
+        {
+          "idProduct": "31",
+          "status": "available"
         }
       ]
     },
@@ -987,6 +1226,14 @@
       "products": [
         {
           "idProduct": "6",
+          "status": "Active"
+        },
+        {
+          "idProduct": "32",
+          "status": "Inactive"
+        },
+        {
+          "idProduct": "33",
           "status": "Active"
         }
       ]
@@ -1002,6 +1249,10 @@
         {
           "idProduct": "8",
           "status": "Active"
+        },
+        {
+          "idProduct": "34",
+          "status": "available"
         }
       ]
     },
@@ -1012,6 +1263,14 @@
         {
           "idProduct": "9",
           "status": "Inactive"
+        },
+        {
+          "idProduct": "35",
+          "status": "Active"
+        },
+        {
+          "idProduct": "36",
+          "status": "available"
         }
       ]
     },
@@ -1025,6 +1284,60 @@
         },
         {
           "idProduct": "11",
+          "status": "Inactive"
+        },
+        {
+          "idProduct": "37",
+          "status": "Active"
+        }
+      ]
+    },
+    {
+      "id": "sp007",
+      "userId": "6",
+      "products": [
+        {
+          "idProduct": "38",
+          "status": "Active"
+        },
+        {
+          "idProduct": "39",
+          "status": "available"
+        },
+        {
+          "idProduct": "40",
+          "status": "Inactive"
+        }
+      ]
+    },
+    {
+      "id": "sp008",
+      "userId": "7",
+      "products": [
+        {
+          "idProduct": "41",
+          "status": "Active"
+        },
+        {
+          "idProduct": "42",
+          "status": "Inactive"
+        }
+      ]
+    },
+    {
+      "id": "sp009",
+      "userId": "8",
+      "products": [
+        {
+          "idProduct": "43",
+          "status": "available"
+        },
+        {
+          "idProduct": "44",
+          "status": "Active"
+        },
+        {
+          "idProduct": "45",
           "status": "Inactive"
         }
       ]

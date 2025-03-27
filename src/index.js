@@ -11,14 +11,18 @@ import Orders from './pages/orders/page';
 import ListCategory from './pages/listCategory/page';
 import Wishlist from './pages/wishlist/page';
 import Sell from './pages/sell/page';
-import SellerProducts from './pages/sellerProduct/page';
-import OrderHistory from './pages/OrderHistory/page';
-import SearchResults from './pages/SearchResults/SearchResults';
+
 import TotalSell from './pages/totalSell/page';
 import Success from './pages/success/page';
 import AuthPage from './pages/auth/page';
 import AdminDashboard from './pages/admin/page';
 import AuctionProductDetail from './pages/auction/page';
+import OrderHistory from './pages/OrderHistory/page';
+import SearchResults from './pages/SearchResults/SearchResults';
+import SellerProducts from './pages/sellerProduct/page';
+import DailyDeals from './pages/dailyDeal/page';
+import HelpContact from './pages/help/page';
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -42,6 +46,9 @@ root.render(
         <Route path="/totalSell" element={<TotalSell />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/auction-product" element={<AuctionProductDetail />} />
+        <Route path="/daily-deals" element={<DailyDeals />} />
+        <Route path="/help" element={<HelpContact />} />
+        
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
