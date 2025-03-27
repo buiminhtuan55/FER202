@@ -22,7 +22,9 @@
         "zipcode": "12345",
         "city": "New York",
         "country": "United States"
-      }
+      },
+      "role": "seller",
+      "action": "unlock"
     },
     {
       "id": "2",
@@ -30,14 +32,17 @@
       "password": "123123",
       "fullname": "Mary Johnson",
       "order_id": [
-        "ORD002"
+        "ORD002",
+        "ORD516"
       ],
       "address": {
         "street": "456 Elm St",
         "zipcode": "67890",
         "city": "Los Angeles",
         "country": "United States"
-      }
+      },
+      "role": "seller",
+      "action": "unlock"
     },
     {
       "id": "3",
@@ -52,7 +57,9 @@
         "zipcode": "54321",
         "city": "Chicago",
         "country": "United States"
-      }
+      },
+      "role": "seller",
+      "action": "lock"
     },
     {
       "id": "4",
@@ -61,14 +68,17 @@
       "fullname": "Sarah Brown",
       "order_id": [
         "ORD005",
-        "ORD607"
+        "ORD607",
+        "ORD681"
       ],
       "address": {
         "street": "321 Pine St",
         "zipcode": "98765",
         "city": "Houston",
         "country": "United States"
-      }
+      },
+      "role": "admin",
+      "action": "unlock"
     },
     {
       "id": "5",
@@ -83,7 +93,9 @@
         "zipcode": "11223",
         "city": "San Francisco",
         "country": "United States"
-      }
+      },
+      "role": "admin",
+      "action": "unlock"
     },
     {
       "id": "27b4",
@@ -99,22 +111,9 @@
         "zipcode": "123123",
         "city": "Hanoi",
         "country": "Vietnam"
-      }
-    },
-    {
-      "id": "user1742836430004",
-      "email": "test@gmail.com",
-      "password": "123123",
-      "fullname": "11111111",
-      "order_id": [
-        "ORD522"
-      ],
-      "address": {
-        "street": "123123",
-        "zipcode": "123123",
-        "city": "123123",
-        "country": "123123"
-      }
+      },
+      "role": "admin",
+      "action": "unlock"
     }
   ],
   "orders": [
@@ -452,6 +451,46 @@
           "price": 12
         }
       ]
+    },
+    {
+      "id": "12c1",
+      "order_id": "ORD516",
+      "user_id": "2",
+      "order_date": "2025-03-27T08:41:20.382Z",
+      "total_amount": 126,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Brown Leather Bag",
+          "quantity": 1,
+          "price": 25
+        },
+        {
+          "product_name": "Modern Laptop",
+          "quantity": 1,
+          "price": 45
+        },
+        {
+          "product_name": "Camping Tent",
+          "quantity": 2,
+          "price": 28
+        }
+      ]
+    },
+    {
+      "id": "6be7",
+      "order_id": "ORD681",
+      "user_id": "4",
+      "order_date": "2025-03-27T11:35:21.007Z",
+      "total_amount": 28,
+      "status": "pending",
+      "items": [
+        {
+          "product_name": "Camping Tent",
+          "quantity": 1,
+          "price": 28
+        }
+      ]
     }
   ],
   "categories": [
@@ -482,16 +521,6 @@
     }
   ],
   "products": [
-    {
-      "id": "16",
-      "title": "Stainless Steel Water Bottle",
-      "description": "Durable water bottle with double-wall insulation for hot and cold drinks",
-      "price": 600,
-      "categoryId": 3,
-      "url": "https://picsum.photos/id/45",
-      "status": "available",
-      "quantity": 50
-    },
     {
       "id": "17",
       "title": "Gaming Mouse",
@@ -570,7 +599,7 @@
       "categoryId": 4,
       "url": "https://picsum.photos/id/987",
       "status": "available",
-      "quantity": 35
+      "quantity": 34
     },
     {
       "id": "26",
@@ -745,21 +774,6 @@
   ],
   "shoppingCart": [
     {
-      "id": "1438",
-      "userId": "2",
-      "productId": [
-        {
-          "idProduct": "1",
-          "quantity": "1"
-        },
-        {
-          "idProduct": "3",
-          "quantity": "1"
-        }
-      ],
-      "dateAdded": "2025-03-01T05:36:10.233Z"
-    },
-    {
       "id": "3e19",
       "userId": "27b4",
       "productId": [
@@ -814,6 +828,17 @@
         }
       ],
       "dateAdded": "2025-03-25T12:55:50.272Z"
+    },
+    {
+      "id": "3e69",
+      "userId": "4",
+      "productId": [
+        {
+          "idProduct": "24",
+          "quantity": "1"
+        }
+      ],
+      "dateAdded": "2025-03-27T11:35:25.080Z"
     }
   ],
   "paymentMethods": [
@@ -988,7 +1013,12 @@
     },
     {
       "id": "sp1742836430014",
-      "userId": "user1742836430004",
+      "userId": null,
+      "products": []
+    },
+    {
+      "id": "sp1743076282046",
+      "userId": null,
       "products": []
     }
   ]

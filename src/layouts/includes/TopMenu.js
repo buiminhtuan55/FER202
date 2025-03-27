@@ -137,6 +137,13 @@ export default function TopMenu() {
                 </ul>
 
                 <ul id="TopMenuRight" className="flex items-center text-[11px] text-[#333333] px-2 h-8">
+                    {currentUser?.role === "admin" && (
+                        <li className="flex items-center gap-2 px-3 hover:underline cursor-pointer">
+                            <Link to="/adminDashboard" className="flex items-center gap-2 text-blue-400 font-bold">
+                                Admin Panel
+                            </Link>
+                        </li>
+                    )}
                     <li className="flex items-center gap-2 px-3 hover:underline cursor-pointer">
                         <Link to="/sell" className="flex items-center gap-2">
                             Sell

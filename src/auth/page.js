@@ -30,7 +30,12 @@ export default function AuthPage() {
                 const user = users.find(u => u.email === formData.email && u.password === formData.password)
                 if (user) {
                     localStorage.setItem('currentUser', JSON.stringify(user))
-                    navigate('/')
+                    // Kiểm tra role của user
+                    if (user.role === 'admin') {
+                        navigate('/adminDashboard') // Điều hướng đến trang admin nếu role là admin
+                    } else {
+                        navigate('/') // Điều hướng về trang chính nếu không phải admin
+                    }
                 } else {
                     setError("Email hoặc mật khẩu không đúng")
                 }
@@ -61,7 +66,9 @@ export default function AuthPage() {
                         zipcode: formData.zipcode,
                         city: formData.city,
                         country: formData.country
-                    }
+                    },
+                    role: 'seller', // Role mặc định là 'seller'
+                    action: 'unlock' // Thêm thuộc tính action với giá trị 'unlock'
                 }
 
                 // Gửi POST request để đăng ký user
@@ -111,6 +118,26 @@ export default function AuthPage() {
             }
         }
     }
+
+    // Hàm tự động điền tài khoản seller
+    const fillSellerCredentials = () => {
+        setFormData({
+            ...formData,
+            email: 'user1@gmail.com',
+            password: '123123',
+        });
+        setIsLogin(true); // Chuyển sang tab đăng nhập
+    };
+
+    // Hàm tự động điền tài khoản admin
+    const fillAdminCredentials = () => {
+        setFormData({
+            ...formData,
+            email: 'user4@gmail.com',
+            password: '123123',
+        });
+        setIsLogin(true); // Chuyển sang tab đăng nhập
+    };
 
     return (
         <div id="AuthPage" className="w-full min-h-screen bg-white">
@@ -245,6 +272,26 @@ export default function AuthPage() {
                         <a href="/forgot-password" className="text-center text-blue-600 hover:underline text-sm">
                             Quên mật khẩu?
                         </a>
+                    )}
+
+                    {/* Hai nút mới để điền thông tin tài khoản */}
+                    {isLogin && (
+                        <div className="flex gap-4 justify-center mt-4">
+                            <button
+                                type="button"
+                                onClick={fillSellerCredentials}
+                                className="p-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                            >
+                                Tự Điền Seller
+                            </button>
+                            <button
+                                type="button"
+                                onClick={fillAdminCredentials}
+                                className="p-2 bg-purple-500 text-white rounded-md hover:bg-purple-600"
+                            >
+                                Tự Điền Admin
+                            </button>
+                        </div>
                     )}
 
                     <div className="relative my-4">

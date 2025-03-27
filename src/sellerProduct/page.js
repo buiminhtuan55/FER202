@@ -11,11 +11,10 @@ const SellerProducts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [newProduct, setNewProduct] = useState({
-    idProduct: "",
     title: "",
     description: "",
     price: 0,
-    quantity: 0, // Added quantity field
+    quantity: 0,
     categoryId: 1,
     url: "",
     status: "available",
@@ -79,6 +78,20 @@ const SellerProducts = () => {
     fetchData();
   }, [currentUser]);
 
+  const generateNewProductId = async () => {
+    try {
+      const response = await fetch("http://localhost:9999/products");
+      if (!response.ok) throw new Error("Không thể lấy danh sách sản phẩm.");
+      const allProducts = await response.json();
+      const existingIds = allProducts.map((p) => parseInt(p.id.replace("prod", "")));
+      const maxId = existingIds.length > 0 ? Math.max(...existingIds) : 0;
+      return `prod${maxId + 1}`;
+    } catch (err) {
+      console.error("Error generating ID:", err);
+      return `prod${Date.now()}`; // Fallback nếu không lấy được danh sách
+    }
+  };
+
   const handleSaveProduct = async (e) => {
     e.preventDefault();
     if (!currentUser || !currentUser.id) {
@@ -87,18 +100,23 @@ const SellerProducts = () => {
     }
 
     const isEditing = !!editingProduct;
-    const productToSave = isEditing
-      ? { ...editingProduct, id: editingProduct.idProduct }
-      : {
-          id: newProduct.idProduct || `prod${Date.now()}`,
-          title: newProduct.title,
-          description: newProduct.description,
-          price: newProduct.price,
-          quantity: newProduct.quantity, // Added quantity
-          categoryId: newProduct.categoryId,
-          url: newProduct.url,
-          status: newProduct.status,
-        };
+    let productToSave;
+
+    if (isEditing) {
+      productToSave = { ...editingProduct, id: editingProduct.idProduct };
+    } else {
+      const newId = await generateNewProductId();
+      productToSave = {
+        id: newId,
+        title: newProduct.title,
+        description: newProduct.description,
+        price: newProduct.price,
+        quantity: newProduct.quantity,
+        categoryId: newProduct.categoryId,
+        url: newProduct.url,
+        status: newProduct.status,
+      };
+    }
 
     try {
       const productMethod = isEditing ? "PUT" : "POST";
@@ -139,11 +157,10 @@ const SellerProducts = () => {
       setIsModalOpen(false);
       setEditingProduct(null);
       setNewProduct({
-        idProduct: "",
         title: "",
         description: "",
         price: 0,
-        quantity: 0, // Added quantity
+        quantity: 0,
         categoryId: 1,
         url: "",
         status: "available",
@@ -191,7 +208,7 @@ const SellerProducts = () => {
       title: detailedProduct?.title || "",
       description: detailedProduct?.description || "",
       price: detailedProduct?.price || 0,
-      quantity: detailedProduct?.quantity || 0, // Added quantity
+      quantity: detailedProduct?.quantity || 0,
       categoryId: detailedProduct?.categoryId || 1,
       url: detailedProduct?.url || "",
       status: product.status,
@@ -220,10 +237,10 @@ const SellerProducts = () => {
         <SubMenu />
       </div>
       <div className="p-4 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Quản lý sản phẩm bán hàng</h2>
           <button
-            onClick={() => navigate('/totalSell')} // Add navigation button
+            onClick={() => navigate('/totalSell')}
             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
           >
             Xem doanh thu
@@ -252,7 +269,7 @@ const SellerProducts = () => {
                 <th className="p-2 text-left">Tên</th>
                 <th className="p-2 text-left">Mô tả</th>
                 <th className="p-2 text-left">Giá (£)</th>
-                <th className="p-2 text-left">Số lượng</th> {/* Added quantity column */}
+                <th className="p-2 text-left">Số lượng</th>
                 <th className="p-2 text-left">Danh mục</th>
                 <th className="p-2 text-left">Trạng thái</th>
                 <th className="p-2 text-left">Hành động</th>
@@ -285,7 +302,7 @@ const SellerProducts = () => {
                       <td className="p-2">{detail.title || "N/A"}</td>
                       <td className="p-2">{detail.description || "N/A"}</td>
                       <td className="p-2">£{(detail.price / 100 || 0).toFixed(2)}</td>
-                      <td className="p-2">{detail.quantity || 0}</td> {/* Display quantity */}
+                      <td className="p-2">{detail.quantity || 0}</td>
                       <td className="p-2">{detail.categoryId || "N/A"}</td>
                       <td className="p-2">{product.status}</td>
                       <td className="p-2">
@@ -317,22 +334,17 @@ const SellerProducts = () => {
                 {editingProduct ? "Sửa sản phẩm" : "Thêm sản phẩm mới"}
               </h3>
               <form onSubmit={handleSaveProduct}>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-1">ID Sản phẩm</label>
-                  <input
-                    type="text"
-                    value={editingProduct ? editingProduct.idProduct : newProduct.idProduct}
-                    onChange={(e) =>
-                      editingProduct
-                        ? setEditingProduct({ ...editingProduct, idProduct: e.target.value })
-                        : setNewProduct({ ...newProduct, idProduct: e.target.value })
-                    }
-                    className="w-full p-2 border rounded"
-                    placeholder="Ví dụ: 101"
-                    required
-                    disabled={editingProduct}
-                  />
-                </div>
+                {editingProduct && (
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-1">ID Sản phẩm</label>
+                    <input
+                      type="text"
+                      value={editingProduct.idProduct}
+                      className="w-full p-2 border rounded bg-gray-100"
+                      disabled
+                    />
+                  </div>
+                )}
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-1">Tên sản phẩm</label>
                   <input
