@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
-import TopMenu from "../layouts/includes/TopMenu";
-import MainHeader from "../layouts/includes/MainHeader";
-import SubMenu from "../layouts/includes/SubMenu";
-import SimilarProducts from "../components/SimilarProducts";
-import Footer from "../layouts/includes/Footer";
+import TopMenu from "../../components/TopMenu";
+import MainHeader from "../../components/MainHeader";
+import SubMenu from "../../components/SubMenu";
+import SimilarProducts from "../../components/SimilarProducts";
+import Footer from "../../components/Footer";
 
 function EmptyCart() {
   const navigate = useNavigate();

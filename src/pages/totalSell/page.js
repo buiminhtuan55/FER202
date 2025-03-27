@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import TopMenu from '../layouts/includes/TopMenu';
-import MainHeader from '../layouts/includes/MainHeader';
-import SubMenu from '../layouts/includes/SubMenu';
+import MainHeader from '../../components/MainHeader';
 import { useNavigate } from 'react-router-dom';
+import TopMenu from '../../components/TopMenu';
+import SubMenu from '../../components/SubMenu';
 
 const TotalSell = () => {
     const navigate = useNavigate();

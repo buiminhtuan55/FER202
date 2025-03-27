@@ -4,22 +4,22 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ProductDetail from './product/[id]/page';
-import Cart from './cart/page';
-import Checkout from './checkout/page';
-import Success from './success/page';
-import Orders from './orders/page';
-import AuthPage from './auth/page';
-import CategoryPage from './listCategory/page';
-import ListCategory from './listCategory/page';
-import Wishlist from './wishlist/page';
-import Sell from './sell/page';
-import SellerProducts from './sellerProduct/page';
-import OrderHistory from './OrderHistory/page';
-import { Search } from 'lucide-react';
-import SearchResults from './SearchResults/SearchResults';
-import TotalSell from './totalSell/page';
-import AdminDashboard from './admin/page';
+import ProductDetail from './pages/product/[id]/page';
+import Cart from './pages/cart/page';
+import Checkout from './pages/checkout/page';
+import Orders from './pages/orders/page';
+import ListCategory from './pages/listCategory/page';
+import Wishlist from './pages/wishlist/page';
+import Sell from './pages/sell/page';
+import SellerProducts from './pages/sellerProduct/page';
+import OrderHistory from './pages/OrderHistory/page';
+import SearchResults from './pages/SearchResults/SearchResults';
+import TotalSell from './pages/totalSell/page';
+import Success from './pages/success/page';
+import AuthPage from './pages/auth/page';
+import AdminDashboard from './pages/admin/page';
+import AuctionProductDetail from './pages/auction/page';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -41,7 +41,7 @@ root.render(
         <Route path="/search" element={<SearchResults />} />
         <Route path="/totalSell" element={<TotalSell />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
-        
+        <Route path="/auction-product" element={<AuctionProductDetail />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

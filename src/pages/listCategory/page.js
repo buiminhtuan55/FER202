@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronDown, Heart, Menu } from "lucide-react";
-import TopMenu from "../layouts/includes/TopMenu";
-import MainHeader from "../layouts/includes/MainHeader";
-import SubMenu from "../layouts/includes/SubMenu";
-import Footer from "../layouts/includes/Footer";
+import TopMenu from "../../components/TopMenu";
+import MainHeader from "../../components/MainHeader";
+import SubMenu from "../../components/SubMenu";
+import Footer from "../../components/Footer";
+
 
 // Filter configurations for different categories
 const categoryFilters = {

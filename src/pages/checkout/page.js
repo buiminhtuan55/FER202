@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Footer from "../layouts/includes/Footer";
-import MainHeader from "../layouts/includes/MainHeader";
-import SubMenu from "../layouts/includes/SubMenu";
-import TopMenu from "../layouts/includes/TopMenu";
+import Footer from "../../components/Footer";
+import SubMenu from "../../components/SubMenu";
+import MainHeader from "../../components/MainHeader";
+import TopMenu from "../../components/TopMenu";
+
 
 // Định nghĩa CheckoutItem
 function CheckoutItem({ product }) {

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Activity from "./includes/activity";
 import Messages from "./includes/messages";
 import Account from "./includes/account";
-import TopMenu from "../layouts/includes/TopMenu";
-import MainHeader from "../layouts/includes/MainHeader";
-import SubMenu from "../layouts/includes/SubMenu";
+import MainHeader from "../../components/MainHeader";
+import TopMenu from "../../components/TopMenu";
+import SubMenu from "../../components/SubMenu";
 
 const Sell = () => {
   const [activeTab, setActiveTab] = useState("Activity");

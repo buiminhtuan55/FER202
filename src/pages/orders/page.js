@@ -1,8 +1,9 @@
 import { Truck } from "lucide-react"
-import TopMenu from "../layouts/includes/TopMenu"
-import MainHeader from "../layouts/includes/MainHeader"
-import SubMenu from "../layouts/includes/SubMenu"
-import Footer from "../layouts/includes/Footer"
+
+import Footer from "../../components/Footer"
+import TopMenu from "../../components/TopMenu"
+import MainHeader from "../../components/MainHeader"
+import SubMenu from "../../components/SubMenu"
 
 // Mock orders data
 const orders = [

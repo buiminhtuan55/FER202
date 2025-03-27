@@ -682,7 +682,7 @@ const AdminDashboard = () => {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.id}</td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center">
-                                                    <div className="h-10 w-10 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
+                                                    {/* <div className="h-10 w-10 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
                                                         {product.url ? (
                                                             <img src={product.url} alt={product.title} className="h-full w-full object-cover" />
                                                         ) : (
@@ -690,7 +690,7 @@ const AdminDashboard = () => {
                                                                 <FaBoxOpen className="h-6 w-6 text-gray-400" />
                                                             </div>
                                                         )}
-                                                    </div>
+                                                    </div> */}
                                                     <div className="ml-4">
                                                         <div className="text-sm font-medium text-gray-900">{product.title}</div>
                                                     </div>

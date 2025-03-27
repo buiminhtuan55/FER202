@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import CarouselComp from "../components/CarouselComp";
 import Product from "../components/Product";
-import Footer from "./includes/Footer";
-import MainHeader from "./includes/MainHeader";
-import SubMenu from "./includes/SubMenu";
-import TopMenu from "./includes/TopMenu";
+import Footer from "../components/Footer";
+import MainHeader from "../components/MainHeader";
+import SubMenu from "../components/SubMenu";
+import TopMenu from "../components/TopMenu";
 
 const ITEMS_PER_PAGE = 10;
 
