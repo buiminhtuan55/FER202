@@ -22,6 +22,7 @@ import SearchResults from './pages/SearchResults/SearchResults';
 import SellerProducts from './pages/sellerProduct/page';
 import DailyDeals from './pages/dailyDeal/page';
 import HelpContact from './pages/help/page';
+import Returns from './pages/returns/page';
 
 
 
@@ -48,6 +49,7 @@ root.render(
         <Route path="/auction-product" element={<AuctionProductDetail />} />
         <Route path="/daily-deals" element={<DailyDeals />} />
         <Route path="/help" element={<HelpContact />} />
+        <Route path="/returns" element={<Returns />} />
         
       </Routes>
     </BrowserRouter>

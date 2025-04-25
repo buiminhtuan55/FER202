@@ -24,13 +24,13 @@ export default function TopMenu() {
             }
 
             try {
-                console.log("Fetching cart count for user:", currentUser.id)
+                // console.log("Fetching cart count for user:", currentUser.id)
                 const response = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`)
                 if (!response.ok) {
                     throw new Error(`Failed to fetch cart: ${response.status}`)
                 }
                 const cartItems = await response.json()
-                console.log("Cart items for count:", cartItems)
+                // console.log("Cart items for count:", cartItems)
                 const totalProducts = cartItems.reduce((sum, item) => sum + item.productId.length, 0)
                 setCartCount(totalProducts)
             } catch (error) {

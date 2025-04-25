@@ -1,105 +1,44 @@
 {
-  "user": [
+  "users": [
     {
       "id": "1",
+      "username": "johnsmith",
       "email": "user1@gmail.com",
       "password": "123123",
-      "fullname": "John Smiths",
-      "order_id": [
-        "ORD381",
-        "ORD118",
-        "ORD137",
-        "ORD960",
-        "ORD130",
-        "ORD201",
-        "ORD327",
-        "ORD701",
-        "ORD855",
-        "ORD399",
-        "ORD677"
-      ],
-      "address": {
-        "street": "123 Main St",
-        "zipcode": "12345",
-        "city": "New York",
-        "country": "United States"
-      },
       "role": "seller",
-      "action": "lock"
+      "avatarURL": "https://picsum.photos/id/64/200"
     },
     {
       "id": "2",
+      "username": "maryjohnson",
       "email": "user2@gmail.com",
       "password": "123123",
-      "fullname": "Mary Johnson",
-      "order_id": [
-        "ORD002",
-        "ORD516",
-        "ORD747"
-      ],
-      "address": {
-        "street": "456 Elm St",
-        "zipcode": "67890",
-        "city": "Los Angeles",
-        "country": "United States"
-      },
-      "role": "seller",
-      "action": "lock"
+      "role": "buyer",
+      "avatarURL": "https://picsum.photos/id/65/200"
     },
     {
       "id": "3",
+      "username": "davidwilson",
       "email": "user3@gmail.com",
       "password": "123123",
-      "fullname": "David Wilson 222",
-      "order_id": [
-        "ORD003"
-      ],
-      "address": {
-        "street": "789 Oak St",
-        "zipcode": "54321",
-        "city": "Chicago",
-        "country": "United States"
-      },
       "role": "seller",
-      "action": "unlock"
+      "avatarURL": "https://picsum.photos/id/66/200"
     },
     {
       "id": "4",
+      "username": "sarahbrown",
       "email": "user4@gmail.com",
       "password": "123123",
-      "fullname": "Sarah Brown",
-      "order_id": [
-        "ORD005",
-        "ORD607",
-        "ORD681",
-        "ORD990"
-      ],
-      "address": {
-        "street": "321 Pine St",
-        "zipcode": "98765",
-        "city": "Houston",
-        "country": "United States"
-      },
       "role": "admin",
-      "action": "lock"
+      "avatarURL": "https://picsum.photos/id/67/200"
     },
     {
       "id": "5",
+      "username": "michaeldavis",
       "email": "user5@gmail.com",
       "password": "123123",
-      "fullname": "Michael Davis",
-      "order_id": [
-        "ORD007",
-        "ORD552"
-      ],
-      "address": {
-        "street": "654 Maple St",
-        "zipcode": "11223",
-        "city": "San Francisco",
-        "country": "United States"
-      },
       "role": "admin",
-      "action": "lock"
+      "avatarURL": "https://picsum.photos/id/68/200"
     },
     {
       "id": "27b4",
@@ -118,478 +57,365 @@
       },
       "role": "admin",
       "action": "unlock"
+    },
+    {
+      "id": "1",
+      "username": "admin",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin",
+      "avatarURL": "https://picsum.photos/id/64/200"
+    },
+    {
+      "id": "2",
+      "username": "user1",
+      "email": "user1@example.com",
+      "password": "user123",
+      "role": "user",
+      "avatarURL": "https://picsum.photos/id/65/200"
+    },
+    {
+      "id": "3",
+      "username": "seller1",
+      "email": "seller1@example.com",
+      "password": "seller123",
+      "role": "seller",
+      "avatarURL": "https://picsum.photos/id/66/200"
+    }
+  ],
+  "address": [
+    {
+      "id": "1",
+      "userId": "1",
+      "fullName": "John Smiths",
+      "phone": "+1234567890",
+      "street": "123 Main St",
+      "city": "New York",
+      "state": "NY",
+      "country": "United States",
+      "isDefault": true
+    },
+    {
+      "id": "2",
+      "userId": "2",
+      "fullName": "Mary Johnson",
+      "phone": "+1987654321",
+      "street": "456 Elm St",
+      "city": "Los Angeles",
+      "state": "CA",
+      "country": "United States",
+      "isDefault": true
+    },
+    {
+      "id": "1",
+      "userId": "2",
+      "fullName": "John Doe",
+      "phone": "1234567890",
+      "street": "123 Main St",
+      "city": "New York",
+      "state": "NY",
+      "country": "USA",
+      "isDefault": true
     }
   ],
   "orders": [
     {
-      "order_id": "ORD002",
-      "user_id": "2",
-      "order_date": "2024-03-22T15:45:00Z",
-      "total_amount": 89.99,
+      "id": "b185",
+      "buyerId": "2",
+      "orderDate": "2024-03-22T15:45:00Z",
+      "totalPrice": 89.99,
       "status": "shipped",
-      "items": [
-        {
-          "product_name": "Bluetooth Headphones",
-          "quantity": 1,
-          "price": 89.99
-        }
-      ],
-      "id": "b185"
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
     },
     {
-      "order_id": "ORD003",
-      "user_id": "3",
-      "order_date": "2024-03-20T08:20:00Z",
-      "total_amount": 45,
+      "id": "ORD001",
+      "buyerId": "2",
+      "orderDate": "2024-03-22T15:45:00Z",
+      "totalPrice": 289.97,
+      "status": "return_pending",
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
+    },
+    {
+      "id": "ORD002",
+      "buyerId": "2",
+      "orderDate": "2024-03-20T10:30:00Z",
+      "totalPrice": 449.97,
+      "status": "return_pending",
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
+    },
+    {
+      "id": "ORD003",
+      "buyerId": "2",
+      "orderDate": "2024-03-15T09:15:00Z",
+      "totalPrice": 299.99,
       "status": "pending",
-      "items": [
-        {
-          "product_name": "USB-C Charger",
-          "quantity": 1,
-          "price": 45
-        }
-      ],
-      "id": "02a8"
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
     },
     {
-      "order_id": "ORD004",
-      "user_id": "27b4",
-      "order_date": "2024-03-18T12:00:00Z",
-      "total_amount": 230,
+      "id": "ORD004",
+      "buyerId": "2",
+      "orderDate": "2024-03-10T14:20:00Z",
+      "totalPrice": 599.98,
       "status": "delivered",
-      "items": [
-        {
-          "product_name": "Mechanical Keyboard",
-          "quantity": 1,
-          "price": 150
-        },
-        {
-          "product_name": "Gaming Mouse",
-          "quantity": 1,
-          "price": 80
-        }
-      ],
-      "id": "44fe"
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
     },
     {
-      "order_id": "ORD007",
-      "user_id": "5",
-      "order_date": "2024-03-27T17:30:00Z",
-      "total_amount": 79.99,
+      "id": "ORD005",
+      "buyerId": "2",
+      "orderDate": "2024-03-05T11:30:00Z",
+      "totalPrice": 799.96,
       "status": "delivered",
-      "items": [
-        {
-          "product_name": "Wireless Earbuds",
-          "quantity": 1,
-          "price": 79.99
-        }
-      ],
-      "id": "be83"
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
     },
     {
-      "order_id": "ORD008",
-      "user_id": "27b4",
-      "order_date": "2024-03-28T11:20:00Z",
-      "total_amount": 120,
-      "status": "shipped",
-      "items": [
-        {
-          "product_name": "Portable SSD 1TB",
-          "quantity": 1,
-          "price": 120
-        }
-      ],
-      "id": "83e7"
+      "id": "ORD006",
+      "buyerId": "2",
+      "orderDate": "2024-03-01T16:45:00Z",
+      "totalPrice": 349.98,
+      "status": "return_approved",
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
     },
     {
-      "id": "0328",
-      "order_id": "ORD381",
-      "user_id": "1",
-      "order_date": "2025-03-24T15:45:46.120Z",
-      "total_amount": 343,
+      "id": "ORD007",
+      "buyerId": "2",
+      "orderDate": "2024-02-28T09:20:00Z",
+      "totalPrice": 199.99,
+      "status": "returned",
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
+    },
+    {
+      "id": "ORD008",
+      "buyerId": "2",
+      "orderDate": "2024-02-25T13:15:00Z",
+      "totalPrice": 899.97,
+      "status": "return_rejected",
+      "addressId": "1",
+      "shipping_address": {
+        "street": "456 Elm St",
+        "zipcode": "67890",
+        "city": "Los Angeles",
+        "country": "United States"
+      }
+    }
+  ],
+  "orderItems": [
+    {
+      "id": "oi001",
+      "orderId": "b185",
+      "productId": "1",
+      "quantity": 1,
+      "unitPrice": 89.99
+    },
+    {
+      "id": "oi002",
+      "orderId": "ORD001",
+      "productId": "1",
+      "quantity": 2,
+      "unitPrice": 89.99
+    },
+    {
+      "id": "oi003",
+      "orderId": "ORD001",
+      "productId": "3",
+      "quantity": 1,
+      "unitPrice": 109.99
+    },
+    {
+      "id": "oi004",
+      "orderId": "ORD002",
+      "productId": "2",
+      "quantity": 3,
+      "unitPrice": 74.99
+    },
+    {
+      "id": "oi005",
+      "orderId": "ORD002",
+      "productId": "5",
+      "quantity": 2,
+      "unitPrice": 112.5
+    },
+    {
+      "id": "oi006",
+      "orderId": "ORD003",
+      "productId": "3",
+      "quantity": 1,
+      "unitPrice": 299.99
+    },
+    {
+      "id": "oi007",
+      "orderId": "ORD004",
+      "productId": "1",
+      "quantity": 1,
+      "unitPrice": 89.99
+    },
+    {
+      "id": "oi008",
+      "orderId": "ORD004",
+      "productId": "4",
+      "quantity": 2,
+      "unitPrice": 129.99
+    },
+    {
+      "id": "oi009",
+      "orderId": "ORD004",
+      "productId": "7",
+      "quantity": 1,
+      "unitPrice": 250
+    },
+    {
+      "id": "oi010",
+      "orderId": "ORD005",
+      "productId": "1",
+      "quantity": 3,
+      "unitPrice": 89.99
+    },
+    {
+      "id": "oi011",
+      "orderId": "ORD005",
+      "productId": "2",
+      "quantity": 2,
+      "unitPrice": 74.99
+    },
+    {
+      "id": "oi012",
+      "orderId": "ORD006",
+      "productId": "3",
+      "quantity": 1,
+      "unitPrice": 299.99
+    },
+    {
+      "id": "oi013",
+      "orderId": "ORD006",
+      "productId": "4",
+      "quantity": 1,
+      "unitPrice": 49.99
+    },
+    {
+      "id": "oi014",
+      "orderId": "ORD007",
+      "productId": "2",
+      "quantity": 1,
+      "unitPrice": 199.99
+    },
+    {
+      "id": "oi015",
+      "orderId": "ORD008",
+      "productId": "1",
+      "quantity": 4,
+      "unitPrice": 89.99
+    },
+    {
+      "id": "oi016",
+      "orderId": "ORD008",
+      "productId": "3",
+      "quantity": 2,
+      "unitPrice": 109.99
+    }
+  ],
+  "returnRequests": [
+    {
+      "id": "RET001",
+      "orderId": "b185",
+      "userId": "2",
+      "reason": "Product damaged",
       "status": "pending",
-      "items": [
-        {
-          "product_name": "Brown Leather Bag",
-          "quantity": 13,
-          "price": 25
-        },
-        {
-          "product_name": "Vintage Camera",
-          "quantity": 1,
-          "price": 18
-        }
-      ]
+      "created_at": "2024-03-25T10:00:00Z"
     },
     {
-      "id": "06e6",
-      "order_id": "ORD118",
-      "user_id": "1",
-      "order_date": "2025-03-24T15:46:05.866Z",
-      "total_amount": 75,
+      "id": "1",
+      "orderId": "ORD002",
+      "userId": "2",
+      "reason": "Sản phẩm không đúng mô tả",
       "status": "pending",
-      "items": [
-        {
-          "product_name": "Brown Leather Bag",
-          "quantity": 3,
-          "price": 25
-        }
-      ]
+      "created_at": "2024-03-21T10:00:00Z"
     },
     {
-      "id": "5e09",
-      "order_id": "ORD137",
-      "user_id": "1",
-      "order_date": "2025-03-24T16:07:57.801Z",
-      "total_amount": 49.5,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Leather Wallet",
-          "quantity": 1,
-          "price": 4.5
-        },
-        {
-          "product_name": "Modern Laptop",
-          "quantity": 1,
-          "price": 45
-        }
-      ]
+      "id": "2",
+      "orderId": "ORD006",
+      "userId": "2",
+      "reason": "Sản phẩm bị hỏng",
+      "status": "approved",
+      "created_at": "2024-03-06T14:30:00Z"
     },
     {
-      "id": "4f30",
-      "order_id": "ORD960",
-      "user_id": "1",
-      "order_date": "2025-03-24T16:09:11.474Z",
-      "total_amount": 15.5,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Ceramic Coffee Mug",
-          "quantity": 1,
-          "price": 3.5
-        },
-        {
-          "product_name": "Wireless Headphones",
-          "quantity": 1,
-          "price": 12
-        }
-      ]
+      "id": "3",
+      "orderId": "ORD007",
+      "userId": "2",
+      "reason": "Thay đổi ý định",
+      "status": "approved",
+      "created_at": "2024-03-02T09:15:00Z"
     },
     {
-      "id": "9963",
-      "order_id": "ORD130",
-      "user_id": "1",
-      "order_date": "2025-03-24T16:33:10.455Z",
-      "total_amount": 21.8,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Denim Jacket",
-          "quantity": 1,
-          "price": 12
-        },
-        {
-          "product_name": "Yoga Kit",
-          "quantity": 1,
-          "price": 9.8
-        }
-      ]
+      "id": "4",
+      "orderId": "ORD008",
+      "userId": "2",
+      "reason": "Lý do khác",
+      "status": "rejected",
+      "created_at": "2024-02-26T11:20:00Z"
     },
     {
-      "id": "99c4",
-      "order_id": "ORD201",
-      "user_id": "1",
-      "order_date": "2025-03-24T16:51:56.291Z",
-      "total_amount": 341.5,
+      "id": "ca0a",
+      "orderId": "ORD001",
+      "userId": "2",
+      "reason": "abc",
       "status": "pending",
-      "items": [
-        {
-          "product_name": "Brown Leather Bag",
-          "quantity": 11,
-          "price": 25
-        },
-        {
-          "product_name": "Vintage Camera",
-          "quantity": 1,
-          "price": 18
-        },
-        {
-          "product_name": "Modern Laptop",
-          "quantity": 1,
-          "price": 45
-        },
-        {
-          "product_name": "Ceramic Coffee Mug",
-          "quantity": 1,
-          "price": 3.5
-        }
-      ]
+      "created_at": "2025-04-25T04:33:14.476Z"
     },
     {
-      "id": "a9e6",
-      "order_id": "ORD522",
-      "user_id": "user1742836430004",
-      "order_date": "2025-03-24T17:14:29.395Z",
-      "total_amount": 12,
+      "id": "932d",
+      "orderId": "ORD001",
+      "userId": "2",
+      "reason": "abc",
       "status": "pending",
-      "items": [
-        {
-          "product_name": "Denim Jacket",
-          "quantity": 1,
-          "price": 12
-        }
-      ]
-    },
-    {
-      "id": "a886",
-      "order_id": "ORD327",
-      "user_id": "1",
-      "order_date": "2025-03-24T17:45:27.823Z",
-      "total_amount": 127.6,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Yoga Kit",
-          "quantity": 2,
-          "price": 9.8
-        },
-        {
-          "product_name": "Modern Laptop",
-          "quantity": 2,
-          "price": 45
-        },
-        {
-          "product_name": "Vintage Camera",
-          "quantity": 1,
-          "price": 18
-        }
-      ]
-    },
-    {
-      "id": "c5de",
-      "order_id": "ORD701",
-      "user_id": "1",
-      "order_date": "2025-03-25T12:29:42.124Z",
-      "total_amount": 61.5,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Gaming Mouse",
-          "quantity": 3,
-          "price": 8.5
-        },
-        {
-          "product_name": "Vintage Camera",
-          "quantity": 2,
-          "price": 18
-        }
-      ]
-    },
-    {
-      "id": "e638",
-      "order_id": "ORD855",
-      "user_id": "1",
-      "order_date": "2025-03-25T12:30:06.170Z",
-      "total_amount": 11,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Electric Kettle",
-          "quantity": 1,
-          "price": 11
-        }
-      ]
-    },
-    {
-      "id": "5c20",
-      "order_id": "ORD399",
-      "user_id": "1",
-      "order_date": "2025-03-25T12:55:34.763Z",
-      "total_amount": 226,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Running Backpack",
-          "quantity": 2,
-          "price": 13
-        },
-        {
-          "product_name": "Vinyl Record Player",
-          "quantity": 8,
-          "price": 25
-        }
-      ]
-    },
-    {
-      "id": "6d80",
-      "order_id": "ORD607",
-      "user_id": "4",
-      "order_date": "2025-03-26T12:54:29.492Z",
-      "total_amount": 57,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Modern Laptop",
-          "quantity": 1,
-          "price": 45
-        },
-        {
-          "product_name": "Wireless Headphones",
-          "quantity": 1,
-          "price": 12
-        }
-      ]
-    },
-    {
-      "id": "12c1",
-      "order_id": "ORD516",
-      "user_id": "2",
-      "order_date": "2025-03-27T08:41:20.382Z",
-      "total_amount": 126,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Brown Leather Bag",
-          "quantity": 1,
-          "price": 25
-        },
-        {
-          "product_name": "Modern Laptop",
-          "quantity": 1,
-          "price": 45
-        },
-        {
-          "product_name": "Camping Tent",
-          "quantity": 2,
-          "price": 28
-        }
-      ]
-    },
-    {
-      "id": "6be7",
-      "order_id": "ORD681",
-      "user_id": "4",
-      "order_date": "2025-03-27T11:35:21.007Z",
-      "total_amount": 28,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Camping Tent",
-          "quantity": 1,
-          "price": 28
-        }
-      ]
-    },
-    {
-      "id": "cb11",
-      "order_id": "ORD747",
-      "user_id": "2",
-      "order_date": "2025-03-27T16:29:40.374Z",
-      "total_amount": 28.5,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Fitness Watch",
-          "quantity": 3,
-          "price": 9.5
-        }
-      ]
-    },
-    {
-      "id": "3898",
-      "order_id": "ORD990",
-      "user_id": "4",
-      "order_date": "2025-03-27T17:05:12.572Z",
-      "total_amount": 294.66,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Digital Sketch Pad",
-          "quantity": 3,
-          "price": 32
-        },
-        {
-          "product_name": "Vintage Camera",
-          "quantity": 2,
-          "price": 18
-        },
-        {
-          "product_name": "Travel Pillow",
-          "quantity": 6,
-          "price": 6
-        },
-        {
-          "product_name": "Smart Thermostat",
-          "quantity": 3,
-          "price": 20
-        },
-        {
-          "product_name": "333",
-          "quantity": 2,
-          "price": 33.33
-        }
-      ]
-    },
-    {
-      "id": "8953",
-      "order_id": "ORD552",
-      "user_id": "5",
-      "order_date": "2025-03-27T17:05:53.008Z",
-      "total_amount": 172.33,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Brown Leather Bag",
-          "quantity": 2,
-          "price": 25
-        },
-        {
-          "product_name": "Vintage Camera",
-          "quantity": 1,
-          "price": 18
-        },
-        {
-          "product_name": "Modern Laptop",
-          "quantity": 1,
-          "price": 45
-        },
-        {
-          "product_name": "333",
-          "quantity": 1,
-          "price": 33.33
-        },
-        {
-          "product_name": "Smart Thermostat",
-          "quantity": 1,
-          "price": 20
-        },
-        {
-          "product_name": "Travel Pillow",
-          "quantity": 1,
-          "price": 6
-        }
-      ]
-    },
-    {
-      "id": "d47f",
-      "order_id": "ORD677",
-      "user_id": "1",
-      "order_date": "2025-03-27T17:07:03.958Z",
-      "total_amount": 143,
-      "status": "pending",
-      "items": [
-        {
-          "product_name": "Vinyl Record Player",
-          "quantity": 5,
-          "price": 25
-        },
-        {
-          "product_name": "Vintage Camera",
-          "quantity": 1,
-          "price": 18
-        }
-      ]
+      "created_at": "2025-04-25T04:37:26.529Z"
     }
   ],
   "categories": [
@@ -625,51 +451,63 @@
       "title": "Brown Leather Bag",
       "description": "Handcrafted genuine leather bag with premium stitching and multiple compartments",
       "price": 2500,
-      "categoryId": 1,
-      "url": "https://picsum.photos/id/7",
-      "status": "available",
-      "quantity": 30,
-      "isAuction": true
+      "images": [
+        "https://picsum.photos/id/7"
+      ],
+      "categoryId": "1",
+      "sellerId": "1",
+      "isAuction": true,
+      "auctionEndTime": "2024-04-01T00:00:00Z"
     },
     {
       "id": "2",
       "title": "Vintage Camera",
       "description": "Classic film camera with manual focus and exposure controls",
       "price": 1800,
-      "categoryId": 2,
-      "url": "https://picsum.photos/id/250",
-      "status": "available",
-      "quantity": 24
+      "images": [
+        "https://picsum.photos/id/250"
+      ],
+      "categoryId": "2",
+      "sellerId": "2",
+      "isAuction": true,
+      "auctionEndTime": "2024-04-02T00:00:00Z"
     },
     {
       "id": "3",
       "title": "Modern Laptop",
-      "description": "High-performance laptop with sleek design and long battery life",
-      "price": 4500,
-      "categoryId": 2,
-      "url": "https://picsum.photos/id/0",
-      "status": "available",
-      "quantity": 14
+      "description": "High-performance laptop with latest specs",
+      "price": 899.99,
+      "images": [
+        "https://picsum.photos/id/1/400/300"
+      ],
+      "categoryId": "1",
+      "sellerId": "3",
+      "isAuction": false
     },
     {
       "id": "4",
       "title": "Wireless Headphones",
-      "description": "Noise-cancelling headphones with premium sound quality",
-      "price": 1200,
-      "categoryId": 2,
-      "url": "https://picsum.photos/id/367",
-      "status": "available",
-      "quantity": 50
+      "description": "Premium noise-cancelling headphones",
+      "price": 249.99,
+      "images": [
+        "https://picsum.photos/id/2/400/300"
+      ],
+      "categoryId": "2",
+      "sellerId": "3",
+      "isAuction": false
     },
     {
       "id": "5",
       "title": "Ceramic Coffee Mug",
       "description": "Handmade ceramic mug with artistic design and comfortable handle",
       "price": 350,
-      "categoryId": 3,
-      "url": "https://picsum.photos/id/30",
-      "status": "available",
-      "quantity": 100
+      "images": [
+        "https://picsum.photos/id/30"
+      ],
+      "categoryId": "3",
+      "sellerId": "3",
+      "isAuction": false,
+      "auctionEndTime": null
     },
     {
       "id": "7",
