@@ -135,8 +135,7 @@ function PayPalCheckoutSimulation({ amount, onComplete, onCancel }) {
                     <div className="flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#003087" className="mr-1">
                         <path d="M20.1 6.75H16.9c-.2 0-.35.1-.4.25L15 13.1c-.1.4.2.75.6.75h1.6c.25 0 .5-.2.55-.45l.4-1.65h1.55c1.85 0 3.3-1.2 3.55-3.05.35-2.3-1.35-3.95-3.15-3.95z" />
-                        <path d="M14.55 6.75H9.65c-.2 0-.35.1-.4.25l-1.5 6.1c-.1.4.2.75.6.75h1.65c.2 0 .35-.1.4-.25l.4-1.7c.05-.15.2-.25.4-.25h1.3c1.85 0 3.3-1.2 3.55-3.05.35-2.3-1.35-3.85-3-3.85z" />
-                        <path d="M7.5 10.75l-.8 3.1c-.1.4.2.75.6.75h1.55c.2 0 .35-.1.4-.25l.8-3.1c.1-.4-.2-.75-.6-.75H8c-.25 0-.4.1-.5.25z" />
+                        <path d="M14.55 6.75H9.65c-.2 0-.35.1-.4.25l-1.5 6.1c-.1.4.2.75.6.75h1.65c.2 0 .35-.1.4-.25l.4-1.7c.05-.15.2-.25.4-.25h1.3c1.85 0 3.3-1.2 3.55-3.05.35-2.3-1.35-3.85-3-3.85zm.55 3.5c-.15 1-.95 1.7-2 1.7h-1.1l.35-1.7c0-.1.15-.2.25-.2h.6c.95 0 1.6.2 1.9.8.1.2.1.4 0 .6zM7.5 10.75l-.8 3.1c-.1.4.2.75.6.75h1.55c.2 0 .35-.1.4-.25l.8-3.1c.1-.4-.2-.75-.6-.75H8c-.25 0-.4.1-.5.25z" />
                       </svg>
                       <span>PayPal Balance</span>
                     </div>
@@ -209,6 +208,20 @@ export default function Checkout() {
     const [products, setProducts] = useState();
     const [dataFetched, setDataFetched] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const [addresses, setAddresses] = useState([]);
+    const [showAddressModal, setShowAddressModal] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [coupon, setCoupon] = useState("");
+    const [couponError, setCouponError] = useState("");
+    const [discount, setDiscount] = useState(0);
+    const [showAddAddressForm, setShowAddAddressForm] = useState(false);
+    const [newAddress, setNewAddress] = useState({
+        street: "",
+        city: "",
+        zipcode: "",
+        country: "",
+        isDefault: false,
+    });
 
     // Fetch payment methods
     const fetchPaymentMethods = useCallback(async () => {
@@ -306,13 +319,15 @@ export default function Checkout() {
                 throw new Error(`Failed to fetch address: ${addressResponse.status}`);
             }
             const addressData = await addressResponse.json();
+            setAddresses(addressData);
     
             const defaultAddress = addressData.find(addr => addr.isDefault);
             if (defaultAddress) {
+                setSelectedAddress(defaultAddress);
                 setAddressDetails({
                     name: defaultAddress.fullName,
                     address: defaultAddress.street,
-                    zipcode: defaultAddress.state,
+                    zipcode: defaultAddress.zipcode,
                     city: defaultAddress.city,
                     country: defaultAddress.country,
                 });
@@ -355,6 +370,19 @@ export default function Checkout() {
         
         fetchData();
     }, [fetchCartItems, fetchAddressDetails, fetchPaymentMethods, dataFetched]);
+
+    // Lấy giảm giá đã áp dụng từ localStorage hoặc state truyền từ /cart
+    useEffect(() => {
+        // Ưu tiên lấy từ state truyền sang nếu có
+        const cartDiscount = window.history.state && window.history.state.discount;
+        if (cartDiscount) {
+            setDiscount(cartDiscount);
+        } else {
+            // Nếu không, lấy từ localStorage
+            const storedDiscount = localStorage.getItem("cart_discount");
+            if (storedDiscount) setDiscount(Number(storedDiscount));
+        }
+    }, []);
 
     // Tính tổng tiền
     const getCartTotal = () => {
@@ -420,20 +448,22 @@ export default function Checkout() {
         }
         
         const orderId = "ORD" + Math.floor(100 + Math.random() * 900);
+        const shippingAddr = selectedAddress || addressDetails;
         const orderData = {
           id: orderId,
           buyerId: currentUser.id,
           order_date: new Date().toISOString(),
-          totalPrice: parseFloat((getCartTotal() / 100).toFixed(2)),
+          totalPrice: parseFloat((getTotalAfterDiscount() / 100).toFixed(2)),
+          discount: discount,
           status: paymentMethod === "cod" ? "pending_payment" : "paid",
           payment_method: paymentMethod,
           payment_status: paymentStatus,
           shipping_address: {
-            address: addressDetails ? addressDetails.address : "N/A",
-            zipcode: addressDetails ? addressDetails.zipcode : "N/A",
-            country: addressDetails ? addressDetails.country : "N/A",
-            city: addressDetails ? addressDetails.country : "N/A",
-            state: addressDetails ? addressDetails.state : "N/A",
+            address: shippingAddr ? shippingAddr.address || shippingAddr.street : "N/A",
+            zipcode: shippingAddr ? shippingAddr.zipcode : "N/A",
+            country: shippingAddr ? shippingAddr.country : "N/A",
+            city: shippingAddr ? shippingAddr.city : "N/A",
+            state: shippingAddr ? shippingAddr.state : "N/A",
           },
         };
       
@@ -483,9 +513,10 @@ export default function Checkout() {
           navigate("/success", {
             state: {
               cartItems: cartItems,
-              addressDetails: addressDetails,
-              orderTotal: getCartTotal(),
-              paymentMethod: paymentMethod
+              addressDetails: shippingAddr,
+              orderTotal: getTotalAfterDiscount(),
+              paymentMethod: paymentMethod,
+              discount: discount
             },
           });
         } catch (error) {
@@ -539,6 +570,78 @@ export default function Checkout() {
         }
       };
 
+    const handleAddressChange = (address) => {
+        setSelectedAddress(address);
+        setAddressDetails({
+            name: address.fullName,
+            address: address.street,
+            zipcode: address.zipcode,
+            city: address.city,
+            country: address.country,
+        });
+        setShowAddressModal(false);
+    };
+
+    // Hàm kiểm tra mã giảm giá
+    const handleApplyCoupon = async () => {
+        setCouponError("");
+        setDiscount(0);
+        if (!coupon) return;
+        try {
+            const res = await fetch(`http://localhost:9999/coupons?code=${coupon}`);
+            const data = await res.json();
+            if (data && data.length > 0) {
+                setDiscount(data[0].discount);
+                setCouponError("");
+            } else {
+                setCouponError("Mã giảm giá không hợp lệ!");
+                setDiscount(0);
+            }
+        } catch (e) {
+            setCouponError("Có lỗi khi kiểm tra mã giảm giá!");
+            setDiscount(0);
+        }
+    };
+
+    // Hàm tính tổng tiền sau giảm giá
+    const getTotalAfterDiscount = () => {
+        const total = getCartTotal();
+        return Math.max(0, total - discount);
+    };
+
+    // Địa chỉ giao hàng: chọn địa chỉ khác
+    const handleChooseAddress = () => {
+        setShowAddAddressForm(true);
+    };
+
+    // Thêm địa chỉ mới
+    const handleAddAddress = async (e) => {
+        e.preventDefault();
+        if (!newAddress.street || !newAddress.city || !newAddress.zipcode || !newAddress.country) {
+            alert("Vui lòng điền đầy đủ thông tin địa chỉ");
+            return;
+        }
+        try {
+            const addressData = {
+                ...newAddress,
+                userId: currentUser.id,
+                isDefault: false,
+            };
+            const res = await fetch("http://localhost:9999/address", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(addressData),
+            });
+            const saved = await res.json();
+            setAddresses(prev => [...prev, saved]);
+            setSelectedAddress(saved);
+            setShowAddAddressForm(false);
+            setNewAddress({ street: "", city: "", zipcode: "", country: "", isDefault: false });
+        } catch (err) {
+            alert("Không thể thêm địa chỉ mới!");
+        }
+    };
+
     if (!currentUser) {
         return (
             <div id="MainLayout" className="min-w-[1050px] max-w-[1300px] mx-auto">
@@ -583,25 +686,25 @@ export default function Checkout() {
                                         Shipping Address
                                     </div>
                                     <div>
-                                        <a
-                                            href="/address"
-                                            className="text-blue-500 text-sm underline"
-                                        >
-                                            Update Address
-                                        </a>
-                                        {addressDetails ? (
-                                            <ul className="text-sm mt-2">
-                                                <li>Name: {addressDetails.name}</li>
-                                                <li>Address: {addressDetails.address}</li>
-                                                <li>Zip: {addressDetails.zipcode}</li>
-                                                <li>City: {addressDetails.city}</li>
-                                                <li>Country: {addressDetails.country}</li>
-                                            </ul>
-                                        ) : (
-                                            <div className="text-sm mt-2">
-                                                No address available
+                                        {selectedAddress ? (
+                                            <div className="mb-2">
+                                                <div>{selectedAddress.street || selectedAddress.address}</div>
+                                                <div>{selectedAddress.city}, {selectedAddress.zipcode}</div>
+                                                <div>{selectedAddress.country}</div>
                                             </div>
-                                        )}
+                                        ) : addressDetails ? (
+                                            <div className="mb-2">
+                                                <div>{addressDetails.street || addressDetails.address}</div>
+                                                <div>{addressDetails.city}, {addressDetails.zipcode}</div>
+                                                <div>{addressDetails.country}</div>
+                                            </div>
+                                        ) : null}
+                                        <button
+                                            className="text-blue-600 underline hover:text-blue-800 text-sm mt-2"
+                                            onClick={handleChooseAddress}
+                                        >
+                                            Chọn địa chỉ khác
+                                        </button>
                                     </div>
                                 </div>
 
@@ -698,10 +801,18 @@ export default function Checkout() {
 
                                     <div className="border-t" />
 
+                                    {/* Hiển thị giảm giá nếu có */}
+                                    {discount > 0 && (
+                                        <div className="flex items-center justify-between text-sm mb-2">
+                                            <div>Giảm giá đã áp dụng:</div>
+                                            <div>-£{(discount / 100).toFixed(2)}</div>
+                                        </div>
+                                    )}
+
                                     <div className="flex items-center justify-between my-4">
                                         <div className="font-semibold">Order total</div>
                                         <div className="text-2xl font-semibold">
-                                            £{(getCartTotal() / 100).toFixed(2)}
+                                            £{(getTotalAfterDiscount() / 100).toFixed(2)}
                                         </div>
                                     </div>
 
@@ -738,10 +849,75 @@ export default function Checkout() {
 
              {isProcessingPayment && (
                 <PayPalCheckoutSimulation 
-                    amount={getCartTotal()}
+                    amount={getTotalAfterDiscount()}
                     onComplete={handlePaymentComplete}
                     onCancel={handlePaymentCancel}
                 />
+            )}
+
+            {/* Address Selection Modal */}
+            {showAddressModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+                        <h3 className="text-xl font-bold mb-4">Chọn địa chỉ giao hàng</h3>
+                        <div className="space-y-2 max-h-80 overflow-y-auto">
+                            {addresses.map((addr) => (
+                                <div key={addr.id} className={`border rounded p-3 mb-2 ${selectedAddress && selectedAddress.id === addr.id ? 'border-blue-500 bg-blue-50' : ''}`}>
+                                    <div>{addr.street}</div>
+                                    <div>{addr.city}, {addr.zipcode}</div>
+                                    <div>{addr.country}</div>
+                                    <button
+                                        className="mt-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+                                        onClick={() => handleAddressChange(addr)}
+                                    >
+                                        Chọn địa chỉ này
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex justify-end mt-4">
+                            <button
+                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+                                onClick={() => setShowAddressModal(false)}
+                            >
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Form nhập địa chỉ mới khi chọn địa chỉ khác */}
+            {showAddAddressForm && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+                        <h3 className="text-xl font-bold mb-4">Nhập địa chỉ giao hàng mới</h3>
+                        <form className="space-y-3" onSubmit={handleAddAddress}>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Địa chỉ đường</label>
+                                <input type="text" className="w-full border rounded px-2 py-1" value={newAddress.street} onChange={e => setNewAddress({ ...newAddress, street: e.target.value })} required />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">Thành phố</label>
+                                    <input type="text" className="w-full border rounded px-2 py-1" value={newAddress.city} onChange={e => setNewAddress({ ...newAddress, city: e.target.value })} required />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">Mã bưu điện</label>
+                                    <input type="text" className="w-full border rounded px-2 py-1" value={newAddress.zipcode} onChange={e => setNewAddress({ ...newAddress, zipcode: e.target.value })} required />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Quốc gia</label>
+                                <input type="text" className="w-full border rounded px-2 py-1" value={newAddress.country} onChange={e => setNewAddress({ ...newAddress, country: e.target.value })} required />
+                            </div>
+                            <div className="flex justify-end gap-2 mt-4">
+                                <button type="button" className="px-4 py-2 text-gray-600 hover:text-gray-800" onClick={() => setShowAddAddressForm(false)}>Hủy</button>
+                                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu địa chỉ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             )}
         </>
     );

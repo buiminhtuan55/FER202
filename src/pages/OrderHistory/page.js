@@ -26,11 +26,7 @@ export default function OrderHistory() {
     const ordersPerPage = 5;
 
     const orderStatuses = {
-        pending: { label: "Chờ xử lý", color: "text-yellow-600" },
-        confirmed: { label: "Đã xác nhận", color: "text-blue-600" },
-        shipped: { label: "Đang giao", color: "text-blue-600" },
-        delivered: { label: "Đã giao", color: "text-green-600" },
-        cancelled: { label: "Đã hủy", color: "text-red-600" },
+        paid: { label: "Đã thanh toán", color: "text-green-600" },
         return_pending: { label: "Đang xử lý hoàn trả", color: "text-purple-600" },
         return_approved: { label: "Đã chấp nhận hoàn trả", color: "text-indigo-600" },
         return_rejected: { label: "Từ chối hoàn trả", color: "text-red-600" },
@@ -44,7 +40,7 @@ export default function OrderHistory() {
     const getOrderTotal = (orderId) => {
         const items = getOrderItems(orderId);
         return items.reduce((total, item) => {
-            const product = products[item.productId];
+            const product = products.find(p => p.id === item.productId);
             return total + (item.quantity * (product?.price || 0));
         }, 0).toFixed(2);
     };
@@ -58,13 +54,19 @@ export default function OrderHistory() {
     };
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('vi-VN', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        if (!dateString) return "N/A";
+        try {
+            return new Date(dateString).toLocaleDateString('vi-VN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch (error) {
+            console.error("Error formatting date:", error);
+            return "N/A";
+        }
     };
 
     // Tính toán phân trang
@@ -413,7 +415,7 @@ export default function OrderHistory() {
                                 <div key={order.id} className="border rounded-lg p-4 shadow-sm">
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="text-sm text-gray-500">Mã đơn hàng: <span className="font-semibold">{order.id}</span></div>
-                                        <div className="text-sm text-gray-500">{formatDate(order.orderDate)}</div>
+                                        <div className="text-sm text-gray-500">{formatDate(order.order_date || order.orderDate || order.created_at)}</div>
                                     </div>
 
                                     {/* Order Items */}
@@ -426,7 +428,7 @@ export default function OrderHistory() {
                                                     className="border p-3 rounded-md bg-gray-50 cursor-pointer hover:shadow"
                                                     onClick={() => product && navigate(`/product/${product.id}`)}
                                                 >
-                                                    {product?.images?.[0] ? (
+                                                    {Array.isArray(product?.images) && product.images.length > 0 && product.images[0] ? (
                                                         <img
                                                             src={product.images[0]}
                                                             alt={product.title}
@@ -437,7 +439,7 @@ export default function OrderHistory() {
                                                     )}
                                                     <div className="font-semibold mb-1 text-sm truncate">{product?.title}</div>
                                                     <div className="text-xs text-gray-600">Số lượng: {item.quantity}</div>
-                                                    <div className="text-xs text-gray-600">Giá: £{product?.unitPrice}</div>
+                                                    <div className="text-xs text-gray-600">Giá: £{item.unitPrice || product?.price || 0}</div>
                                                 </div>
                                             );
                                         })}
@@ -472,7 +474,7 @@ export default function OrderHistory() {
                                                 <span>Xem chi tiết</span>
                                             </button>
                                             
-                                            {order.status === "shipped" && (
+                                            {order.status === "paid" && (
                                                 <button
                                                     onClick={() => handleReturnRequest(order)}
                                                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
@@ -560,15 +562,19 @@ export default function OrderHistory() {
                                         {getStatusLabel(selectedOrder.status)}
                                     </span></p>
                                     <p><span className="font-medium">Tổng tiền:</span> £{Number(selectedOrder.totalPrice || 0).toFixed(2)}</p>
+                                    {selectedOrder.discount > 0 && (
+                                      <p><span className="font-medium">Giảm giá đã áp dụng:</span> -£{Number(selectedOrder.discount / 100).toFixed(2)}</p>
+                                    )}
                                 </div>
                             </div>
                             
                             <div>
                                 <h4 className="font-semibold mb-2">Địa chỉ giao hàng</h4>
                                 <div className="space-y-1 text-sm">
-                                    <p>{selectedOrder.shipping_address?.address || 'Không có thông tin'}</p>
-                                    <p>{selectedOrder.shipping_address?.city || 'Không có'}, {selectedOrder.shipping_address?.zipcode || 'Không có'}</p>
-                                    <p>{selectedOrder.shipping_address?.country || 'Không có thông tin'}</p>
+                                    <p><span className="font-medium">Địa chỉ:</span> {selectedOrder.shipping_address?.address || 'Không có thông tin'}</p>
+                                    <p><span className="font-medium">Thành phố:</span> {selectedOrder.shipping_address?.city || 'Không có'}</p>
+                                    <p><span className="font-medium">Mã bưu điện:</span> {selectedOrder.shipping_address?.zipcode || 'Không có'}</p>
+                                    <p><span className="font-medium">Quốc gia:</span> {selectedOrder.shipping_address?.country || 'Không có thông tin'}</p>
                                 </div>
                             </div>
                         </div>
@@ -588,14 +594,25 @@ export default function OrderHistory() {
                                 {
                                     orderItems
                                     .filter(item => item.orderId === selectedOrder.id) 
-                                    .map((item, index) => (
-                                        <tr key={index}>
-                                        <td>{getProductName(item.productId)}</td>
-                                        <td className="px-6 py-4">{item.quantity}</td>
-                                        <td className="px-6 py-4">£{item.unitPrice.toFixed(2)}</td>
-                                        <td className="px-6 py-4">£{(item.quantity * item.unitPrice).toFixed(2)}</td>
-                                        </tr>
-                                    ))
+                                    .map((item, index) => {
+                                        const product = products[item.productId];
+                                        return (
+                                            <tr key={index}>
+                                                <td>
+                                                    <button
+                                                        className="text-blue-600 hover:underline"
+                                                        onClick={() => product && navigate(`/product/${product.id}`)}
+                                                        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                                                    >
+                                                        {product ? product.title : getProductName(item.productId)}
+                                                    </button>
+                                                </td>
+                                                <td className="px-6 py-4">{item.quantity}</td>
+                                                <td className="px-6 py-4">£{item.unitPrice.toFixed(2)}</td>
+                                                <td className="px-6 py-4">£{(item.quantity * item.unitPrice).toFixed(2)}</td>
+                                            </tr>
+                                        );
+                                    })
                                 }
 
                                 </tbody>

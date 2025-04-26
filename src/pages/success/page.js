@@ -1,11 +1,23 @@
 import { CheckCircle } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Success() {
   // Lấy dữ liệu từ Checkout qua useLocation
   const navigate = useNavigate();
   const location = useLocation();
-  const { cartItems = [], addressDetails = {}, orderTotal = 0 } = location.state || {};
+  const { cartItems = [], addressDetails = {}, orderTotal = 0, discount: discountFromState = 0 } = location.state || {};
+  const [discount, setDiscount] = useState(discountFromState);
+
+  useEffect(() => {
+    if (!discountFromState) {
+      const storedDiscount = localStorage.getItem("cart_discount");
+      if (storedDiscount) setDiscount(Number(storedDiscount));
+    }
+  }, [discountFromState]);
+
+  const totalBeforeDiscount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalAfterDiscount = Math.max(0, totalBeforeDiscount - discount);
 
   return (
     <div id="SuccessPage" className="mt-12 max-w-[1200px] mx-auto px-2 min-h-[50vh]">
@@ -54,9 +66,21 @@ export default function Success() {
                   </div>
                 ))}
                 <div className="flex justify-between mt-4 pt-2 border-t">
+                  <span className="font-semibold">Tạm tính:</span>
+                  <span className="font-semibold text-lg">
+                    £{(totalBeforeDiscount / 100).toFixed(2)}
+                  </span>
+                </div>
+                {discount > 0 && (
+                  <div className="flex justify-between mt-1">
+                    <span className="font-semibold">Giảm giá đã áp dụng:</span>
+                    <span className="font-semibold text-lg text-red-600">-£{(discount / 100).toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between mt-1 pt-2 border-t">
                   <span className="font-semibold">Total:</span>
                   <span className="font-semibold text-lg">
-                    £{(orderTotal / 100).toFixed(2)}
+                    £{(totalAfterDiscount / 100).toFixed(2)}
                   </span>
                 </div>
               </div>

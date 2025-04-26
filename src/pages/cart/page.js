@@ -341,11 +341,12 @@ export default function Cart() {
       navigate("/auth");
       return;
     }
-
     if (cartItems.length === 0) {
       alert("Your cart is empty!");
       return;
     }
+    // Lưu discount vào localStorage trước khi chuyển trang
+    localStorage.setItem("cart_discount", getTotalDiscount());
     navigate("/checkout");
   };
 
