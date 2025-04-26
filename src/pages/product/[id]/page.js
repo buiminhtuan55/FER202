@@ -87,10 +87,12 @@ export default function ProductDetail() {
         created_at: new Date().toISOString(),
         action_url: `/product/${productId}`,
         review_id: `rev${Date.now()}`,
-        product_id: productId
+        product_id: productId,
+        senderId: "system",
+        reiceiverId: currentUser.id,
       };
   
-      await fetch("http://localhost:9999/notifications", {
+      await fetch("http://localhost:9999/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -206,6 +206,7 @@ export default function Checkout() {
     const [paymentMethod, setPaymentMethod] = useState("paypal");
     const [isProcessingPayment, setIsProcessingPayment] = useState(false);
     const [paymentMethods, setPaymentMethods] = useState([]);
+    const [products, setProducts] = useState();
     const [dataFetched, setDataFetched] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -228,6 +229,17 @@ export default function Checkout() {
             ]);
         }
     }, []);
+
+    const fetchAllProducts = useCallback(async () => {
+      try {
+          const res = await fetch("http://localhost:9999/products");
+          const data = await res.json();
+          setProducts(data);
+      } catch (error) {
+          console.error("Error fetching all products:", error);
+          setProducts([]);
+      }
+  }, []);
 
     // Hàm lấy dữ liệu từ API
     const fetchCartItems = useCallback(async () => {
@@ -334,7 +346,8 @@ export default function Checkout() {
             await Promise.all([
                 fetchCartItems(),
                 fetchAddressDetails(),
-                fetchPaymentMethods()
+                fetchPaymentMethods(),
+                fetchAllProducts()
             ]);
             setIsLoading(false);
             setDataFetched(true);
@@ -358,11 +371,13 @@ export default function Checkout() {
               user_id: currentUser.id,
               type: "order",
               title: `Đơn hàng #${orderId} đã được xác nhận`,
-              content: `Đơn hàng của bạn đã được xác nhận và đang được chuẩn bị. Tổng giá trị: £${orderData.total_amount.toFixed(2)}`,
+              content: `Đơn hàng của bạn đã được xác nhận và đang được chuẩn bị. Tổng giá trị: £${orderData.totalPrice.toFixed(2)}`,
               order_id: orderId,
               status: "unread",
               created_at: new Date().toISOString(),
-              action_url: `/account/orders/${orderId}`
+              action_url: `/order-history`,
+              senderId: "system",
+              reiceiverId: currentUser.id,
             };
           } else {
             notification = {
@@ -378,7 +393,7 @@ export default function Checkout() {
             };
           }
       
-          await fetch("http://localhost:9999/notifications", {
+          await fetch("http://localhost:9999/messages", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -406,10 +421,10 @@ export default function Checkout() {
         
         const orderId = "ORD" + Math.floor(100 + Math.random() * 900);
         const orderData = {
-          order_id: orderId,
-          user_id: currentUser.id,
+          id: orderId,
+          buyerId: currentUser.id,
           order_date: new Date().toISOString(),
-          total_amount: parseFloat((getCartTotal() / 100).toFixed(2)),
+          totalPrice: parseFloat((getCartTotal() / 100).toFixed(2)),
           status: paymentMethod === "cod" ? "pending_payment" : "paid",
           payment_method: paymentMethod,
           payment_status: paymentStatus,
@@ -420,11 +435,6 @@ export default function Checkout() {
             city: addressDetails ? addressDetails.country : "N/A",
             state: addressDetails ? addressDetails.state : "N/A",
           },
-          items: cartItems.map(item => ({
-            product_name: item.title,
-            quantity: item.quantity,
-            price: parseFloat((item.price / 100).toFixed(2)),
-          }))
         };
       
         try {
@@ -440,7 +450,26 @@ export default function Checkout() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ order_id: updatedOrderIds }),
           });
-      
+          for (let item of cartItems) {
+            const product = products.find(p => p.id === item.idProduct);
+            if (!product) {
+              console.error("Product not found for id:", item.idProduct);
+              continue;
+            }
+          
+            const orderItemData = {
+              orderId: orderId,
+              productId: item.idProduct,
+              quantity: item.quantity,
+              unitPrice: parseFloat((product.price / 100).toFixed(2)),
+            };
+          
+            await fetch("http://localhost:9999/orderItems", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(orderItemData),
+            });
+          }
           const cartRes = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`);
           const cartData = await cartRes.json();
           for (let cart of cartData) {
@@ -493,10 +522,12 @@ export default function Checkout() {
             content: "Bạn đã hủy quá trình thanh toán. Giỏ hàng của bạn vẫn được giữ nguyên.",
             status: "unread",
             created_at: new Date().toISOString(),
-            action_url: "/cart"
+            action_url: "/cart",
+            senderId: "system",
+            reiceiverId: currentUser.id,
           };
       
-          fetch("http://localhost:9999/notifications", {
+          fetch("http://localhost:9999/messages", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

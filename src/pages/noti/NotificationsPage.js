@@ -23,7 +23,7 @@ export default function NotificationsPage() {
 
             try {
                 setLoading(true)
-                const response = await fetch(`http://localhost:9999/notifications?user_id=${currentUser.id}`)
+                const response = await fetch(`http://localhost:9999/messages?user_id=${currentUser.id}`)
                 if (!response.ok) {
                     throw new Error(`Failed to fetch notifications: ${response.status}`)
                 }
@@ -50,7 +50,7 @@ export default function NotificationsPage() {
                     read_at: new Date().toISOString()
                 }
                 
-                await fetch(`http://localhost:9999/notifications/${notificationId}`, {
+                await fetch(`http://localhost:9999/messages/${notificationId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ export default function NotificationsPage() {
                         read_at: new Date().toISOString()
                     }
                     
-                    return fetch(`http://localhost:9999/notifications/${notification.id}`, {
+                    return fetch(`http://localhost:9999/messages/${notification.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

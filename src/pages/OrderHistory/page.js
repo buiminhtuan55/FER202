@@ -13,7 +13,7 @@ export default function OrderHistory() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const [orders, setOrders] = useState([]);
     const [orderItems, setOrderItems] = useState([]);
-    const [products, setProducts] = useState({});
+    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
@@ -136,6 +136,7 @@ export default function OrderHistory() {
             );
             const orderItemsArrays = await Promise.all(orderItemsPromises);
             const allOrderItems = orderItemsArrays.flat();
+            
             setOrderItems(allOrderItems);
 
             // Fetch products - sửa lại query để lấy tất cả products
@@ -154,6 +155,10 @@ export default function OrderHistory() {
         } finally {
             setLoading(false);
         }
+    };
+    const getProductName = (productId) => {
+        const product = products[productId];
+        return product ? product.title : 'Unknown';
     };
 
     useEffect(() => {
@@ -232,7 +237,6 @@ export default function OrderHistory() {
         setSelectedOrder(order);
         setShowOrderDetail(true);
     };
-
     // Component phân trang
     const Pagination = useCallback(() => {
         // Không hiển thị phân trang nếu không có đơn hàng hoặc chỉ có 1 trang
@@ -455,7 +459,7 @@ export default function OrderHistory() {
                                             <div>Trạng thái: <span className={`font-medium ${getStatusColor(order.status)}`}>
                                                 {getStatusLabel(order.status)}
                                             </span></div>
-                                            <div>Tổng tiền: <span className="font-semibold">£{order.total_amount}</span></div>
+                                            <div>Tổng tiền: <span className="font-semibold">£{Number(order.totalPrice || 0).toFixed(2)}</span></div>
                                         </div>
 
                                         {/* Action Buttons */}
@@ -555,7 +559,7 @@ export default function OrderHistory() {
                                     <p><span className="font-medium">Trạng thái:</span> <span className={getStatusColor(selectedOrder.status)}>
                                         {getStatusLabel(selectedOrder.status)}
                                     </span></p>
-                                    <p><span className="font-medium">Tổng tiền:</span> £{selectedOrder.total_amount.toFixed(2)}</p>
+                                    <p><span className="font-medium">Tổng tiền:</span> £{Number(selectedOrder.totalPrice || 0).toFixed(2)}</p>
                                 </div>
                             </div>
                             
@@ -581,28 +585,24 @@ export default function OrderHistory() {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {selectedOrder.items.map((item, index) => (
+                                {
+                                    orderItems
+                                    .filter(item => item.orderId === selectedOrder.id) 
+                                    .map((item, index) => (
                                         <tr key={index}>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    <div className="h-10 w-10 rounded bg-gray-200 mr-3"></div>
-                                                    <div 
-                                                        className="text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
-                                                    >
-                                                        {item.product_name}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.quantity}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">£{item.price.toFixed(2)}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">£{(item.quantity * item.price).toFixed(2)}</td>
+                                        <td>{getProductName(item.productId)}</td>
+                                        <td className="px-6 py-4">{item.quantity}</td>
+                                        <td className="px-6 py-4">£{item.unitPrice.toFixed(2)}</td>
+                                        <td className="px-6 py-4">£{(item.quantity * item.unitPrice).toFixed(2)}</td>
                                         </tr>
-                                    ))}
+                                    ))
+                                }
+
                                 </tbody>
                                 <tfoot className="bg-gray-50">
                                     <tr>
                                         <td colSpan="3" className="px-6 py-4 text-right font-medium">Tổng tiền:</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">£{selectedOrder.total_amount.toFixed(2)}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">£{Number(selectedOrder.totalPrice || 0).toFixed(2)}</td>
                                     </tr>
                                 </tfoot>
                             </table>
