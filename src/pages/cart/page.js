@@ -14,7 +14,9 @@ function EmptyCart() {
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <ShoppingCart className="h-16 w-16 text-gray-400 mb-4" />
       <h3 className="text-2xl font-semibold mb-2">Your cart is empty</h3>
-      <p className="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet</p>
+      <p className="text-gray-500 mb-6">
+        Looks like you haven't added anything to your cart yet
+      </p>
       <button
         onClick={() => navigate("/")}
         className="bg-blue-600 text-white px-8 py-2 rounded-full hover:bg-blue-700"
@@ -25,49 +27,80 @@ function EmptyCart() {
   );
 }
 
-function CartItem({ product, cartItemId, onRemove, onUpdateQuantity, availableStock }) {
+function CartItem({
+  product,
+  cartItemId,
+  onRemove,
+  onUpdateQuantity,
+  availableStock,
+  handleBuyNowAll,
+}) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b p-4">
-      <div className="flex items-center gap-4">
-        <img
-          src={`${product.url}/100`}
-          alt={product.title}
-          className="w-[100px] h-[100px] object-cover rounded-lg"
-        />
-        <div>
-          <div className="font-semibold">{product.title}</div>
-          <div className="text-sm text-gray-500">{product.description}</div>
-          <div className="font-bold mt-2">£{(product.price / 100).toFixed(2)}</div>
+    <>
+      <div className="flex items-center justify-between gap-4 border-b p-4">
+        <div className="flex items-center gap-4">
+          <img
+            src={`${product.url}/100`}
+            alt={product.title}
+            className="w-[100px] h-[100px] object-cover rounded-lg"
+          />
+          <div>
+            <div className="font-semibold">{product.title}</div>
+            <div className="text-sm text-gray-500">{product.description}</div>
+            <div className="font-bold mt-2">
+              £{(product.price / 100).toFixed(2)}
+            </div>
 
-          <div className="flex items-center gap-2 mt-2">
-            <button
-              onClick={() => onUpdateQuantity(cartItemId, product.idProduct, product.quantity - 1)}
-              className="p-1 rounded-full hover:bg-gray-100"
-              disabled={product.quantity <= 1}
-            >
-              <Minus size={16} />
-            </button>
-            <span>{product.quantity}</span>
-            <button
-              onClick={() => onUpdateQuantity(cartItemId, product.idProduct, product.quantity + 1)}
-              className="p-1 rounded-full hover:bg-gray-100"
-              disabled={product.quantity >= availableStock}
-            >
-              <Plus size={16} />
-            </button>
+            <div className="flex items-center gap-2 mt-2">
+              <button
+                onClick={() =>
+                  onUpdateQuantity(
+                    cartItemId,
+                    product.idProduct,
+                    product.quantity - 1
+                  )
+                }
+                className="p-1 rounded-full hover:bg-gray-100"
+                disabled={product.quantity <= 1}
+              >
+                <Minus size={16} />
+              </button>
+              <span>{product.quantity}</span>
+              <button
+                onClick={() =>
+                  onUpdateQuantity(
+                    cartItemId,
+                    product.idProduct,
+                    product.quantity + 1
+                  )
+                }
+                className="p-1 rounded-full hover:bg-gray-100"
+                disabled={product.quantity >= availableStock}
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+            {availableStock === 0 && (
+              <div className="text-red-500 text-sm mt-1">Out of stock</div>
+            )}
           </div>
-          {availableStock === 0 && (
-            <div className="text-red-500 text-sm mt-1">Out of stock</div>
-          )}
         </div>
+        <button
+          onClick={() => onRemove(cartItemId, product.idProduct)}
+          className="text-blue-500 hover:text-blue-700"
+        >
+          Remove
+        </button>
       </div>
-      <button
-        onClick={() => onRemove(cartItemId, product.idProduct)}
-        className="text-blue-500 hover:text-blue-700"
-      >
-        Remove
-      </button>
-    </div>
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => handleBuyNowAll()}
+          className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+        >
+          Buy Now
+        </button>
+      </div>
+    </>
   );
 }
 
@@ -78,7 +111,6 @@ export default function Cart() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const [couponList, setCouponList] = useState([]);
   const [appliedCoupons, setAppliedCoupons] = useState([]);
-
 
   const fetchCartItems = async () => {
     if (!currentUser) {
@@ -91,7 +123,9 @@ export default function Cart() {
     try {
       console.log("Current user:", currentUser);
       console.log("Fetching cart for user:", currentUser.id);
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`);
+      const cartResponse = await fetch(
+        `http://localhost:9999/shoppingCart?userId=${currentUser.id}`
+      );
       if (!cartResponse.ok) {
         throw new Error(`Failed to fetch cart: ${cartResponse.status}`);
       }
@@ -109,15 +143,24 @@ export default function Cart() {
         cartData.flatMap((cartItem) =>
           cartItem.productId.map(async (product) => {
             console.log(`Fetching product with id: ${product.idProduct}`);
-            const productResponse = await fetch(`http://localhost:9999/products?id=${product.idProduct}`);
+            const productResponse = await fetch(
+              `http://localhost:9999/products?id=${product.idProduct}`
+            );
             if (!productResponse.ok) {
-              console.warn(`Failed to fetch product with id ${product.idProduct}: ${productResponse.status}`);
+              console.warn(
+                `Failed to fetch product with id ${product.idProduct}: ${productResponse.status}`
+              );
               return null;
             }
             const productData = await productResponse.json();
-            console.log(`Product data for id ${product.idProduct}:`, productData);
+            console.log(
+              `Product data for id ${product.idProduct}:`,
+              productData
+            );
 
-            let productInfo = Array.isArray(productData) ? productData[0] : productData;
+            let productInfo = Array.isArray(productData)
+              ? productData[0]
+              : productData;
             if (productInfo) {
               return {
                 ...productInfo,
@@ -156,22 +199,30 @@ export default function Cart() {
 
     try {
       // Fetch product data to check stock
-      const productResponse = await fetch(`http://localhost:9999/products?id=${productId}`);
+      const productResponse = await fetch(
+        `http://localhost:9999/products?id=${productId}`
+      );
       const productData = await productResponse.json();
-      const productInfo = Array.isArray(productData) ? productData[0] : productData;
+      const productInfo = Array.isArray(productData)
+        ? productData[0]
+        : productData;
       if (!productInfo || productInfo.quantity <= 0) {
         alert("This product is out of stock!");
         return;
       }
 
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart?userId=${currentUser.id}`);
+      const cartResponse = await fetch(
+        `http://localhost:9999/shoppingCart?userId=${currentUser.id}`
+      );
       const cartData = await cartResponse.json();
       console.log("Cart data before adding:", cartData);
 
       let newCartQuantity = 1;
       if (cartData.length > 0) {
         const cartItem = cartData[0];
-        const existingProduct = cartItem.productId.find((p) => p.idProduct === productId);
+        const existingProduct = cartItem.productId.find(
+          (p) => p.idProduct === productId
+        );
 
         if (existingProduct) {
           const currentQty = parseInt(existingProduct.quantity);
@@ -196,7 +247,10 @@ export default function Cart() {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              productId: [...cartItem.productId, { idProduct: productId, quantity: "1" }],
+              productId: [
+                ...cartItem.productId,
+                { idProduct: productId, quantity: "1" },
+              ],
             }),
           });
         }
@@ -214,11 +268,14 @@ export default function Cart() {
 
       // Update product stock
       const newStock = productInfo.quantity - 1;
-      const stockResponse = await fetch(`http://localhost:9999/products/${productId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity: newStock }),
-      });
+      const stockResponse = await fetch(
+        `http://localhost:9999/products/${productId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity: newStock }),
+        }
+      );
       if (!stockResponse.ok) {
         throw new Error("Failed to update product stock");
       }
@@ -232,16 +289,24 @@ export default function Cart() {
 
   const removeFromCart = async (cartItemId, productId) => {
     try {
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`);
+      const cartResponse = await fetch(
+        `http://localhost:9999/shoppingCart/${cartItemId}`
+      );
       const cartItem = await cartResponse.json();
 
-      const productToRemove = cartItem.productId.find((p) => p.idProduct === productId);
+      const productToRemove = cartItem.productId.find(
+        (p) => p.idProduct === productId
+      );
       const quantityRemoved = parseInt(productToRemove.quantity);
 
-      const updatedProducts = cartItem.productId.filter((p) => p.idProduct !== productId);
+      const updatedProducts = cartItem.productId.filter(
+        (p) => p.idProduct !== productId
+      );
 
       if (updatedProducts.length === 0) {
-        await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, { method: "DELETE" });
+        await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
+          method: "DELETE",
+        });
       } else {
         await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
           method: "PATCH",
@@ -251,16 +316,23 @@ export default function Cart() {
       }
 
       // Restore stock to products API
-      const productResponse = await fetch(`http://localhost:9999/products?id=${productId}`);
+      const productResponse = await fetch(
+        `http://localhost:9999/products?id=${productId}`
+      );
       const productData = await productResponse.json();
-      const productInfo = Array.isArray(productData) ? productData[0] : productData;
+      const productInfo = Array.isArray(productData)
+        ? productData[0]
+        : productData;
       const newStock = productInfo.quantity + quantityRemoved;
 
-      const stockResponse = await fetch(`http://localhost:9999/products/${productId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity: newStock }),
-      });
+      const stockResponse = await fetch(
+        `http://localhost:9999/products/${productId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity: newStock }),
+        }
+      );
       if (!stockResponse.ok) {
         throw new Error("Failed to update product stock");
       }
@@ -277,15 +349,23 @@ export default function Cart() {
 
     try {
       // Fetch current product stock
-      const productResponse = await fetch(`http://localhost:9999/products?id=${productId}`);
+      const productResponse = await fetch(
+        `http://localhost:9999/products?id=${productId}`
+      );
       const productData = await productResponse.json();
-      const productInfo = Array.isArray(productData) ? productData[0] : productData;
+      const productInfo = Array.isArray(productData)
+        ? productData[0]
+        : productData;
       const currentStock = productInfo.quantity;
 
       // Fetch current cart quantity
-      const cartResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`);
+      const cartResponse = await fetch(
+        `http://localhost:9999/shoppingCart/${cartItemId}`
+      );
       const cartItem = await cartResponse.json();
-      const currentCartProduct = cartItem.productId.find((p) => p.idProduct === productId);
+      const currentCartProduct = cartItem.productId.find(
+        (p) => p.idProduct === productId
+      );
       const currentCartQty = parseInt(currentCartProduct.quantity);
 
       // Calculate stock change
@@ -299,25 +379,33 @@ export default function Cart() {
 
       // Update cart
       const updatedProducts = cartItem.productId.map((p) =>
-        p.idProduct === productId ? { ...p, quantity: newQuantity.toString() } : p
+        p.idProduct === productId
+          ? { ...p, quantity: newQuantity.toString() }
+          : p
       );
 
-      const cartUpdateResponse = await fetch(`http://localhost:9999/shoppingCart/${cartItemId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: updatedProducts }),
-      });
+      const cartUpdateResponse = await fetch(
+        `http://localhost:9999/shoppingCart/${cartItemId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productId: updatedProducts }),
+        }
+      );
 
       if (!cartUpdateResponse.ok) {
         throw new Error("Failed to update cart quantity");
       }
 
       // Update product stock
-      const stockResponse = await fetch(`http://localhost:9999/products/${productId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity: newStock }),
-      });
+      const stockResponse = await fetch(
+        `http://localhost:9999/products/${productId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity: newStock }),
+        }
+      );
 
       if (!stockResponse.ok) {
         throw new Error("Failed to update product stock");
@@ -333,7 +421,6 @@ export default function Cart() {
   const getCartTotal = () => {
     return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   };
-
 
   const handleCheckout = () => {
     if (!currentUser) {
@@ -386,11 +473,15 @@ export default function Cart() {
   const handleApplyCoupon = (coupon) => {
     const subtotal = getCartTotal();
     if (subtotal < coupon.minTotal) {
-      alert(`This coupon requires a minimum subtotal of £${(coupon.minTotal / 100).toFixed(2)}`);
+      alert(
+        `This coupon requires a minimum subtotal of £${(
+          coupon.minTotal / 100
+        ).toFixed(2)}`
+      );
       return;
     }
 
-    if (appliedCoupons.find(c => c.id === coupon.id)) {
+    if (appliedCoupons.find((c) => c.id === coupon.id)) {
       alert("Coupon already applied");
       return;
     }
@@ -404,7 +495,13 @@ export default function Cart() {
   };
 
   const handleRemoveCoupon = (couponId) => {
-    setAppliedCoupons(appliedCoupons.filter(c => c.id !== couponId));
+    setAppliedCoupons(appliedCoupons.filter((c) => c.id !== couponId));
+  };
+
+  //Order cart page
+  const handleBuyNowAll = () => {
+    localStorage.setItem("orderProducts", JSON.stringify(cartItems));
+    navigate("/order-page");
   };
 
   if (!currentUser) {
@@ -417,7 +514,10 @@ export default function Cart() {
         </div>
         <div className="text-center py-20">
           Please{" "}
-          <button onClick={() => navigate("/auth")} className="text-blue-500 hover:underline">
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-blue-500 hover:underline"
+          >
             login
           </button>{" "}
           to view your cart
@@ -454,6 +554,7 @@ export default function Cart() {
                       onRemove={removeFromCart}
                       onUpdateQuantity={updateQuantity}
                       availableStock={product.availableStock}
+                      handleBuyNowAll={handleBuyNowAll}
                     />
                   ))}
                 </div>
@@ -484,22 +585,28 @@ export default function Cart() {
                   <div className="flex flex-col gap-6 mt-4 mb-6 text-base">
                     {/* Available Coupons */}
                     <div className="w-full bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-sm">
-                      <div className="text-blue-700 font-semibold mb-3 text-base">🎁 Available Coupons</div>
+                      <div className="text-blue-700 font-semibold mb-3 text-base">
+                        🎁 Available Coupons
+                      </div>
                       {couponList.map((coupon) => (
                         <div
                           key={coupon.id}
                           className="flex items-center justify-between mb-2 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm"
                         >
                           <span className="text-sm text-gray-700">
-                            {coupon.code} – £{(coupon.discount / 100).toFixed(2)} off
+                            {coupon.code} – £
+                            {(coupon.discount / 100).toFixed(2)} off
                           </span>
                           <button
                             onClick={() => handleApplyCoupon(coupon)}
-                            disabled={appliedCoupons.some(c => c.id === coupon.id)}
-                            className={`text-sm font-medium ${appliedCoupons.some(c => c.id === coupon.id)
-                                ? 'text-gray-400 cursor-not-allowed'
-                                : 'text-blue-500 hover:underline'
-                              }`}
+                            disabled={appliedCoupons.some(
+                              (c) => c.id === coupon.id
+                            )}
+                            className={`text-sm font-medium ${
+                              appliedCoupons.some((c) => c.id === coupon.id)
+                                ? "text-gray-400 cursor-not-allowed"
+                                : "text-blue-500 hover:underline"
+                            }`}
                           >
                             Apply
                           </button>
@@ -510,13 +617,17 @@ export default function Cart() {
                     {/* Applied Coupons */}
                     {appliedCoupons.length > 0 && (
                       <div className="w-full bg-green-50 border border-green-200 rounded-xl p-4 shadow-sm">
-                        <div className="text-green-700 font-semibold mb-3 text-base">🧾 Applied Coupons</div>
+                        <div className="text-green-700 font-semibold mb-3 text-base">
+                          🧾 Applied Coupons
+                        </div>
                         {appliedCoupons.map((coupon) => (
                           <div
                             key={coupon.id}
                             className="flex items-center justify-between mb-2 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm"
                           >
-                            <span className="font-medium text-gray-700">{coupon.code}</span>
+                            <span className="font-medium text-gray-700">
+                              {coupon.code}
+                            </span>
                             <button
                               onClick={() => handleRemoveCoupon(coupon.id)}
                               className="text-red-500 hover:underline text-sm"
@@ -530,13 +641,18 @@ export default function Cart() {
 
                     {/* Subtotal */}
                     <div className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm mt-6">
-                      <div className="text-gray-700 font-semibold text-base mb-2">Subtotal</div>
+                      <div className="text-gray-700 font-semibold text-base mb-2">
+                        Subtotal
+                      </div>
                       <div className="text-2xl font-bold text-black">
-                        £{Math.max(0, (getCartTotal() - getTotalDiscount()) / 100).toFixed(2)}
+                        £
+                        {Math.max(
+                          0,
+                          (getCartTotal() - getTotalDiscount()) / 100
+                        ).toFixed(2)}
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             )}

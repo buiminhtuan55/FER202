@@ -25,7 +25,7 @@ export default function AuthPage() {
 
         if (isLogin) {
             try {
-                const response = await fetch('http://localhost:9999/user')
+                const response = await fetch('http://localhost:9999/users')
                 const users = await response.json()
                 const user = users.find(u => u.email === formData.email && u.password === formData.password)
                 if (user) {

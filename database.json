@@ -124,7 +124,7 @@
       "buyerId": "2",
       "orderDate": "2024-03-22T15:45:00Z",
       "totalPrice": 89.99,
-      "status": "shipped",
+      "status": "return_pending",
       "addressId": "1",
       "shipping_address": {
         "street": "456 Elm St",
@@ -244,6 +244,36 @@
         "city": "Los Angeles",
         "country": "United States"
       }
+    },
+    {
+      "id": "ORD862",
+      "buyerId": "2",
+      "order_date": "2025-04-26T18:46:01.384Z",
+      "totalPrice": 4.5,
+      "status": "paid",
+      "payment_method": "paypal",
+      "payment_status": "completed",
+      "shipping_address": {
+        "address": "456 Elm St",
+        "zipcode": "CA",
+        "country": "United States",
+        "city": "United States"
+      }
+    },
+    {
+      "id": "ORD585",
+      "buyerId": "2",
+      "order_date": "2025-04-26T20:00:06.404Z",
+      "totalPrice": 8.8,
+      "status": "paid",
+      "payment_method": "paypal",
+      "payment_status": "completed",
+      "shipping_address": {
+        "address": "456 Elm St",
+        "zipcode": "CA",
+        "country": "United States",
+        "city": "United States"
+      }
     }
   ],
   "orderItems": [
@@ -358,6 +388,20 @@
       "productId": "3",
       "quantity": 2,
       "unitPrice": 109.99
+    },
+    {
+      "id": "bc13",
+      "orderId": "ORD862",
+      "productId": "10",
+      "quantity": 1,
+      "unitPrice": 4.5
+    },
+    {
+      "id": "9448",
+      "orderId": "ORD585",
+      "productId": "9",
+      "quantity": 1,
+      "unitPrice": 8.8
     }
   ],
   "returnRequests": [
@@ -416,6 +460,14 @@
       "reason": "abc",
       "status": "pending",
       "created_at": "2025-04-25T04:37:26.529Z"
+    },
+    {
+      "id": "5391",
+      "orderId": "b185",
+      "userId": "2",
+      "reason": "damaged",
+      "status": "pending",
+      "created_at": "2025-04-26T18:46:30.030Z"
     }
   ],
   "categories": [
@@ -528,7 +580,7 @@
       "categoryId": 4,
       "url": "https://picsum.photos/id/719",
       "status": "available",
-      "quantity": 43,
+      "quantity": 44,
       "isAuction": false
     },
     {
@@ -539,7 +591,7 @@
       "categoryId": 5,
       "url": "https://picsum.photos/id/27",
       "status": "available",
-      "quantity": 60
+      "quantity": 63
     },
     {
       "id": "10",
@@ -918,6 +970,17 @@
         }
       ],
       "dateAdded": "2025-03-24T15:59:03.745Z"
+    },
+    {
+      "id": "2df9",
+      "userId": "2",
+      "productId": [
+        {
+          "idProduct": "9",
+          "quantity": "1"
+        }
+      ],
+      "dateAdded": "2025-04-26T20:46:00.724Z"
     }
   ],
   "paymentMethods": [
@@ -1247,8 +1310,73 @@
       "minTotal": 2000
     }
   ],
-  "reviews": [
-  ],
+  "reviews": [],
   "messages": [
+    {
+      "id": "n1745693161498",
+      "user_id": "2",
+      "type": "order",
+      "title": "Đơn hàng #ORD862 đã được xác nhận",
+      "content": "Đơn hàng của bạn đã được xác nhận và đang được chuẩn bị. Tổng giá trị: £4.50",
+      "order_id": "ORD862",
+      "status": "read",
+      "created_at": "2025-04-26T18:46:01.499Z",
+      "action_url": "/order-history",
+      "senderId": "system",
+      "reiceiverId": "2",
+      "read_at": "2025-04-26T18:51:01.478Z"
+    },
+    {
+      "id": "n1745695890651",
+      "user_id": "2",
+      "type": "order",
+      "title": "Thanh toán đã bị hủy",
+      "content": "Bạn đã hủy quá trình thanh toán. Giỏ hàng của bạn vẫn được giữ nguyên.",
+      "status": "read",
+      "created_at": "2025-04-26T19:31:30.651Z",
+      "action_url": "/cart",
+      "senderId": "system",
+      "reiceiverId": "2",
+      "read_at": "2025-04-26T19:56:02.893Z"
+    },
+    {
+      "id": "n1745697358580",
+      "user_id": "2",
+      "type": "order",
+      "title": "Thanh toán đã bị hủy",
+      "content": "Bạn đã hủy quá trình thanh toán. Giỏ hàng của bạn vẫn được giữ nguyên.",
+      "status": "read",
+      "created_at": "2025-04-26T19:55:58.580Z",
+      "action_url": "/cart",
+      "senderId": "system",
+      "reiceiverId": "2",
+      "read_at": "2025-04-26T19:56:09.874Z"
+    },
+    {
+      "id": "n1745697606442",
+      "user_id": "2",
+      "type": "order",
+      "title": "Đơn hàng #ORD585 đã được xác nhận",
+      "content": "Đơn hàng của bạn đã được xác nhận và đang được chuẩn bị. Tổng giá trị: £8.80",
+      "order_id": "ORD585",
+      "status": "read",
+      "created_at": "2025-04-26T20:00:06.442Z",
+      "action_url": "/order-history",
+      "senderId": "system",
+      "reiceiverId": "2",
+      "read_at": "2025-04-26T20:10:28.039Z"
+    },
+    {
+      "id": "n1745699944647",
+      "user_id": "2",
+      "type": "order",
+      "title": "Thanh toán đã bị hủy",
+      "content": "Bạn đã hủy quá trình thanh toán. Giỏ hàng của bạn vẫn được giữ nguyên.",
+      "status": "unread",
+      "created_at": "2025-04-26T20:39:04.647Z",
+      "action_url": "/cart",
+      "senderId": "system",
+      "reiceiverId": "2"
+    }
   ]
 }
