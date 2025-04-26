@@ -1,0 +1,43 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "title": "iPhone 14 Pro Max",
+      "description": "Latest iPhone model with advanced features",
+      "price": 1299.99,
+      "images": [
+        "https://example.com/iphone14-1.jpg",
+        "https://example.com/iphone14-2.jpg"
+      ],
+      "categoryId": "1",
+      "sellerId": "user1",
+      "isAuction": false,
+      "auctionEndTime": null
+    },
+    {
+      "id": "2",
+      "title": "Samsung Galaxy S23 Ultra",
+      "description": "Premium Android smartphone with S Pen",
+      "price": 1199.99,
+      "images": [
+        "https://example.com/s23-1.jpg",
+        "https://example.com/s23-2.jpg"
+      ],
+      "categoryId": "1",
+      "sellerId": "user2",
+      "isAuction": false,
+      "auctionEndTime": null
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Electronics"
+    },
+    {
+      "id": "2",
+      "name": "Fashion"
+    }
+  ],
+  "cart": []
+}
