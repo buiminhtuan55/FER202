@@ -11,10 +11,7 @@ export default function AuthPage() {
         email: '',
         password: '',
         fullname: '',
-        street: '',
-        zipcode: '',
-        city: '',
-        country: ''
+        confirmPassword: ''
     })
     const [error, setError] = useState("")
     const navigate = useNavigate()
@@ -23,9 +20,15 @@ export default function AuthPage() {
         e.preventDefault()
         setError("")
 
+        // Kiểm tra mật khẩu và xác nhận lại mật khẩu
+        if (!isLogin && formData.password !== formData.confirmPassword) {
+            setError("Mật khẩu nhập lại không khớp")
+            return
+        }
+
         if (isLogin) {
             try {
-                const response = await fetch('http://localhost:9999/user')
+                const response = await fetch('http://localhost:9999/users')
                 const users = await response.json()
                 const user = users.find(u => u.email === formData.email && u.password === formData.password)
                 if (user) {
@@ -61,12 +64,7 @@ export default function AuthPage() {
                     password: formData.password,
                     fullname: formData.fullname,
                     order_id: [], // Khởi tạo mảng rỗng cho order_id
-                    address: {
-                        street: formData.street,
-                        zipcode: formData.zipcode,
-                        city: formData.city,
-                        country: formData.country
-                    },
+                    address: {}, // Không cần địa chỉ khi đăng ký
                     role: 'seller', // Role mặc định là 'seller'
                     action: 'unlock' // Thêm thuộc tính action với giá trị 'unlock'
                 }
@@ -216,49 +214,19 @@ export default function AuthPage() {
                         </button>
                     </div>
 
+                    {/* Ô nhập lại mật khẩu */}
                     {!isLogin && (
-                        <>
-                            <div>
-                                <input
-                                    type="text"
-                                    placeholder="Đường"
-                                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                    value={formData.street}
-                                    onChange={(e) => setFormData({ ...formData, street: e.target.value })}
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    placeholder="Mã bưu điện"
-                                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                    value={formData.zipcode}
-                                    onChange={(e) => setFormData({ ...formData, zipcode: e.target.value })}
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    placeholder="Thành phố"
-                                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                    value={formData.city}
-                                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    placeholder="Quốc gia"
-                                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                    value={formData.country}
-                                    onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                                />
-                            </div>
-                        </>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Nhập lại mật khẩu"
+                                className="w-full p-3 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                                value={formData.confirmPassword || ""}
+                                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                            />
+                        </div>
                     )}
 
                     <button
@@ -274,7 +242,6 @@ export default function AuthPage() {
                         </a>
                     )}
 
-                    {/* Hai nút mới để điền thông tin tài khoản */}
                     {isLogin && (
                         <div className="flex gap-4 justify-center mt-4">
                             <button
