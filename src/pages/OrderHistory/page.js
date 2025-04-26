@@ -433,7 +433,7 @@ export default function OrderHistory() {
                                                     )}
                                                     <div className="font-semibold mb-1 text-sm truncate">{product?.title}</div>
                                                     <div className="text-xs text-gray-600">Số lượng: {item.quantity}</div>
-                                                    <div className="text-xs text-gray-600">Giá: £{product?.price}</div>
+                                                    <div className="text-xs text-gray-600">Giá: £{product?.unitPrice}</div>
                                                 </div>
                                             );
                                         })}
@@ -455,7 +455,7 @@ export default function OrderHistory() {
                                             <div>Trạng thái: <span className={`font-medium ${getStatusColor(order.status)}`}>
                                                 {getStatusLabel(order.status)}
                                             </span></div>
-                                            <div>Tổng tiền: <span className="font-semibold">£{getOrderTotal(order.id)}</span></div>
+                                            <div>Tổng tiền: <span className="font-semibold">£{order.total_amount}</span></div>
                                         </div>
 
                                         {/* Action Buttons */}
@@ -551,20 +551,20 @@ export default function OrderHistory() {
                             <div>
                                 <h4 className="font-semibold mb-2">Thông tin đơn hàng</h4>
                                 <div className="space-y-1 text-sm">
-                                    <p><span className="font-medium">Ngày đặt:</span> {formatDate(selectedOrder.orderDate)}</p>
+                                    <p><span className="font-medium">Ngày đặt:</span> {new Date(selectedOrder.order_date).toLocaleDateString('vi-VN')}</p>
                                     <p><span className="font-medium">Trạng thái:</span> <span className={getStatusColor(selectedOrder.status)}>
                                         {getStatusLabel(selectedOrder.status)}
                                     </span></p>
-                                    <p><span className="font-medium">Tổng tiền:</span> £{getOrderTotal(selectedOrder.id)}</p>
+                                    <p><span className="font-medium">Tổng tiền:</span> £{selectedOrder.total_amount.toFixed(2)}</p>
                                 </div>
                             </div>
                             
                             <div>
                                 <h4 className="font-semibold mb-2">Địa chỉ giao hàng</h4>
                                 <div className="space-y-1 text-sm">
-                                    <p>{selectedOrder.shipping_address.street}</p>
-                                    <p>{selectedOrder.shipping_address.city}, {selectedOrder.shipping_address.zipcode}</p>
-                                    <p>{selectedOrder.shipping_address.country}</p>
+                                    <p>{selectedOrder.shipping_address?.address || 'Không có thông tin'}</p>
+                                    <p>{selectedOrder.shipping_address?.city || 'Không có'}, {selectedOrder.shipping_address?.zipcode || 'Không có'}</p>
+                                    <p>{selectedOrder.shipping_address?.country || 'Không có thông tin'}</p>
                                 </div>
                             </div>
                         </div>
@@ -581,43 +581,28 @@ export default function OrderHistory() {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {getOrderItems(selectedOrder.id).map((item) => {
-                                        const product = products[item.productId];
-                                        return (
-                                            <tr key={item.id}>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex items-center">
-                                                        {product?.images?.[0] ? (
-                                                            <img
-                                                                src={product.images[0]}
-                                                                alt={product.title}
-                                                                className="h-10 w-10 rounded object-cover mr-3"
-                                                            />
-                                                        ) : (
-                                                            <div className="h-10 w-10 rounded bg-gray-200 mr-3"></div>
-                                                        )}
-                                                        <div 
-                                                            className="text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
-                                                            onClick={() => {
-                                                                navigate(`/product/${product.id}`);
-                                                                setShowOrderDetail(false);
-                                                            }}
-                                                        >
-                                                            {product?.title}
-                                                        </div>
+                                    {selectedOrder.items.map((item, index) => (
+                                        <tr key={index}>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="flex items-center">
+                                                    <div className="h-10 w-10 rounded bg-gray-200 mr-3"></div>
+                                                    <div 
+                                                        className="text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer"
+                                                    >
+                                                        {item.product_name}
                                                     </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.quantity}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">£{product?.price}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">£{(item.quantity * (product?.price || 0)).toFixed(2)}</td>
-                                            </tr>
-                                        );
-                                    })}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.quantity}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">£{item.price.toFixed(2)}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">£{(item.quantity * item.price).toFixed(2)}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                                 <tfoot className="bg-gray-50">
                                     <tr>
                                         <td colSpan="3" className="px-6 py-4 text-right font-medium">Tổng tiền:</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">£{getOrderTotal(selectedOrder.id)}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">£{selectedOrder.total_amount.toFixed(2)}</td>
                                     </tr>
                                 </tfoot>
                             </table>

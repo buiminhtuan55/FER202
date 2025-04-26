@@ -71,34 +71,60 @@ export default function ProductDetail() {
     setRating(Number(e.target.value));
   };
 
-  // =========================
-  // Hàm xử lý khi nhập bình luận
   const handleCommentChange = (e) => {
     setComment(e.target.value);
   };
 
-  // =========================
-  // Hàm gửi review mới
+  const createReviewNotification = async (currentUser, productId, productName) => {
+    try {
+      const userNotification = {
+        id: `n${Date.now()}`,
+        user_id: currentUser.id,
+        type: "feedback",
+        title: `Cảm ơn bạn đã đánh giá sản phẩm`,
+        content: `Cảm ơn bạn đã đánh giá sản phẩm "${productName}". Đánh giá của bạn sẽ giúp cải thiện trải nghiệm mua sắm.`,
+        status: "unread",
+        created_at: new Date().toISOString(),
+        action_url: `/product/${productId}`,
+        review_id: `rev${Date.now()}`,
+        product_id: productId
+      };
+  
+      await fetch("http://localhost:9999/notifications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userNotification),
+      });
+      
+      console.log("Review notification created successfully");
+      
+    } catch (error) {
+      console.error("Error creating review notification:", error);
+    }
+  };
+  
   const handleSubmitReview = async () => {
     if (rating === 0 || comment.trim() === "") {
       alert("Vui lòng chọn số sao và nhập bình luận.");
       return;
     }
-
+  
     if (!currentUser) {
       alert("Bạn cần đăng nhập để gửi đánh giá.");
       return;
     }
-
+  
     const newReview = {
       productId: id,
       rating,
       comment,
       userId: currentUser.id,
-      userName: currentUser.name || "Ẩn danh", // có tên user
+      userName: currentUser.name || "Ẩn danh",
       createdAt: new Date().toISOString(),
     };
-
+  
     try {
       await fetch("http://localhost:9999/reviews", {
         method: "POST",
@@ -107,7 +133,10 @@ export default function ProductDetail() {
         },
         body: JSON.stringify(newReview),
       });
-
+  
+      // Create notification for the review
+      await createReviewNotification(currentUser, id, product.title);
+  
       alert("Gửi đánh giá thành công!");
       setRating(0);
       setComment("");
