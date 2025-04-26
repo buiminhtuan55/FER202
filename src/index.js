@@ -23,6 +23,8 @@ import SellerProducts from './pages/sellerProduct/page';
 import DailyDeals from './pages/dailyDeal/page';
 import HelpContact from './pages/help/page';
 import Returns from './pages/returns/page';
+import UserAddress from './pages/OrderHistory/UserAddress';
+import NotificationsPage from './pages/noti/NotificationsPage';
 
 
 
@@ -43,6 +45,7 @@ root.render(
         <Route path="/sell" element={<Sell />} />
         <Route path="/sellerProduct" element={<SellerProducts />} />
         <Route path="/order-history" element={<OrderHistory />} />
+        <Route path="/address" element={<UserAddress />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/totalSell" element={<TotalSell />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
@@ -50,7 +53,8 @@ root.render(
         <Route path="/daily-deals" element={<DailyDeals />} />
         <Route path="/help" element={<HelpContact />} />
         <Route path="/returns" element={<Returns />} />
-        
+        <Route path="/notifications" element={<NotificationsPage />} />
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
