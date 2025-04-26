@@ -11,7 +11,6 @@ import Orders from './pages/orders/page';
 import ListCategory from './pages/listCategory/page';
 import Wishlist from './pages/wishlist/page';
 import Sell from './pages/sell/page';
-
 import TotalSell from './pages/totalSell/page';
 import Success from './pages/success/page';
 import AuthPage from './pages/auth/page';
@@ -25,8 +24,7 @@ import HelpContact from './pages/help/page';
 import Returns from './pages/returns/page';
 import UserAddress from './pages/OrderHistory/UserAddress';
 import NotificationsPage from './pages/noti/NotificationsPage';
-
-
+import ProfilePage from './pages/profile/page';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -54,7 +52,7 @@ root.render(
         <Route path="/help" element={<HelpContact />} />
         <Route path="/returns" element={<Returns />} />
         <Route path="/notifications" element={<NotificationsPage />} />
-
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -236,6 +236,9 @@ export default function TopMenu() {
                                     <li className="text-[11px] py-2 px-4 w-full hover:underline text-blue-500 hover:text-blue-600 cursor-pointer">
                                         <Link to="/order-history">My orders</Link>
                                     </li>
+                                    <li className="text-[11px] py-2 px-4 w-full hover:underline text-blue-500 hover:text-blue-600 cursor-pointer">
+                                        <Link to="/profile">My Profile</Link>
+                                    </li>
                                     <li
                                         onClick={handleSignOut}
                                         className="text-[11px] py-2 px-4 w-full hover:underline text-blue-500 hover:text-blue-600 cursor-pointer"
