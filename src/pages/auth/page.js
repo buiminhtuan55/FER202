@@ -49,7 +49,7 @@ export default function AuthPage() {
         } else {
             try {
                 // Kiểm tra xem email đã tồn tại chưa
-                const usersResponse = await fetch('http://localhost:9999/user')
+                const usersResponse = await fetch('http://localhost:9999/users')
                 const users = await usersResponse.json()
                 const existingUser = users.find(u => u.email === formData.email)
                 if (existingUser) {
@@ -63,14 +63,16 @@ export default function AuthPage() {
                     email: formData.email,
                     password: formData.password,
                     fullname: formData.fullname,
+                    username:'',
                     order_id: [], // Khởi tạo mảng rỗng cho order_id
                     address: {}, // Không cần địa chỉ khi đăng ký
                     role: 'seller', // Role mặc định là 'seller'
-                    action: 'unlock' // Thêm thuộc tính action với giá trị 'unlock'
+                    action: 'unlock',// Thêm thuộc tính action với giá trị 'unlock' 
+                    avatarURL:'https://picsum.photos/id/68/200' 
                 }
 
                 // Gửi POST request để đăng ký user
-                const userResponse = await fetch('http://localhost:9999/user', {
+                const userResponse = await fetch('http://localhost:9999/users', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -12,6 +12,7 @@ export default function ProfilePage() {
     city: "",
     country: "",
     addressId: null,
+    isDefault: true,
   });
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [passwordData, setPasswordData] = useState({
@@ -43,6 +44,7 @@ export default function ProfilePage() {
           city: addr?.city || currentUser.address?.city || "",
           country: addr?.country || currentUser.address?.country || "",
           addressId: addr?.id || null,
+          isDefault: addr?.isDefault || true,
         });
       });
   }, [navigate]);
@@ -89,6 +91,7 @@ export default function ProfilePage() {
             country: formData.country,
             userId: user.id,
             fullName: formData.fullname,
+            isDefault: true,
           }),
         });
       } else {
@@ -102,6 +105,7 @@ export default function ProfilePage() {
             country: formData.country,
             userId: user.id,
             fullName: formData.fullname,
+            isDefault: true,
           }),
         });
       }
