@@ -1232,5 +1232,20 @@
       "bidDate": "2025-03-27T16:35:03.048Z",
       "isWinningBid": true
     }
-  ]
+  ],
+  "coupons": [
+    {
+      "id": "1",
+      "code": "SAVE10",
+      "discount": 1000,
+      "minTotal": 5000
+    },
+    {
+      "id": "2",
+      "code": "WELCOME5",
+      "discount": 500,
+      "minTotal": 2000
+    }
+  ],
+  "reviews": []
 }

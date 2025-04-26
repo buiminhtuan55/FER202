@@ -76,6 +76,9 @@ export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const [couponList, setCouponList] = useState([]);
+  const [appliedCoupons, setAppliedCoupons] = useState([]);
+
 
   const fetchCartItems = async () => {
     if (!currentUser) {
@@ -328,8 +331,9 @@ export default function Cart() {
   };
 
   const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   };
+
 
   const handleCheckout = () => {
     if (!currentUser) {
@@ -349,8 +353,58 @@ export default function Cart() {
     fetchCartItems();
   }, [currentUser]);
 
+  useEffect(() => {
+    fetchCartItems();
+
+    const fetchCoupons = async () => {
+      try {
+        const res = await fetch("http://localhost:9999/coupons");
+        const data = await res.json();
+        setCouponList(data);
+      } catch (error) {
+        console.error("Failed to fetch coupons:", error);
+      }
+    };
+
+    fetchCoupons();
+  }, [currentUser]);
+
   const handleAddTestProduct = () => {
     addToCart("1");
+  };
+
+  const getTotalDiscount = () => {
+    const subtotal = getCartTotal();
+    return appliedCoupons.reduce((acc, coupon) => {
+      if (subtotal >= coupon.minTotal) {
+        return acc + coupon.discount;
+      }
+      return acc;
+    }, 0);
+  };
+
+  const handleApplyCoupon = (coupon) => {
+    const subtotal = getCartTotal();
+    if (subtotal < coupon.minTotal) {
+      alert(`This coupon requires a minimum subtotal of £${(coupon.minTotal / 100).toFixed(2)}`);
+      return;
+    }
+
+    if (appliedCoupons.find(c => c.id === coupon.id)) {
+      alert("Coupon already applied");
+      return;
+    }
+
+    if (appliedCoupons.length >= 2) {
+      alert("You can only use up to 2 coupons at once.");
+      return;
+    }
+
+    setAppliedCoupons([...appliedCoupons, coupon]);
+  };
+
+  const handleRemoveCoupon = (couponId) => {
+    setAppliedCoupons(appliedCoupons.filter(c => c.id !== couponId));
   };
 
   if (!currentUser) {
@@ -411,8 +465,7 @@ export default function Cart() {
                 <div className="bg-white p-4 border sticky top-4">
                   <button
                     onClick={handleCheckout}
-                    className="flex items —
-center justify-center bg-blue-600 w-full text-white font-semibold p-3 rounded-full hover:bg-blue-700"
+                    className="flex items —center justify-center bg-blue-600 w-full text-white font-semibold p-3 rounded-full hover:bg-blue-700"
                   >
                     Go to checkout
                   </button>
@@ -428,10 +481,62 @@ center justify-center bg-blue-600 w-full text-white font-semibold p-3 rounded-fu
 
                   <div className="border-b border-gray-300" />
 
-                  <div className="flex items-center justify-between mt-4 mb-1 text-lg font-semibold">
-                    <div>Subtotal</div>
-                    <div>£{(getCartTotal() / 100).toFixed(2)}</div>
+                  <div className="flex flex-col gap-6 mt-4 mb-6 text-base">
+                    {/* Available Coupons */}
+                    <div className="w-full bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-sm">
+                      <div className="text-blue-700 font-semibold mb-3 text-base">🎁 Available Coupons</div>
+                      {couponList.map((coupon) => (
+                        <div
+                          key={coupon.id}
+                          className="flex items-center justify-between mb-2 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm"
+                        >
+                          <span className="text-sm text-gray-700">
+                            {coupon.code} – £{(coupon.discount / 100).toFixed(2)} off
+                          </span>
+                          <button
+                            onClick={() => handleApplyCoupon(coupon)}
+                            disabled={appliedCoupons.some(c => c.id === coupon.id)}
+                            className={`text-sm font-medium ${appliedCoupons.some(c => c.id === coupon.id)
+                                ? 'text-gray-400 cursor-not-allowed'
+                                : 'text-blue-500 hover:underline'
+                              }`}
+                          >
+                            Apply
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Applied Coupons */}
+                    {appliedCoupons.length > 0 && (
+                      <div className="w-full bg-green-50 border border-green-200 rounded-xl p-4 shadow-sm">
+                        <div className="text-green-700 font-semibold mb-3 text-base">🧾 Applied Coupons</div>
+                        {appliedCoupons.map((coupon) => (
+                          <div
+                            key={coupon.id}
+                            className="flex items-center justify-between mb-2 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm"
+                          >
+                            <span className="font-medium text-gray-700">{coupon.code}</span>
+                            <button
+                              onClick={() => handleRemoveCoupon(coupon.id)}
+                              className="text-red-500 hover:underline text-sm"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Subtotal */}
+                    <div className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm mt-6">
+                      <div className="text-gray-700 font-semibold text-base mb-2">Subtotal</div>
+                      <div className="text-2xl font-bold text-black">
+                        £{Math.max(0, (getCartTotal() - getTotalDiscount()) / 100).toFixed(2)}
+                      </div>
+                    </div>
                   </div>
+
                 </div>
               </div>
             )}
